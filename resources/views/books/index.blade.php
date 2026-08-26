@@ -60,7 +60,7 @@
             {{-- Target Container untuk Update Isi Tabel --}}
             <div id="tableContainer">
                 {{-- Tambahkan pb-36 di sini agar ada ruang kosong ke bawah untuk menu dropdown --}}
-                <div class="overflow-x-auto pb-36">
+                <div class="overflow-x-auto  ">
                     <table class="w-full text-left text-xs sm:text-sm table-fixed">
                         <!-- Header dan Body Tabel Anda tetap sama -->
                         <thead
@@ -173,7 +173,7 @@
                                                 x-transition:leave="transition ease-in duration-75"
                                                 x-transition:leave-start="transform opacity-100 scale-100"
                                                 x-transition:leave-end="transform opacity-0 scale-95"
-                                                class="absolute right-0 z-50 w-36 mt-1 origin-top-right rounded-xl bg-white border border-slate-200 shadow-lg py-1 text-left focus:outline-none"
+                                                class="absolute right-0 z-50 w-36 mb-1 origin-top-right rounded-xl bg-white border border-slate-200 shadow-lg py-1 text-left focus:outline-none"
                                                 style="display: none;">
 
                                                 {{-- 1. Tombol Detail --}}
