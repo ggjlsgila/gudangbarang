@@ -11,7 +11,7 @@ class Book extends Model
 
     protected $fillable = [
         'kode_buku',
-        'nama_buku',
+        'judul_buku',
         'stok',
         'keterangan',
     ];

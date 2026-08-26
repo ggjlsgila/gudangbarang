@@ -39,6 +39,7 @@
             {{-- Search Form --}}
             <div class="border-b border-slate-100 p-3 sm:p-4">
                 <form method="GET" action="{{ route('books.index') }}" class="flex gap-2" id="bookSearchForm">
+
                     <input type="text" name="search" id="bookSearch" value="{{ request('search') }}"
                         placeholder="Cari kode, ISBN, atau judul buku..." autocomplete="off"
                         class="w-full rounded-xl border-slate-300 text-xs sm:text-sm font-medium text-slate-900 placeholder-slate-400 focus:border-indigo-500 focus:ring-indigo-500">
@@ -52,6 +53,7 @@
                         class="{{ request('search') ? 'inline-flex' : 'hidden' }} items-center justify-center rounded-xl border border-slate-300 px-4 py-2 text-xs sm:text-sm font-semibold text-slate-700 hover:bg-slate-50 transition shrink-0">
                         Reset
                     </a>
+
                 </form>
             </div>
 
@@ -115,7 +117,7 @@
                                     </td>
 
                                     <td class="px-2 py-3.5 sm:px-4 font-semibold text-slate-900 truncate">
-                                        {{ $book->judul_buku ?? ($book->nama_buku ?? ($book->judul ?? $book->nama)) }}
+                                        {{ $book->judul_buku }}
                                     </td>
 
                                     <td
@@ -151,8 +153,11 @@
                                     <td class="whitespace-nowrap px-1 py-3.5 sm:px-4 text-center">
                                         <div class="inline-flex items-center justify-center gap-1.5">
                                             {{-- Tombol Detail --}}
-                                            <button type="button" title="Detail Buku"
-                                                onclick="openDetailModal('{{ $book->kode_buku }}', '{{ addslashes($book->judul_buku) }}', '{{ $book->stok }}', '{{ addslashes($book->keterangan ?? '-') }}', '{{ $book->file ? asset('storage/' . $book->file) : '' }}')"
+                                            <button type="button" title="Detail Buku" onclick="openDetailModal(this)"
+                                                data-kode="{{ $book->kode_buku }}" data-judul="{{ $book->judul_buku }}"
+                                                data-stok="{{ $book->stok }}"
+                                                data-keterangan="{{ $book->keterangan ?? '-' }}"
+                                                data-file="{{ $book->file ? asset('storage/' . $book->file) : '' }}"
                                                 class="inline-flex items-center justify-center rounded-lg border border-slate-200 p-1.5 text-slate-600 transition hover:border-slate-300 hover:bg-slate-100 hover:text-indigo-600 cursor-pointer">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                     stroke-width="2" stroke="currentColor" class="w-4 h-4">
@@ -165,7 +170,7 @@
 
                                             {{-- Tombol Edit Modal --}}
                                             <button type="button" title="Edit Buku"
-                                                onclick="openEditModal('{{ route('books.update', $book) }}', '{{ $book->kode_buku }}', '{{ addslashes($book->nama_buku) }}', '{{ $book->stok }}', '{{ addslashes($book->keterangan ?? '') }}')"
+                                                onclick="openEditModal('{{ route('books.update', $book) }}', '{{ $book->kode_buku }}', '{{ addslashes($book->judul_buku) }}', '{{ $book->stok }}', '{{ addslashes($book->keterangan ?? '') }}')"
                                                 class="inline-flex items-center justify-center rounded-lg border border-slate-200 p-1.5 text-slate-600 transition hover:border-slate-300 hover:bg-slate-100 hover:text-indigo-600 cursor-pointer">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                     stroke-width="2" stroke="currentColor" class="w-4 h-4">
@@ -386,8 +391,14 @@
 @endsection
 
 <script>
-    // Functions Modal Detail
-    function openDetailModal(kode, judul, stok, keterangan, fileUrl) {
+    function openDetailModal(button) {
+
+        const kode = button.dataset.kode;
+        const judul = button.dataset.judul;
+        const stok = button.dataset.stok;
+        const keterangan = button.dataset.keterangan;
+        const fileUrl = button.dataset.file;
+
         document.getElementById('modalKode').innerText = kode;
         document.getElementById('modalJudul').innerText = judul;
         document.getElementById('modalStok').innerText = stok + ' Unit';
@@ -397,42 +408,30 @@
         const fileEmpty = document.getElementById('modalFileEmpty');
 
         if (fileUrl && fileUrl.trim() !== '') {
+
             fileLink.href = fileUrl;
             fileLink.classList.remove('hidden');
             fileLink.classList.add('inline-flex');
             fileEmpty.classList.add('hidden');
+
         } else {
+
             fileLink.classList.add('hidden');
             fileLink.classList.remove('inline-flex');
             fileEmpty.classList.remove('hidden');
+
         }
 
         const modal = document.getElementById('detailModal');
+
         modal.classList.remove('hidden');
         modal.classList.add('flex');
     }
 
-    function closeDetailModal() {
-        const modal = document.getElementById('detailModal');
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-    }
-
-    // Functions Modal Tambah
-    function openTambahModal() {
-        const modal = document.getElementById('tambahModal');
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-    }
-
-    function closeTambahModal() {
-        const modal = document.getElementById('tambahModal');
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-    }
 
     // Functions Modal Edit
     function openEditModal(actionUrl, kode, judul, stok, keterangan) {
+
         document.getElementById('editForm').action = actionUrl;
         document.getElementById('editKode').value = kode;
         document.getElementById('editJudul').value = judul;
@@ -440,25 +439,35 @@
         document.getElementById('editKeterangan').value = keterangan;
 
         const modal = document.getElementById('editModal');
+
         modal.classList.remove('hidden');
         modal.classList.add('flex');
     }
 
+
     function closeEditModal() {
+
         const modal = document.getElementById('editModal');
+
         modal.classList.add('hidden');
         modal.classList.remove('flex');
     }
 
-    // AJAX Live Search
+
+    // AJAX LIVE SEARCH
     document.addEventListener('DOMContentLoaded', function() {
+
         const searchInput = document.getElementById('bookSearch');
         const searchForm = document.getElementById('bookSearchForm');
         const tableContainer = document.getElementById('tableContainer');
         const btnReset = document.getElementById('btnReset');
+
         let timer;
 
+
+        // Fungsi mengambil data tanpa reload halaman
         function fetchBooks(url) {
+
             fetch(url, {
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest'
@@ -466,64 +475,90 @@
                 })
                 .then(response => response.text())
                 .then(html => {
+
                     const parser = new DOMParser();
+
                     const doc = parser.parseFromString(html, 'text/html');
-                    const newTable = doc.getElementById('tableContainer');
+
+                    const newTable =
+                        doc.getElementById('tableContainer');
+
                     if (newTable) {
-                        tableContainer.innerHTML = newTable.innerHTML;
+
+                        tableContainer.innerHTML =
+                            newTable.innerHTML;
                     }
 
+
+                    // Tampilkan / sembunyikan tombol Reset
                     if (searchInput.value.trim() !== '') {
+
                         btnReset.classList.remove('hidden');
                         btnReset.classList.add('inline-flex');
+
                     } else {
+
                         btnReset.classList.add('hidden');
                         btnReset.classList.remove('inline-flex');
                     }
+
                 })
-                .catch(error => console.error('Error loading data:', error));
+                .catch(error => {
+
+                    console.error('Error loading data:', error);
+
+                });
         }
 
+
+        // LIVE SEARCH SAAT MENGETIK
         searchInput.addEventListener('input', function() {
+
             clearTimeout(timer);
+
             timer = setTimeout(function() {
-                const query = searchInput.value;
-                const url = `{{ route('books.index') }}?search=${encodeURIComponent(query)}`;
+
+                const query =
+                    searchInput.value.trim();
+
+                const url =
+                    `{{ route('books.index') }}?search=${encodeURIComponent(query)}`;
+
                 fetchBooks(url);
-                window.history.pushState(null, '', url);
+
+                window.history.pushState(
+                    null,
+                    '',
+                    url
+                );
+
             }, 300);
+
         });
 
+
+        // Tombol Cari
         searchForm.addEventListener('submit', function(e) {
+
             e.preventDefault();
-            const query = searchInput.value;
-            const url = `{{ route('books.index') }}?search=${encodeURIComponent(query)}`;
-            fetchBooks(url);
-            window.history.pushState(null, '', url);
-        });
-        // Variabel untuk melacak status sorting saat ini
-        let currentSort = '{{ request('sort') }}';
-        let currentDirection = '{{ request('direction', 'asc') }}';
 
-        function sortBooks(column) {
-            // Jika kolom yang diklik sama, balik arahnya (asc <-> desc)
-            if (currentSort === column) {
-                currentDirection = currentDirection === 'asc' ? 'desc' : 'asc';
-            } else {
-                currentSort = column;
-                currentDirection = 'asc';
-            }
+            clearTimeout(timer);
 
-            const searchInput = document.getElementById('bookSearch');
-            const query = searchInput ? searchInput.value : '';
+            const query =
+                searchInput.value.trim();
 
-            // Buat URL dengan parameter search dan sort
             const url =
-                `{{ route('books.index') }}?search=${encodeURIComponent(query)}&sort=${currentSort}&direction=${currentDirection}`;
+                `{{ route('books.index') }}?search=${encodeURIComponent(query)}`;
 
-            // Panggil fungsi fetch data tabel yang sudah ada
             fetchBooks(url);
-            window.history.pushState(null, '', url);
-        }
+
+            window.history.pushState(
+                null,
+                '',
+                url
+            );
+
+        });
+
     });
 </script>
