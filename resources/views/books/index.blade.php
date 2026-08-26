@@ -150,52 +150,81 @@
                                         @endif
                                     </td>
 
+                                    {{-- KOLOM AKSI DENGAN DROPDOWN TITIK TIGA (ALPINE.JS) --}}
                                     <td class="whitespace-nowrap px-1 py-3.5 sm:px-4 text-center">
-                                        <div class="inline-flex items-center justify-center gap-1.5">
-                                            {{-- Tombol Detail --}}
-                                            <button type="button" title="Detail Buku" onclick="openDetailModal(this)"
-                                                data-kode="{{ $book->kode_buku }}" data-judul="{{ $book->judul_buku }}"
-                                                data-stok="{{ $book->stok }}"
-                                                data-keterangan="{{ $book->keterangan ?? '-' }}"
-                                                data-file="{{ $book->file ? asset('storage/' . $book->file) : '' }}"
+                                        <div class="relative inline-block text-left" x-data="{ open: false }">
+                                            <!-- Tombol Titik Tiga -->
+                                            <button @click="open = !open" @click.away="open = false" type="button"
+                                                title="Menu Aksi"
                                                 class="inline-flex items-center justify-center rounded-lg border border-slate-200 p-1.5 text-slate-600 transition hover:border-slate-300 hover:bg-slate-100 hover:text-indigo-600 cursor-pointer">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                     stroke-width="2" stroke="currentColor" class="w-4 h-4">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.573 16.49 16.638 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                                        d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
                                                 </svg>
                                             </button>
 
-                                            {{-- Tombol Edit Modal --}}
-                                            <button type="button" title="Edit Buku"
-                                                onclick="openEditModal('{{ route('books.update', $book) }}', '{{ $book->kode_buku }}', '{{ addslashes($book->judul_buku) }}', '{{ $book->stok }}', '{{ addslashes($book->keterangan ?? '') }}')"
-                                                class="inline-flex items-center justify-center rounded-lg border border-slate-200 p-1.5 text-slate-600 transition hover:border-slate-300 hover:bg-slate-100 hover:text-indigo-600 cursor-pointer">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                    stroke-width="2" stroke="currentColor" class="w-4 h-4">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                                                </svg>
-                                            </button>
+                                            <!-- Menu Dropdown Container -->
+                                            <div x-show="open" x-transition:enter="transition ease-out duration-100"
+                                                x-transition:enter-start="transform opacity-0 scale-95"
+                                                x-transition:enter-end="transform opacity-100 scale-100"
+                                                x-transition:leave="transition ease-in duration-75"
+                                                x-transition:leave-start="transform opacity-100 scale-100"
+                                                x-transition:leave-end="transform opacity-0 scale-95"
+                                                class="absolute right-0 z-50 w-36 mt-1 origin-top-right rounded-xl bg-white border border-slate-200 shadow-lg py-1 text-left focus:outline-none"
+                                                style="display: none;">
 
-                                            {{-- Tombol Hapus --}}
-                                            <form method="POST" action="{{ route('books.destroy', $book) }}"
-                                                class="inline-flex m-0 p-0"
-                                                onsubmit="return confirm('Yakin ingin menghapus buku ini?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" title="Hapus Buku"
-                                                    class="inline-flex items-center justify-center rounded-lg border border-rose-200 bg-rose-50 p-1.5 text-rose-600 transition hover:bg-rose-100 hover:text-rose-700 cursor-pointer">
+                                                {{-- 1. Tombol Detail --}}
+                                                <button type="button" onclick="openDetailModal(this)"
+                                                    data-kode="{{ $book->kode_buku }}"
+                                                    data-judul="{{ $book->judul_buku }}" data-stok="{{ $book->stok }}"
+                                                    data-keterangan="{{ $book->keterangan ?? '-' }}"
+                                                    data-file="{{ $book->file ? asset('storage/' . $book->file) : '' }}"
+                                                    @click="open = false"
+                                                    class="flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-indigo-600 transition">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                                        class="w-4 h-4">
+                                                        class="w-3.5 h-3.5 text-slate-400">
                                                         <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                                            d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.573 16.49 16.638 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                                                     </svg>
+                                                    <span>Detail</span>
                                                 </button>
-                                            </form>
 
+                                                {{-- 2. Tombol Edit Modal --}}
+                                                <button type="button"
+                                                    onclick="openEditModal('{{ route('books.update', $book) }}', '{{ $book->kode_buku }}', '{{ addslashes($book->judul_buku) }}', '{{ $book->stok }}', '{{ addslashes($book->keterangan ?? '') }}')"
+                                                    @click="open = false"
+                                                    class="flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-indigo-600 transition">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                        class="w-3.5 h-3.5 text-slate-400">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                                    </svg>
+                                                    <span>Edit</span>
+                                                </button>
+
+                                                {{-- 3. Tombol Hapus --}}
+                                                <form method="POST" action="{{ route('books.destroy', $book) }}"
+                                                    onsubmit="return confirm('Yakin ingin menghapus buku ini?')"
+                                                    class="block m-0 p-0">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit"
+                                                        class="flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 transition">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                            class="w-3.5 h-3.5 text-rose-400">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                                        </svg>
+                                                        <span>Hapus</span>
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>
@@ -389,7 +418,6 @@
         </div>
     </div>
 @endsection
-
 <script>
     // Fungsi Buka Modal Detail
     function openDetailModal(button) {
@@ -423,7 +451,7 @@
         modal.classList.add('flex');
     }
 
-    // === TAMBAHKAN FUNGSI INI SUPAYA TOMBOL TUTUP & X BERFUNGSI ===
+    // Fungsi Tutup Modal Detail
     function closeDetailModal() {
         const modal = document.getElementById('detailModal');
         modal.classList.add('hidden');
@@ -432,7 +460,6 @@
 
     // Functions Modal Edit
     function openEditModal(actionUrl, kode, judul, stok, keterangan) {
-
         document.getElementById('editForm').action = actionUrl;
         document.getElementById('editKode').value = kode;
         document.getElementById('editJudul').value = judul;
@@ -440,22 +467,18 @@
         document.getElementById('editKeterangan').value = keterangan;
 
         const modal = document.getElementById('editModal');
-
         modal.classList.remove('hidden');
         modal.classList.add('flex');
     }
 
-
     function closeEditModal() {
-
         const modal = document.getElementById('editModal');
-
         modal.classList.add('hidden');
         modal.classList.remove('flex');
     }
 
 
-    // AJAX LIVE SEARCH
+    // AJAX LIVE SEARCH & PAGINATION
     document.addEventListener('DOMContentLoaded', function() {
 
         const searchInput = document.getElementById('bookSearch');
@@ -465,10 +488,22 @@
 
         let timer;
 
+        // Fungsi mengecek status tombol reset berdasarkan input
+        function toggleResetButton() {
+            if (searchInput && searchInput.value.trim() !== '') {
+                btnReset.classList.remove('hidden');
+                btnReset.classList.add('inline-flex');
+            } else {
+                btnReset.classList.add('hidden');
+                btnReset.classList.remove('inline-flex');
+            }
+        }
+
+        // Cek status tombol reset saat halaman pertama kali dimuat
+        toggleResetButton();
 
         // Fungsi mengambil data tanpa reload halaman
         function fetchBooks(url) {
-
             fetch(url, {
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest'
@@ -476,89 +511,89 @@
                 })
                 .then(response => response.text())
                 .then(html => {
-
                     const parser = new DOMParser();
-
                     const doc = parser.parseFromString(html, 'text/html');
-
-                    const newTable =
-                        doc.getElementById('tableContainer');
+                    const newTable = doc.getElementById('tableContainer');
 
                     if (newTable) {
-
-                        tableContainer.innerHTML =
-                            newTable.innerHTML;
+                        tableContainer.innerHTML = newTable.innerHTML;
                     }
 
-
-                    // Tampilkan / sembunyikan tombol Reset
-                    if (searchInput.value.trim() !== '') {
-
-                        btnReset.classList.remove('hidden');
-                        btnReset.classList.add('inline-flex');
-
-                    } else {
-
-                        btnReset.classList.add('hidden');
-                        btnReset.classList.remove('inline-flex');
-                    }
-
+                    toggleResetButton();
                 })
                 .catch(error => {
-
                     console.error('Error loading data:', error);
-
                 });
         }
 
 
         // LIVE SEARCH SAAT MENGETIK
-        searchInput.addEventListener('input', function() {
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                clearTimeout(timer);
 
-            clearTimeout(timer);
+                timer = setTimeout(function() {
+                    const query = searchInput.value.trim();
+                    const url =
+                        `{{ route('books.index') }}?search=${encodeURIComponent(query)}`;
 
-            timer = setTimeout(function() {
+                    fetchBooks(url);
 
-                const query =
-                    searchInput.value.trim();
+                    window.history.pushState(null, '', url);
+                }, 300);
+            });
+        }
 
-                const url =
-                    `{{ route('books.index') }}?search=${encodeURIComponent(query)}`;
+
+        // Tombol Cari (Submit Form)
+        if (searchForm) {
+            searchForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                clearTimeout(timer);
+
+                const query = searchInput.value.trim();
+                const url = `{{ route('books.index') }}?search=${encodeURIComponent(query)}`;
 
                 fetchBooks(url);
 
-                window.history.pushState(
-                    null,
-                    '',
-                    url
-                );
-
-            }, 300);
-
-        });
+                window.history.pushState(null, '', url);
+            });
+        }
 
 
-        // Tombol Cari
-        searchForm.addEventListener('submit', function(e) {
+        // Tombol Reset
+        if (btnReset) {
+            btnReset.addEventListener('click', function(e) {
+                e.preventDefault();
+                searchInput.value = '';
 
-            e.preventDefault();
+                const url = `{{ route('books.index') }}`;
+                fetchBooks(url);
 
-            clearTimeout(timer);
+                window.history.pushState(null, '', url);
+            });
+        }
 
-            const query =
-                searchInput.value.trim();
 
-            const url =
-                `{{ route('books.index') }}?search=${encodeURIComponent(query)}`;
+        // === TAMBAHAN: Penanganan AJAX untuk Pagination / Link di dalam Tabel ===
+        document.addEventListener('click', function(e) {
+            const targetLink = e.target.closest('#tableContainer a');
 
-            fetchBooks(url);
+            // Jika yang diklik adalah link pagination atau sorting di dalam tabel container
+            if (targetLink && targetLink.href) {
+                e.preventDefault();
+                const url = targetLink.href;
 
-            window.history.pushState(
-                null,
-                '',
-                url
-            );
+                fetchBooks(url);
+                window.history.pushState(null, '', url);
 
+                // Sinkronkan nilai input search jika ada parameter search di URL pagination
+                const urlParams = new URLSearchParams(new URL(url).search);
+                if (urlParams.has('search') && searchInput) {
+                    searchInput.value = urlParams.get('search');
+                    toggleResetButton();
+                }
+            }
         });
 
     });

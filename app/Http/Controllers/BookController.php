@@ -37,7 +37,10 @@ class BookController extends Controller
     ->orderBy($sort, $direction)
     ->paginate(10)
     ->withQueryString();
-
+    
+if ($request->ajax()) {
+            return view('books.index', compact('books', 'search'))->render();
+        }
     return view('books.index', compact('books', 'search'));
 }
 
