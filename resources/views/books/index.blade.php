@@ -441,77 +441,84 @@
             modal.classList.remove('flex');
             modal.classList.add('pointer-events-none');
         }
-        // Fungsi Buka Modal Detail
-        function openDetailModal(button) {
-            const kode = button.dataset.kode;
-            const judul = button.dataset.judul;
-            const stok = button.dataset.stok;
-            const keterangan = button.dataset.keterangan;
-            const fileUrl = button.dataset.file;
+    }
 
-            document.getElementById('modalKode').innerText = kode;
-            document.getElementById('modalJudul').innerText = judul;
-            document.getElementById('modalStok').innerText = stok + ' Unit';
-            document.getElementById('modalKeterangan').innerText = keterangan;
+    // --- MODAL DETAIL ---
+    function openDetailModal(button) {
+        const kode = button.dataset.kode;
+        const judul = button.dataset.judul;
+        const stok = button.dataset.stok;
+        const keterangan = button.dataset.keterangan;
+        const fileUrl = button.dataset.file;
 
-            const fileLink = document.getElementById('modalFileLink');
-            const fileEmpty = document.getElementById('modalFileEmpty');
+        document.getElementById('modalKode').innerText = kode;
+        document.getElementById('modalJudul').innerText = judul;
+        document.getElementById('modalStok').innerText = stok + ' Unit';
+        document.getElementById('modalKeterangan').innerText = keterangan;
 
-            if (fileUrl && fileUrl.trim() !== '') {
-                fileLink.href = fileUrl;
-                fileLink.classList.remove('hidden');
-                fileLink.classList.add('inline-flex');
-                fileEmpty.classList.add('hidden');
-            } else {
-                fileLink.classList.add('hidden');
-                fileLink.classList.remove('inline-flex');
-                fileEmpty.classList.remove('hidden');
-            }
+        const fileLink = document.getElementById('modalFileLink');
+        const fileEmpty = document.getElementById('modalFileEmpty');
 
-            const modal = document.getElementById('detailModal');
+        if (fileUrl && fileUrl.trim() !== '') {
+            fileLink.href = fileUrl;
+            fileLink.classList.remove('hidden');
+            fileLink.classList.add('inline-flex');
+            fileEmpty.classList.add('hidden');
+        } else {
+            fileLink.classList.add('hidden');
+            fileLink.classList.remove('inline-flex');
+            fileEmpty.classList.remove('hidden');
+        }
+
+        const modal = document.getElementById('detailModal');
+        if (modal) {
             modal.classList.remove('hidden');
             modal.classList.add('flex');
         }
+    }
 
-        // Fungsi Tutup Modal Detail
-        function closeDetailModal() {
-            const modal = document.getElementById('detailModal');
+    function closeDetailModal() {
+        const modal = document.getElementById('detailModal');
+        if (modal) {
             modal.classList.add('hidden');
             modal.classList.remove('flex');
         }
+    }
 
-        // Functions Modal Edit
-        function openEditModal(actionUrl, kode, judul, stok, keterangan) {
-            document.getElementById('editForm').action = actionUrl;
-            document.getElementById('editKode').value = kode;
-            document.getElementById('editJudul').value = judul;
-            document.getElementById('editStok').value = stok;
-            document.getElementById('editKeterangan').value = keterangan;
+    // --- MODAL EDIT ---
+    function openEditModal(actionUrl, kode, judul, stok, keterangan) {
+        document.getElementById('editForm').action = actionUrl;
+        document.getElementById('editKode').value = kode;
+        document.getElementById('editJudul').value = judul;
+        document.getElementById('editStok').value = stok;
+        document.getElementById('editKeterangan').value = keterangan;
 
-            const modal = document.getElementById('editModal');
+        const modal = document.getElementById('editModal');
+        if (modal) {
             modal.classList.remove('hidden');
             modal.classList.add('flex');
         }
+    }
 
-        function closeEditModal() {
-            const modal = document.getElementById('editModal');
+    function closeEditModal() {
+        const modal = document.getElementById('editModal');
+        if (modal) {
             modal.classList.add('hidden');
             modal.classList.remove('flex');
         }
+    }
 
+    // --- AJAX LIVE SEARCH, PAGINATION & RESET ---
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('bookSearch');
+        const searchForm = document.getElementById('bookSearchForm');
+        const tableContainer = document.getElementById('tableContainer');
+        const btnReset = document.getElementById('btnReset');
 
-        // AJAX LIVE SEARCH & PAGINATION
-        document.addEventListener('DOMContentLoaded', function() {
+        let timer;
 
-            const searchInput = document.getElementById('bookSearch');
-            const searchForm = document.getElementById('bookSearchForm');
-            const tableContainer = document.getElementById('tableContainer');
-            const btnReset = document.getElementById('btnReset');
-
-            let timer;
-
-            // Fungsi mengecek status tombol reset berdasarkan input
-            function toggleResetButton() {
+        function toggleResetButton() {
+            if (btnReset) {
                 if (searchInput && searchInput.value.trim() !== '') {
                     btnReset.classList.remove('hidden');
                     btnReset.classList.add('inline-flex');
@@ -520,103 +527,98 @@
                     btnReset.classList.remove('inline-flex');
                 }
             }
+        }
 
-            // Cek status tombol reset saat halaman pertama kali dimuat
-            toggleResetButton();
+        toggleResetButton();
 
-            // Fungsi mengambil data tanpa reload halaman
-            function fetchBooks(url) {
-                fetch(url, {
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest'
-                        }
-                    })
-                    .then(response => response.text())
-                    .then(html => {
-                        const parser = new DOMParser();
-                        const doc = parser.parseFromString(html, 'text/html');
-                        const newTable = doc.getElementById('tableContainer');
+        function fetchBooks(url) {
+            fetch(url, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const newTable = doc.getElementById('tableContainer');
 
-                        if (newTable) {
-                            tableContainer.innerHTML = newTable.innerHTML;
-                        }
+                    if (newTable && tableContainer) {
+                        tableContainer.innerHTML = newTable.innerHTML;
+                    }
 
-                        toggleResetButton();
-                    })
-                    .catch(error => {
-                        console.error('Error loading data:', error);
-                    });
-            }
-
-
-            // LIVE SEARCH SAAT MENGETIK
-            if (searchInput) {
-                searchInput.addEventListener('input', function() {
-                    clearTimeout(timer);
-
-                    timer = setTimeout(function() {
-                        const query = searchInput.value.trim();
-                        const url =
-                            `{{ route('books.index') }}?search=${encodeURIComponent(query)}`;
-
-                        fetchBooks(url);
-
-                        window.history.pushState(null, '', url);
-                    }, 300);
+                    toggleResetButton();
+                })
+                .catch(error => {
+                    console.error('Error loading data:', error);
                 });
-            }
+        }
 
+        // Live Search saat mengetik
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                clearTimeout(timer);
 
-            // Tombol Cari (Submit Form)
-            if (searchForm) {
-                searchForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    clearTimeout(timer);
-
+                timer = setTimeout(function() {
                     const query = searchInput.value.trim();
-                    const url = `{{ route('books.index') }}?search=${encodeURIComponent(query)}`;
+                    const url =
+                        `{{ route('books.index') }}?search=${encodeURIComponent(query)}`;
 
                     fetchBooks(url);
-
                     window.history.pushState(null, '', url);
-                });
-            }
+                }, 300);
+            });
+        }
 
+        // Tombol Cari (Submit Form)
+        if (searchForm) {
+            searchForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                clearTimeout(timer);
 
-            // Tombol Reset
-            if (btnReset) {
-                btnReset.addEventListener('click', function(e) {
-                    e.preventDefault();
+                const query = searchInput.value.trim();
+                const url = `{{ route('books.index') }}?search=${encodeURIComponent(query)}`;
+
+                fetchBooks(url);
+                window.history.pushState(null, '', url);
+            });
+        }
+
+        // Tombol Reset
+        if (btnReset) {
+            btnReset.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (searchInput) {
                     searchInput.value = '';
+                }
 
-                    const url = `{{ route('books.index') }}`;
-                    fetchBooks(url);
+                const url = `{{ route('books.index') }}`;
+                fetchBooks(url);
+                window.history.pushState(null, '', url);
+            });
+        }
 
-                    window.history.pushState(null, '', url);
-                });
-            }
+        // Penanganan AJAX untuk Pagination / Link di dalam Tabel
+        document.addEventListener('click', function(e) {
+            const targetLink = e.target.closest('#tableContainer a');
 
+            if (targetLink && targetLink.href) {
+                e.preventDefault();
+                const url = targetLink.href;
 
-            // === TAMBAHAN: Penanganan AJAX untuk Pagination / Link di dalam Tabel ===
-            document.addEventListener('click', function(e) {
-                const targetLink = e.target.closest('#tableContainer a');
+                fetchBooks(url);
+                window.history.pushState(null, '', url);
 
-                // Jika yang diklik adalah link pagination atau sorting di dalam tabel container
-                if (targetLink && targetLink.href) {
-                    e.preventDefault();
-                    const url = targetLink.href;
-
-                    fetchBooks(url);
-                    window.history.pushState(null, '', url);
-
-                    // Sinkronkan nilai input search jika ada parameter search di URL pagination
+                try {
                     const urlParams = new URLSearchParams(new URL(url).search);
                     if (urlParams.has('search') && searchInput) {
                         searchInput.value = urlParams.get('search');
                         toggleResetButton();
                     }
+                } catch (err) {
+                    console.error('Error parsing pagination URL:', err);
                 }
-            });
-
+            }
         });
+    });
 </script>
