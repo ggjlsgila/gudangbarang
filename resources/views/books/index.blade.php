@@ -59,8 +59,10 @@
 
             {{-- Target Container untuk Update Isi Tabel --}}
             <div id="tableContainer">
-                <div class="overflow-x-auto">
+                {{-- Tambahkan pb-36 di sini agar ada ruang kosong ke bawah untuk menu dropdown --}}
+                <div class="overflow-x-auto pb-36">
                     <table class="w-full text-left text-xs sm:text-sm table-fixed">
+                        <!-- Header dan Body Tabel Anda tetap sama -->
                         <thead
                             class="bg-indigo-50/50 border-b border-indigo-100/60 text-slate-900 font-bold uppercase tracking-wider text-[10px] sm:text-xs">
                             <tr>
