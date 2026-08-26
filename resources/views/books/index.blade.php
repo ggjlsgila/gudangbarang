@@ -69,11 +69,11 @@
 
                                 {{-- Kolom Nama Buku dengan Sortir URL --}}
                                 <th class="px-2 py-3 sm:px-4 w-[40%] sm:w-[30%]">
-                                    <a href="{{ route('books.index', array_merge(request()->all(), ['sort' => 'nama_buku', 'direction' => request('direction') == 'asc' && request('sort') == 'nama_buku' ? 'desc' : 'asc'])) }}"
+                                    <a href="{{ route('books.index', array_merge(request()->all(), ['sort' => 'judul_buku', 'direction' => request('direction') == 'asc' && request('sort') == 'judul_buku' ? 'desc' : 'asc'])) }}"
                                         class="group inline-flex items-center gap-1.5 hover:text-indigo-600 transition cursor-pointer">
-                                        <span>NAMA BUKU</span>
+                                        <span>judul BUKU</span>
                                         <span class="text-slate-400 group-hover:text-indigo-600">
-                                            @if (request('sort') == 'nama_buku')
+                                            @if (request('sort') == 'judul_buku')
                                                 {{ request('direction') == 'asc' ? '▲' : '▼' }}
                                             @else
                                                 ⇅
@@ -354,7 +354,7 @@
                     <label class="text-[11px] font-bold text-neutral-500 uppercase tracking-wider block mb-1">Judul
                         Buku</label>
                     {{-- UBAH NAME MENJADI nama_buku AGAR SESUAI DENGAN CONTROLLER & DATABASE --}}
-                    <input type="text" name="nama_buku" id="editJudul" required
+                    <input type="text" name="judul_buku" id="editJudul" required
                         class="w-full rounded-xl border border-neutral-300 px-3.5 py-2 text-xs sm:text-sm text-black focus:border-indigo-600 focus:outline-none">
                 </div>
                 <div>
@@ -391,8 +391,8 @@
 @endsection
 
 <script>
+    // Fungsi Buka Modal Detail
     function openDetailModal(button) {
-
         const kode = button.dataset.kode;
         const judul = button.dataset.judul;
         const stok = button.dataset.stok;
@@ -408,26 +408,27 @@
         const fileEmpty = document.getElementById('modalFileEmpty');
 
         if (fileUrl && fileUrl.trim() !== '') {
-
             fileLink.href = fileUrl;
             fileLink.classList.remove('hidden');
             fileLink.classList.add('inline-flex');
             fileEmpty.classList.add('hidden');
-
         } else {
-
             fileLink.classList.add('hidden');
             fileLink.classList.remove('inline-flex');
             fileEmpty.classList.remove('hidden');
-
         }
 
         const modal = document.getElementById('detailModal');
-
         modal.classList.remove('hidden');
         modal.classList.add('flex');
     }
 
+    // === TAMBAHKAN FUNGSI INI SUPAYA TOMBOL TUTUP & X BERFUNGSI ===
+    function closeDetailModal() {
+        const modal = document.getElementById('detailModal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
 
     // Functions Modal Edit
     function openEditModal(actionUrl, kode, judul, stok, keterangan) {
