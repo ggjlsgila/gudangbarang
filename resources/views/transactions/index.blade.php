@@ -118,7 +118,7 @@
                                     <td class="px-3 py-3.5 sm:px-4 font-medium text-slate-700 truncate">
                                         @if ($trx->itemable)
                                             <span class="font-bold text-slate-900 block truncate">
-                                                {{ $trx->itemable->nama_buku ?? ($trx->itemable->nama_barang ?? ($trx->itemable->nama_item ?? '-')) }}
+                                                {{ $trx->itemable->judul_buku ?? ($trx->itemable->nama_buku ?? ($trx->itemable->nama_barang ?? ($trx->itemable->nama_item ?? '-'))) }}
                                             </span>
                                             <span class="font-mono text-[11px] text-slate-400 block">
                                                 {{ $trx->itemable->kode_buku ?? ($trx->itemable->kode_barang ?? ($trx->itemable->kode_item ?? '')) }}
@@ -152,49 +152,56 @@
                                     </td>
 
                                     <td class="whitespace-nowrap px-1 py-3.5 sm:px-4 text-center">
-                                        <div class="inline-flex items-center justify-center gap-1.5">
-
-                                            {{-- Detail Button (Icon Mata) --}}
-                                            <button type="button" title="Detail Transaksi"
-                                                onclick="openDetailModal('{{ $trx->kode_transaksi }}', '{{ addslashes($trx->itemable->nama_buku ?? ($trx->itemable->nama_barang ?? ($trx->itemable->nama_item ?? '-'))) }}', '{{ ucfirst($trx->jenis_transaksi) }}', '{{ $trx->jumlah }}', '{{ \Carbon\Carbon::parse($trx->tanggal_transaksi)->format('d M Y') }}', '{{ addslashes($trx->keterangan ?? '-') }}')"
-                                                class="inline-flex items-center justify-center rounded-lg border border-slate-200 p-1.5 text-slate-600 transition hover:border-indigo-600 hover:bg-indigo-50 hover:text-indigo-600 cursor-pointer">
+                                        <div class="relative inline-block text-left" x-data="{ open: false, dropUp: false, menuTop: 0, menuLeft: 0 }">
+                                            <button type="button" title="Menu Aksi"
+                                                @click="
+                                                    let rect = $el.getBoundingClientRect();
+                                                    let spaceBelow = window.innerHeight - rect.bottom;
+                                                    dropUp = spaceBelow < 220;
+                                                    menuTop = dropUp ? rect.top - 140 : rect.bottom + 8;
+                                                    menuLeft = Math.max(8, Math.min(rect.right - 128, window.innerWidth - 136));
+                                                    open = !open;
+                                                "
+                                                @click.away="open = false"
+                                                class="inline-flex items-center justify-center rounded-lg border border-slate-200 p-1.5 text-slate-600 transition hover:border-slate-300 hover:bg-slate-100 hover:text-indigo-600 cursor-pointer">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                     stroke-width="2" stroke="currentColor" class="w-4 h-4">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.573 16.49 16.638 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                                        d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75 0 0 1 0 1.5Z" />
                                                 </svg>
                                             </button>
 
-                                            {{-- Edit Button (Icon Pensil) --}}
-                                            <button type="button" title="Edit Transaksi"
-                                                onclick="openEditModal('{{ route('transactions.update', $trx) }}', '{{ $trx->jenis_transaksi }}', '{{ $trx->jumlah }}', '{{ $trx->tanggal_transaksi }}', '{{ addslashes($trx->keterangan ?? '') }}')"
-                                                class="inline-flex items-center justify-center rounded-lg border border-slate-200 p-1.5 text-slate-600 transition hover:border-amber-500 hover:bg-amber-50 hover:text-amber-600 cursor-pointer">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                    stroke-width="2" stroke="currentColor" class="w-4 h-4">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                                                </svg>
-                                            </button>
+                                            <template x-teleport="body">
+                                                <div x-show="open" x-transition
+                                                    :style="`top: ${menuTop}px; left: ${menuLeft}px;`"
+                                                    class="fixed z-[9999] w-32 rounded-xl border border-slate-200 bg-white py-1 text-left shadow-lg focus:outline-none"
+                                                    style="display: none;">
+                                                    <button type="button"
+                                                        onclick="openDetailModal('{{ $trx->kode_transaksi }}', '{{ addslashes($trx->itemable->judul_buku ?? ($trx->itemable->nama_buku ?? ($trx->itemable->nama_barang ?? ($trx->itemable->nama_item ?? '-')))) }}', '{{ ucfirst($trx->jenis_transaksi) }}', '{{ $trx->jumlah }}', '{{ \Carbon\Carbon::parse($trx->tanggal_transaksi)->format('d M Y') }}', '{{ addslashes($trx->keterangan ?? '-') }}')"
+                                                        @click="open = false"
+                                                        class="flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-indigo-600 transition">
+                                                        <span>Detail</span>
+                                                    </button>
 
-                                            {{-- Delete Button --}}
-                                            <form method="POST" action="{{ route('transactions.destroy', $trx) }}"
-                                                class="inline-flex m-0 p-0"
-                                                onsubmit="return confirm('Hapus transaksi ini? Stok item akan disesuaikan kembali.')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" title="Hapus Transaksi"
-                                                    class="inline-flex items-center justify-center rounded-lg border border-slate-200 p-1.5 text-slate-600 transition hover:border-rose-500 hover:bg-rose-50 hover:text-rose-600 cursor-pointer">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                                        class="w-4 h-4">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                                                    </svg>
-                                                </button>
-                                            </form>
+                                                    <button type="button"
+                                                        onclick="openEditModal('{{ route('transactions.update', $trx) }}', '{{ $trx->jenis_transaksi }}', '{{ $trx->jumlah }}', '{{ $trx->tanggal_transaksi }}', '{{ addslashes($trx->keterangan ?? '') }}')"
+                                                        @click="open = false"
+                                                        class="flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-indigo-600 transition">
+                                                        <span>Edit</span>
+                                                    </button>
 
+                                                    <form method="POST" action="{{ route('transactions.destroy', $trx) }}"
+                                                        onsubmit="return confirm('Hapus transaksi ini? Stok item akan disesuaikan kembali.')"
+                                                        class="block m-0 p-0">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit"
+                                                            class="flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 transition">
+                                                            <span>Hapus</span>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </template>
                                         </div>
                                     </td>
                                 </tr>
@@ -220,9 +227,11 @@
                 @endif
             </div>
             {{-- MODAL DETAIL TRANSAKSI --}}
-            <div id="detailModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+            <div id="detailModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black/50"
+                onclick="closeDetailModal()">
                 <div class="flex min-h-screen items-center justify-center p-4">
-                    <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl border border-slate-100 relative">
+                    <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl border border-slate-100 relative"
+                        onclick="event.stopPropagation()">
 
                         {{-- Modal Header --}}
                         <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
@@ -290,9 +299,10 @@
                 </div>
             </div>
             {{-- MODAL EDIT TRANSAKSI --}}
-            <div id="editModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+            <div id="editModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black/50" onclick="closeEditModal()">
                 <div class="flex min-h-screen items-center justify-center p-4">
-                    <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl border border-slate-100 relative">
+                    <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl border border-slate-100 relative"
+                        onclick="event.stopPropagation()">
 
                         {{-- Modal Header --}}
                         <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
@@ -367,9 +377,11 @@
                 </div>
             </div>
             {{-- MODAL TAMBAH TRANSAKSI --}}
-            <div id="tambahModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+            <div id="tambahModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black/50"
+                onclick="closeTambahModal()">
                 <div class="flex min-h-screen items-center justify-center p-4">
-                    <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl border border-slate-100 relative">
+                    <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl border border-slate-100 relative"
+                        onclick="event.stopPropagation()">
 
                         {{-- Modal Header --}}
                         <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
@@ -486,167 +498,203 @@
                                 </button>
                             </div>
                         </form>
-                    @endsection
 
-                    {{-- ========================================== --}}
-                    {{-- JAVASCRIPT HANDLER (TERMASUK LIVE SEARCH AJAX) --}}
-                    {{-- ========================================== --}}
-                    <script>
-                        // Variable Global TomSelect
-                        let tomBuku = null;
-                        let tomItem = null;
+                        {{-- ========================================== --}}
+                        {{-- JAVASCRIPT HANDLER (TERMASUK LIVE SEARCH AJAX) --}}
+                        {{-- ========================================== --}}
+                        <script>
+                            // Variable Global TomSelect
+                            let tomBuku = null;
+                            let tomItem = null;
 
-                        // Modal Tambah
-                        function openTambahModal() {
-                            document.getElementById('tambahModal').classList.remove('hidden');
-                        }
+                            // Modal Tambah
+                            function openTambahModal() {
+                                closeDetailModal();
+                                closeEditModal();
+                                document.getElementById('tambahModal').classList.remove('hidden');
+                            }
 
-                        function closeTambahModal() {
-                            document.getElementById('tambahModal').classList.add('hidden');
-                        }
+                            function closeTambahModal() {
+                                document.getElementById('tambahModal').classList.add('hidden');
+                            }
 
-                        // Modal Detail (Mata)
-                        function openDetailModal(kode, item, jenis, jumlah, tanggal, keterangan) {
-                            document.getElementById('detailKode').innerText = kode;
-                            document.getElementById('detailItem').innerText = item;
-                            document.getElementById('detailJenis').innerText = jenis;
-                            document.getElementById('detailJumlah').innerText = jumlah;
-                            document.getElementById('detailTanggal').innerText = tanggal;
-                            document.getElementById('detailKeterangan').innerText = keterangan;
-                            document.getElementById('detailModal').classList.remove('hidden');
-                        }
+                            // Modal Detail (Mata)
+                            function openDetailModal(kode, item, jenis, jumlah, tanggal, keterangan) {
+                                closeTambahModal();
+                                closeEditModal();
+                                document.getElementById('detailKode').innerText = kode;
+                                document.getElementById('detailItem').innerText = item;
+                                document.getElementById('detailJenis').innerText = jenis;
+                                document.getElementById('detailJumlah').innerText = jumlah;
+                                document.getElementById('detailTanggal').innerText = tanggal;
+                                document.getElementById('detailKeterangan').innerText = keterangan;
+                                document.getElementById('detailModal').classList.remove('hidden');
+                            }
 
-                        function closeDetailModal() {
-                            document.getElementById('detailModal').classList.add('hidden');
-                        }
+                            function closeDetailModal() {
+                                document.getElementById('detailModal').classList.add('hidden');
+                            }
 
-                        // Modal Edit (Pensil)
-                        function openEditModal(actionUrl, jenis, jumlah, tanggal, keterangan) {
-                            document.getElementById('editForm').action = actionUrl;
-                            document.getElementById('editJenis').value = jenis;
-                            document.getElementById('editJumlah').value = jumlah;
-                            document.getElementById('editTanggal').value = tanggal;
-                            document.getElementById('editKeterangan').value = keterangan;
-                            document.getElementById('editModal').classList.remove('hidden');
-                        }
+                            // Modal Edit (Pensil)
+                            function openEditModal(actionUrl, jenis, jumlah, tanggal, keterangan) {
+                                closeTambahModal();
+                                closeDetailModal();
+                                document.getElementById('editForm').action = actionUrl;
+                                document.getElementById('editJenis').value = jenis;
+                                document.getElementById('editJumlah').value = jumlah;
+                                document.getElementById('editTanggal').value = tanggal;
+                                document.getElementById('editKeterangan').value = keterangan;
+                                document.getElementById('editModal').classList.remove('hidden');
+                            }
 
-                        function closeEditModal() {
-                            document.getElementById('editModal').classList.add('hidden');
-                        }
+                            function closeEditModal() {
+                                document.getElementById('editModal').classList.add('hidden');
+                            }
 
-                        // Switch Item/Buku di Modal Tambah (Sudah diperbaiki)
-                        function toggleItemOptions() {
-                            const kategori = document.getElementById('selectKategori').value;
-                            const containerBuku = document.getElementById('containerBuku');
-                            const containerItem = document.getElementById('containerItem');
-                            const realItemId = document.getElementById('realItemId');
-
-                            if (kategori === 'buku') {
-                                containerBuku.classList.remove('hidden');
-                                containerItem.classList.add('hidden');
-                                // Ambil value dari TomSelect buku jika sudah terpilih
-                                if (tomBuku) {
-                                    realItemId.value = tomBuku.getValue();
+                            document.addEventListener('keydown', function(event) {
+                                if (event.key !== 'Escape') {
+                                    return;
                                 }
-                            } else if (kategori === 'item') {
-                                containerItem.classList.remove('hidden');
-                                containerBuku.classList.add('hidden');
-                                // Ambil value dari TomSelect item jika sudah terpilih
-                                if (tomItem) {
-                                    realItemId.value = tomItem.getValue();
+
+                                closeDetailModal();
+                                closeEditModal();
+                                closeTambahModal();
+                            });
+
+                            // Switch Item/Buku di Modal Tambah (Sudah diperbaiki)
+                            function toggleItemOptions() {
+                                const kategori = document.getElementById('selectKategori').value;
+                                const containerBuku = document.getElementById('containerBuku');
+                                const containerItem = document.getElementById('containerItem');
+                                const realItemId = document.getElementById('realItemId');
+
+                                if (kategori === 'buku') {
+                                    containerBuku.classList.remove('hidden');
+                                    containerItem.classList.add('hidden');
+                                    // Ambil value dari TomSelect buku jika sudah terpilih
+                                    if (tomBuku) {
+                                        realItemId.value = tomBuku.getValue();
+                                    }
+                                } else if (kategori === 'item') {
+                                    containerItem.classList.remove('hidden');
+                                    containerBuku.classList.add('hidden');
+                                    // Ambil value dari TomSelect item jika sudah terpilih
+                                    if (tomItem) {
+                                        realItemId.value = tomItem.getValue();
+                                    }
+                                } else {
+                                    containerBuku.classList.add('hidden');
+                                    containerItem.classList.add('hidden');
+                                    realItemId.value = '';
                                 }
-                            } else {
-                                containerBuku.classList.add('hidden');
-                                containerItem.classList.add('hidden');
-                                realItemId.value = '';
-                            }
-                        }
-
-                        // Inisialisasi Utama Aplikasi
-                        document.addEventListener('DOMContentLoaded', function() {
-
-                            // 1. Inisialisasi Tom Select
-                            const selectBukuEl = document.getElementById('selectBuku');
-                            const selectItemEl = document.getElementById('selectItem');
-
-                            if (selectBukuEl) {
-                                tomBuku = new TomSelect("#selectBuku", {
-                                    dropdownParent: 'body',
-                                    create: false,
-                                    sortField: {
-                                        field: "text",
-                                        order: "asc"
-                                    },
-                                    onChange: function(value) {
-                                        // Isi input hidden setiap kali user memilih item
-                                        document.getElementById('realItemId').value = value;
-                                    }
-                                });
                             }
 
-                            if (selectItemEl) {
-                                tomItem = new TomSelect("#selectItem", {
-                                    create: false,
-                                    sortField: {
-                                        field: "text",
-                                        order: "asc"
-                                    },
-                                    onChange: function(value) {
-                                        // Isi input hidden setiap kali user memilih item
-                                        document.getElementById('realItemId').value = value;
-                                    }
-                                });
-                            }
+                            // Inisialisasi Utama Aplikasi
+                            document.addEventListener('DOMContentLoaded', function() {
 
-                            // 2. AJAX Live Search & Event Handling
-                            const searchInput = document.getElementById('transactionSearch');
-                            const searchForm = document.getElementById('transactionSearchForm');
-                            const tableContainer = document.getElementById('tableContainer');
-                            const btnReset = document.getElementById('btnReset');
-                            let timer;
+                                // 1. Inisialisasi Tom Select
+                                const selectBukuEl = document.getElementById('selectBuku');
+                                const selectItemEl = document.getElementById('selectItem');
 
-                            function fetchTransactions(url) {
-                                fetch(url, {
-                                        headers: {
-                                            'X-Requested-With': 'XMLHttpRequest'
+                                if (selectBukuEl) {
+                                    tomBuku = new TomSelect("#selectBuku", {
+                                        dropdownParent: 'body',
+                                        create: false,
+                                        sortField: {
+                                            field: "text",
+                                            order: "asc"
+                                        },
+                                        onChange: function(value) {
+                                            // Isi input hidden setiap kali user memilih item
+                                            document.getElementById('realItemId').value = value;
                                         }
-                                    })
-                                    .then(response => response.text())
-                                    .then(html => {
-                                        const parser = new DOMParser();
-                                        const doc = parser.parseFromString(html, 'text/html');
-                                        const newTable = doc.getElementById('tableContainer');
-                                        if (newTable) {
-                                            tableContainer.innerHTML = newTable.innerHTML;
+                                    });
+                                }
+
+                                if (selectItemEl) {
+                                    tomItem = new TomSelect("#selectItem", {
+                                        create: false,
+                                        sortField: {
+                                            field: "text",
+                                            order: "asc"
+                                        },
+                                        onChange: function(value) {
+                                            // Isi input hidden setiap kali user memilih item
+                                            document.getElementById('realItemId').value = value;
                                         }
+                                    });
+                                }
 
-                                        // Tampilkan atau sembunyikan tombol Reset
-                                        const jenisFilter = document.querySelector('input[name="jenis_transaksi"]');
-                                        const hasJenis = jenisFilter && jenisFilter.value;
+                                // 2. AJAX Live Search & Event Handling
+                                const searchInput = document.getElementById('transactionSearch');
+                                const searchForm = document.getElementById('transactionSearchForm');
+                                const tableContainer = document.getElementById('tableContainer');
+                                const btnReset = document.getElementById('btnReset');
+                                let timer;
 
-                                        if ((searchInput && searchInput.value.trim() !== '') || hasJenis) {
-                                            if (btnReset) {
-                                                btnReset.classList.remove('hidden');
-                                                btnReset.classList.add('inline-flex');
+                                function fetchTransactions(url) {
+                                    fetch(url, {
+                                            headers: {
+                                                'X-Requested-With': 'XMLHttpRequest'
                                             }
-                                        } else {
-                                            if (btnReset) {
-                                                btnReset.classList.add('hidden');
-                                                btnReset.classList.remove('inline-flex');
+                                        })
+                                        .then(response => response.text())
+                                        .then(html => {
+                                            const parser = new DOMParser();
+                                            const doc = parser.parseFromString(html, 'text/html');
+                                            const newTable = doc.getElementById('tableContainer');
+                                            if (newTable) {
+                                                tableContainer.innerHTML = newTable.innerHTML;
                                             }
-                                        }
-                                    })
-                                    .catch(error => console.error('Error loading data:', error));
-                            }
 
-                            // Live Search Input Handler
-                            if (searchInput) {
-                                searchInput.addEventListener('input', function() {
-                                    clearTimeout(timer);
-                                    timer = setTimeout(function() {
+                                            // Tampilkan atau sembunyikan tombol Reset
+                                            const jenisFilter = document.querySelector('input[name="jenis_transaksi"]');
+                                            const hasJenis = jenisFilter && jenisFilter.value;
+
+                                            if ((searchInput && searchInput.value.trim() !== '') || hasJenis) {
+                                                if (btnReset) {
+                                                    btnReset.classList.remove('hidden');
+                                                    btnReset.classList.add('inline-flex');
+                                                }
+                                            } else {
+                                                if (btnReset) {
+                                                    btnReset.classList.add('hidden');
+                                                    btnReset.classList.remove('inline-flex');
+                                                }
+                                            }
+                                        })
+                                        .catch(error => console.error('Error loading data:', error));
+                                }
+
+                                // Live Search Input Handler
+                                if (searchInput) {
+                                    searchInput.addEventListener('input', function() {
+                                        clearTimeout(timer);
+                                        timer = setTimeout(function() {
+                                            const query = searchInput.value;
+                                            const urlObj = new URL("{{ route('transactions.index') }}", window.location
+                                                .origin);
+
+                                            if (query) {
+                                                urlObj.searchParams.set('search', query);
+                                            }
+
+                                            const jenisFilter = document.querySelector('input[name="jenis_transaksi"]');
+                                            if (jenisFilter && jenisFilter.value) {
+                                                urlObj.searchParams.set('jenis_transaksi', jenisFilter.value);
+                                            }
+
+                                            fetchTransactions(urlObj.toString());
+                                            window.history.pushState(null, '', urlObj.toString());
+                                        }, 300);
+                                    });
+                                }
+
+                                if (searchForm) {
+                                    searchForm.addEventListener('submit', function(e) {
+                                        e.preventDefault();
                                         const query = searchInput.value;
-                                        const urlObj = new URL("{{ route('transactions.index') }}", window.location
-                                            .origin);
+                                        const urlObj = new URL("{{ route('transactions.index') }}", window.location.origin);
 
                                         if (query) {
                                             urlObj.searchParams.set('search', query);
@@ -659,43 +707,23 @@
 
                                         fetchTransactions(urlObj.toString());
                                         window.history.pushState(null, '', urlObj.toString());
-                                    }, 300);
-                                });
-                            }
+                                    });
+                                }
 
-                            if (searchForm) {
-                                searchForm.addEventListener('submit', function(e) {
-                                    e.preventDefault();
-                                    const query = searchInput.value;
-                                    const urlObj = new URL("{{ route('transactions.index') }}", window.location.origin);
-
-                                    if (query) {
-                                        urlObj.searchParams.set('search', query);
-                                    }
-
-                                    const jenisFilter = document.querySelector('input[name="jenis_transaksi"]');
-                                    if (jenisFilter && jenisFilter.value) {
-                                        urlObj.searchParams.set('jenis_transaksi', jenisFilter.value);
-                                    }
-
-                                    fetchTransactions(urlObj.toString());
-                                    window.history.pushState(null, '', urlObj.toString());
-                                });
-                            }
-
-                            // Event Delegation untuk Pagination Link
-                            if (tableContainer) {
-                                tableContainer.addEventListener('click', function(e) {
-                                    const link = e.target.closest('a');
-                                    if (link && link.getAttribute('href') && link.getAttribute('href') !== '#') {
-                                        if (link.closest('.border-t') || link.closest('nav')) {
-                                            e.preventDefault();
-                                            const targetUrl = link.getAttribute('href');
-                                            fetchTransactions(targetUrl);
-                                            window.history.pushState(null, '', targetUrl);
+                                // Event Delegation untuk Pagination Link
+                                if (tableContainer) {
+                                    tableContainer.addEventListener('click', function(e) {
+                                        const link = e.target.closest('a');
+                                        if (link && link.getAttribute('href') && link.getAttribute('href') !== '#') {
+                                            if (link.closest('.border-t') || link.closest('nav')) {
+                                                e.preventDefault();
+                                                const targetUrl = link.getAttribute('href');
+                                                fetchTransactions(targetUrl);
+                                                window.history.pushState(null, '', targetUrl);
+                                            }
                                         }
-                                    }
-                                });
-                            }
-                        });
-                    </script>
+                                    });
+                                }
+                            });
+                        </script>
+                    @endsection

@@ -66,11 +66,11 @@
                         <thead
                             class="bg-indigo-50/50 border-b border-indigo-100/60 text-slate-900 font-bold uppercase tracking-wider text-[10px] sm:text-xs">
                             <tr>
-                                <th class="px-2 py-3 sm:px-4 w-[6%] text-center">NO</th>
-                                <th class="hidden sm:table-cell px-3 py-3 sm:px-4 w-[18%]">KODE / ISBN</th>
+                                <th class="px-2 py-3 sm:px-4 w-[8%] text-center">NO</th>
+                                <th class="hidden sm:table-cell px-3 py-3 sm:px-4 w-[15%]">KODE / ISBN</th>
 
                                 {{-- Kolom Nama Buku dengan Sortir URL --}}
-                                <th class="px-2 py-3 sm:px-4 w-[40%] sm:w-[30%]">
+                                <th class="px-2 py-3 sm:px-4 w-[48%] sm:w-[33%]">
                                     <a href="{{ route('books.index', array_merge(request()->all(), ['sort' => 'judul_buku', 'direction' => request('direction') == 'asc' && request('sort') == 'judul_buku' ? 'desc' : 'asc'])) }}"
                                         class="group inline-flex items-center gap-1.5 hover:text-indigo-600 transition cursor-pointer">
                                         <span>judul BUKU</span>
@@ -85,7 +85,7 @@
                                 </th>
 
                                 {{-- Kolom Stok dengan Sortir URL --}}
-                                <th class="px-1.5 py-3 sm:px-4 w-[10%] sm:w-[8%] text-center">
+                                <th class="px-1.5 py-3 sm:px-4 w-[14%] sm:w-[8%] text-center">
                                     <a href="{{ route('books.index', array_merge(request()->all(), ['sort' => 'stok', 'direction' => request('direction') == 'asc' && request('sort') == 'stok' ? 'desc' : 'asc'])) }}"
                                         class="group inline-flex items-center justify-center gap-1 hover:text-indigo-600 transition cursor-pointer w-full">
                                         <span>STOK</span>
@@ -101,7 +101,7 @@
 
                                 <th class="hidden sm:table-cell px-3 py-3 sm:px-4 w-[14%]">KETERANGAN</th>
                                 <th class="hidden sm:table-cell px-2 py-3 sm:px-4 w-[10%] text-center">FILE / COVER</th>
-                                <th class="px-1 py-3 sm:px-4 text-center w-[24%] sm:w-[14%]">AKSI</th>
+                                <th class="px-1 py-3 sm:px-4 text-center w-[18%] sm:w-[14%]">AKSI</th>
                             </tr>
                         </thead>
 
@@ -138,7 +138,8 @@
                                     {{-- KOLOM FILE / COVER (Hidden di Mobile) --}}
                                     <td class="hidden sm:table-cell px-2 py-3.5 sm:px-4 text-center whitespace-nowrap">
                                         @if (!empty($book->file))
-                                            <a href="{{ asset('storage/' . $book->file) }}" target="_blank"
+                                            <button type="button"
+                                                onclick="openFilePreview(@js(asset('storage/' . $book->file)), @js(basename($book->file)))"
                                                 class="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] font-bold text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-200 transition">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                     stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
@@ -146,20 +147,22 @@
                                                         d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
                                                 </svg>
                                                 <span>Lihat</span>
-                                            </a>
+                                            </button>
                                         @else
                                             <span class="text-xs text-slate-400 font-medium">-</span>
                                         @endif
                                     </td>
                                     {{-- KOLOM AKSI DENGAN DROPDOWN PINTAR OTOMATIS --}}
                                     <td class="whitespace-nowrap px-1 py-3.5 sm:px-4 text-center">
-                                        <div class="relative inline-block text-left" x-data="{ open: false, dropUp: false }">
+                                        <div class="relative inline-block text-left" x-data="{ open: false, dropUp: false, menuTop: 0, menuLeft: 0 }">
                                             <!-- Tombol Titik Tiga -->
                                             <button
                                                 @click="
                     let rect = $el.getBoundingClientRect();
                     let spaceBelow = window.innerHeight - rect.bottom;
                     dropUp = spaceBelow < 220;
+                    menuTop = dropUp ? rect.top - 140 : rect.bottom + 8;
+                    menuLeft = Math.max(8, Math.min(rect.right - 128, window.innerWidth - 136));
                     open = !open;
                 "
                                                 @click.away="open = false" type="button" title="Menu Aksi"
@@ -172,64 +175,66 @@
                                             </button>
 
                                             <!-- Menu Dropdown Pintar (Otomatis menyesuaikan posisi) -->
-                                            <div x-show="open" x-transition
-                                                :class="dropUp ?
-                                                    'absolute right-0 bottom-full mb-2 z-50 w-36 origin-bottom-right rounded-xl bg-white border border-slate-200 shadow-lg py-1 text-left focus:outline-none' :
-                                                    'absolute right-0 top-full mt-2 z-50 w-36 origin-top-right rounded-xl bg-white border border-slate-200 shadow-lg py-1 text-left focus:outline-none'"
-                                                style="display: none;">
+                                            <template x-teleport="body">
+                                                <div x-show="open" x-transition
+                                                    :style="`top: ${menuTop}px; left: ${menuLeft}px;`"
+                                                    class="fixed z-[9999] w-32 rounded-xl border border-slate-200 bg-white py-1 text-left shadow-lg focus:outline-none"
+                                                    style="display: none;">
 
-                                                {{-- Tombol Detail --}}
-                                                <button type="button" onclick="openDetailModal(this)"
-                                                    data-kode="{{ $book->kode_buku }}"
-                                                    data-judul="{{ $book->judul_buku }}" data-stok="{{ $book->stok }}"
-                                                    data-keterangan="{{ $book->keterangan ?? '-' }}"
-                                                    data-file="{{ $book->file ? asset('storage/' . $book->file) : '' }}"
-                                                    @click="open = false"
-                                                    class="flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-indigo-600 transition">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                                        class="w-3.5 h-3.5 text-slate-400">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.573 16.49 16.638 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                                    </svg>
-                                                    <span>Detail</span>
-                                                </button>
-
-                                                {{-- Tombol Edit --}}
-                                                <button type="button"
-                                                    onclick="openEditModal('{{ route('books.update', $book) }}', '{{ $book->kode_buku }}', '{{ addslashes($book->judul_buku) }}', '{{ $book->stok }}', '{{ addslashes($book->keterangan ?? '') }}')"
-                                                    @click="open = false"
-                                                    class="flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-indigo-600 transition">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                                        class="w-3.5 h-3.5 text-slate-400">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                                                    </svg>
-                                                    <span>Edit</span>
-                                                </button>
-
-                                                {{-- Tombol Hapus --}}
-                                                <form method="POST" action="{{ route('books.destroy', $book) }}"
-                                                    onsubmit="return confirm('Yakin ingin menghapus buku ini?')"
-                                                    class="block m-0 p-0">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit"
-                                                        class="flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 transition">
+                                                    {{-- Tombol Detail --}}
+                                                    <button type="button" onclick="openDetailModal(this)"
+                                                        data-kode="{{ $book->kode_buku }}"
+                                                        data-judul="{{ $book->judul_buku }}"
+                                                        data-stok="{{ $book->stok }}"
+                                                        data-keterangan="{{ $book->keterangan ?? '-' }}"
+                                                        data-file="{{ $book->file ? asset('storage/' . $book->file) : '' }}"
+                                                        @click="open = false"
+                                                        class="flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-indigo-600 transition">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                                            class="w-3.5 h-3.5 text-rose-400">
+                                                            class="w-3.5 h-3.5 text-slate-400">
                                                             <path stroke-linecap="round" stroke-linejoin="round"
-                                                                d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                                                d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.573 16.49 16.638 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                                                         </svg>
-                                                        <span>Hapus</span>
+                                                        <span>Detail</span>
                                                     </button>
-                                                </form>
 
-                                            </div>
+                                                    {{-- Tombol Edit --}}
+                                                    <button type="button"
+                                                        onclick="openEditModal('{{ route('books.update', $book) }}', '{{ $book->kode_buku }}', '{{ addslashes($book->judul_buku) }}', '{{ $book->stok }}', '{{ addslashes($book->keterangan ?? '') }}')"
+                                                        @click="open = false"
+                                                        class="flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-indigo-600 transition">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                            class="w-3.5 h-3.5 text-slate-400">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                                        </svg>
+                                                        <span>Edit</span>
+                                                    </button>
+
+                                                    {{-- Tombol Hapus --}}
+                                                    <form method="POST" action="{{ route('books.destroy', $book) }}"
+                                                        onsubmit="return confirm('Yakin ingin menghapus buku ini?')"
+                                                        class="block m-0 p-0">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit"
+                                                            class="flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 transition">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                viewBox="0 0 24 24" stroke-width="2"
+                                                                stroke="currentColor" class="w-3.5 h-3.5 text-rose-400">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                                            </svg>
+                                                            <span>Hapus</span>
+                                                        </button>
+                                                    </form>
+
+                                                </div>
+                                            </template>
                                         </div>
                                     </td>
                                 </tr>
@@ -259,9 +264,10 @@
     </div>
 
     {{-- 1. MODAL DETAIL BUKU --}}
-    <div id="detailModal" class="fixed inset-0 z-50 hidden p-4 pointer-events-none items-center justify-center">
-        <div
-            class="pointer-events-auto w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl transition-all border border-neutral-200">
+    <div id="detailModal" class="fixed inset-0 z-50 hidden p-4 items-center justify-center bg-black/50"
+        onclick="closeDetailModal()">
+        <div class="pointer-events-auto w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl transition-all border border-neutral-200"
+            onclick="event.stopPropagation()">
             <div class="flex items-center justify-between border-b border-neutral-200 pb-3">
                 <h3 class="text-base font-extrabold text-black">Detail Informasi Buku</h3>
                 <button type="button" onclick="closeDetailModal()"
@@ -314,10 +320,41 @@
         </div>
     </div>
 
+    {{-- MODAL PREVIEW FILE / COVER --}}
+    <div id="filePreviewModal" class="fixed inset-0 z-[60] hidden p-4 items-center justify-center bg-black/60"
+        onclick="closeFilePreview()">
+        <div class="relative flex h-full max-h-[90vh] w-full max-w-5xl flex-col rounded-2xl bg-white shadow-2xl"
+            onclick="event.stopPropagation()">
+            <div class="flex shrink-0 items-center justify-between border-b border-neutral-200 px-4 py-3 sm:px-6">
+                <h3 id="filePreviewTitle" class="truncate pr-4 text-sm font-extrabold text-neutral-900">Preview File</h3>
+                <button type="button" onclick="closeFilePreview()" title="Tutup preview"
+                    class="shrink-0 rounded-lg p-1.5 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-900 transition">
+                    <span class="text-xl leading-none">&times;</span>
+                </button>
+            </div>
+            <div class="flex min-h-0 flex-1 items-center justify-center bg-neutral-100 p-3 sm:p-6">
+                <img id="filePreviewImage" src="" alt="Preview cover buku"
+                    class="hidden max-h-full max-w-full rounded-lg object-contain shadow-sm">
+                <iframe id="filePreviewDocument" title="Preview dokumen buku"
+                    class="hidden h-full w-full rounded-lg border border-neutral-200 bg-white"></iframe>
+                <p id="filePreviewUnsupported" class="hidden text-center text-sm font-semibold text-neutral-500">
+                    File ini tidak dapat ditampilkan sebagai preview.
+                </p>
+            </div>
+            <div class="flex shrink-0 justify-end border-t border-neutral-200 px-4 py-3 sm:px-6">
+                <a id="filePreviewOpen" href="#" target="_blank" rel="noopener"
+                    class="inline-flex items-center rounded-xl bg-indigo-600 px-4 py-2 text-xs font-bold text-white hover:bg-indigo-700 transition">
+                    Buka / Unduh File
+                </a>
+            </div>
+        </div>
+    </div>
+
     {{-- 2. MODAL TAMBAH BUKU --}}
-    <div id="tambahModal" class="fixed inset-0 z-50 hidden p-4 pointer-events-none items-center justify-center">
-        <div
-            class="pointer-events-auto w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl transition-all border border-neutral-200 max-h-[90vh] overflow-y-auto">
+    <div id="tambahModal" class="fixed inset-0 z-50 hidden p-4 items-center justify-center bg-black/50"
+        onclick="closeTambahModal()">
+        <div class="pointer-events-auto w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl transition-all border border-neutral-200 max-h-[90vh] overflow-y-auto"
+            onclick="event.stopPropagation()">
             <div class="flex items-center justify-between border-b border-neutral-200 pb-3">
                 <h3 class="text-base font-extrabold text-black">Tambah Data Buku</h3>
                 <button type="button" onclick="closeTambahModal()"
@@ -367,9 +404,10 @@
     </div>
 
     {{-- {{-- 3. MODAL EDIT BUKU --}}
-    <div id="editModal" class="fixed inset-0 z-50 hidden p-4 pointer-events-none items-center justify-center">
-        <div
-            class="pointer-events-auto w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl transition-all border border-neutral-200 max-h-[90vh] overflow-y-auto">
+    <div id="editModal" class="fixed inset-0 z-50 hidden p-4 items-center justify-center bg-black/50"
+        onclick="closeEditModal()">
+        <div class="pointer-events-auto w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl transition-all border border-neutral-200 max-h-[90vh] overflow-y-auto"
+            onclick="event.stopPropagation()">
             <div class="flex items-center justify-between border-b border-neutral-200 pb-3">
                 <h3 class="text-base font-extrabold text-black">Edit Data Buku</h3>
                 <button type="button" onclick="closeEditModal()"
@@ -426,6 +464,9 @@
 <script>
     // --- MODAL TAMBAH ---
     function openTambahModal() {
+        closeDetailModal();
+        closeEditModal();
+        closeFilePreview();
         const modal = document.getElementById('tambahModal');
         if (modal) {
             modal.classList.remove('hidden');
@@ -451,6 +492,9 @@
         const keterangan = button.dataset.keterangan;
         const fileUrl = button.dataset.file;
 
+        closeTambahModal();
+        closeEditModal();
+        closeFilePreview();
         document.getElementById('modalKode').innerText = kode;
         document.getElementById('modalJudul').innerText = judul;
         document.getElementById('modalStok').innerText = stok + ' Unit';
@@ -485,8 +529,56 @@
         }
     }
 
+    function openFilePreview(fileUrl, fileName) {
+        closeDetailModal();
+        closeTambahModal();
+        closeEditModal();
+        const modal = document.getElementById('filePreviewModal');
+        const image = document.getElementById('filePreviewImage');
+        const documentViewer = document.getElementById('filePreviewDocument');
+        const unsupported = document.getElementById('filePreviewUnsupported');
+        const openLink = document.getElementById('filePreviewOpen');
+        const title = document.getElementById('filePreviewTitle');
+        const extension = fileName.split('.').pop().toLowerCase();
+
+        image.classList.add('hidden');
+        documentViewer.classList.add('hidden');
+        unsupported.classList.add('hidden');
+        image.removeAttribute('src');
+        documentViewer.removeAttribute('src');
+        openLink.href = fileUrl;
+        title.textContent = fileName || 'Preview File';
+
+        if (['jpg', 'jpeg', 'png'].includes(extension)) {
+            image.src = fileUrl;
+            image.classList.remove('hidden');
+        } else if (extension === 'pdf') {
+            documentViewer.src = fileUrl;
+            documentViewer.classList.remove('hidden');
+        } else {
+            unsupported.classList.remove('hidden');
+        }
+
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    function closeFilePreview() {
+        const modal = document.getElementById('filePreviewModal');
+        const image = document.getElementById('filePreviewImage');
+        const documentViewer = document.getElementById('filePreviewDocument');
+
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        image.removeAttribute('src');
+        documentViewer.removeAttribute('src');
+    }
+
     // --- MODAL EDIT ---
     function openEditModal(actionUrl, kode, judul, stok, keterangan) {
+        closeTambahModal();
+        closeDetailModal();
+        closeFilePreview();
         document.getElementById('editForm').action = actionUrl;
         document.getElementById('editKode').value = kode;
         document.getElementById('editJudul').value = judul;
@@ -507,6 +599,17 @@
             modal.classList.remove('flex');
         }
     }
+
+    document.addEventListener('keydown', function(event) {
+        if (event.key !== 'Escape') {
+            return;
+        }
+
+        closeFilePreview();
+        closeDetailModal();
+        closeTambahModal();
+        closeEditModal();
+    });
 
     // --- AJAX LIVE SEARCH, PAGINATION & RESET ---
     document.addEventListener('DOMContentLoaded', function() {

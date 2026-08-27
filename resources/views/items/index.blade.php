@@ -105,7 +105,8 @@
                                     {{-- Kolom File/Lampiran --}}
                                     <td class="hidden sm:table-cell px-3 py-3.5 sm:px-4 text-center whitespace-nowrap">
                                         @if ($item->file)
-                                            <a href="{{ asset('storage/' . $item->file) }}" target="_blank"
+                                            <button type="button"
+                                                onclick="openFilePreview(@js(asset('storage/' . $item->file)), @js(basename($item->file)))"
                                                 class="inline-flex items-center gap-1 rounded-lg bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-700 transition hover:bg-slate-200">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none"
                                                     viewBox="0 0 24 24" stroke="currentColor">
@@ -113,56 +114,63 @@
                                                         d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
                                                 </svg>
                                                 <span>Lihat</span>
-                                            </a>
+                                            </button>
                                         @else
                                             <span class="text-slate-400 font-medium">-</span>
                                         @endif
                                     </td>
 
                                     <td class="whitespace-nowrap px-1 py-3.5 sm:px-4 text-center">
-                                        <div class="inline-flex items-center justify-center gap-1.5">
-
-                                            {{-- Tombol Detail --}}
-                                            <button type="button" title="Detail Barang"
-                                                onclick="openDetailModal('{{ $item->kode_barang }}', '{{ addslashes($item->nama_barang) }}', '{{ $item->stok }}', '{{ addslashes($item->keterangan ?? '-') }}', '{{ $item->file ? asset('storage/' . $item->file) : '' }}')"
+                                        <div class="relative inline-block text-left" x-data="{ open: false, dropUp: false, menuTop: 0, menuLeft: 0 }">
+                                            <button type="button" title="Menu Aksi"
+                                                @click="
+                                                    let rect = $el.getBoundingClientRect();
+                                                    let spaceBelow = window.innerHeight - rect.bottom;
+                                                    dropUp = spaceBelow < 220;
+                                                    menuTop = dropUp ? rect.top - 140 : rect.bottom + 8;
+                                                    menuLeft = Math.max(8, Math.min(rect.right - 128, window.innerWidth - 136));
+                                                    open = !open;
+                                                "
+                                                @click.away="open = false"
                                                 class="inline-flex items-center justify-center rounded-lg border border-slate-200 p-1.5 text-slate-600 transition hover:border-slate-300 hover:bg-slate-100 hover:text-indigo-600 cursor-pointer">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                     stroke-width="2" stroke="currentColor" class="w-4 h-4">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.573 16.49 16.638 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                                        d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
                                                 </svg>
                                             </button>
 
-                                            {{-- Tombol Edit Modal --}}
-                                            <button type="button" title="Edit Barang"
-                                                onclick="openEditModal('{{ route('items.update', $item) }}', '{{ $item->kode_barang }}', '{{ addslashes($item->nama_barang) }}', '{{ $item->stok }}', '{{ addslashes($item->keterangan ?? '') }}')"
-                                                class="inline-flex items-center justify-center rounded-lg border border-slate-200 p-1.5 text-slate-600 transition hover:border-slate-300 hover:bg-slate-100 hover:text-indigo-600 cursor-pointer">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                    stroke-width="2" stroke="currentColor" class="w-4 h-4">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                                                </svg>
-                                            </button>
+                                            <template x-teleport="body">
+                                                <div x-show="open" x-transition
+                                                    :style="`top: ${menuTop}px; left: ${menuLeft}px;`"
+                                                    class="fixed z-[9999] w-32 rounded-xl border border-slate-200 bg-white py-1 text-left shadow-lg focus:outline-none"
+                                                    style="display: none;">
+                                                    <button type="button"
+                                                        onclick="openDetailModal(@js($item->kode_barang), @js($item->nama_barang), @js($item->stok), @js($item->keterangan ?? '-'), @js($item->file ? asset('storage/' . $item->file) : ''), @js($item->file ? basename($item->file) : ''))"
+                                                        @click="open = false"
+                                                        class="flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-indigo-600 transition">
+                                                        <span>Detail</span>
+                                                    </button>
 
-                                            {{-- Tombol Hapus --}}
-                                            <form method="POST" action="{{ route('items.destroy', $item) }}"
-                                                class="inline-flex m-0 p-0"
-                                                onsubmit="return confirm('Yakin ingin menghapus barang ini?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" title="Hapus Barang"
-                                                    class="inline-flex items-center justify-center rounded-lg border border-rose-200 bg-rose-50 p-1.5 text-rose-600 transition hover:bg-rose-100 hover:text-rose-700 cursor-pointer">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                                        class="w-4 h-4">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                                                    </svg>
-                                                </button>
-                                            </form>
+                                                    <button type="button"
+                                                        onclick="openEditModal('{{ route('items.update', $item) }}', '{{ $item->kode_barang }}', '{{ addslashes($item->nama_barang) }}', '{{ $item->stok }}', '{{ addslashes($item->keterangan ?? '') }}')"
+                                                        @click="open = false"
+                                                        class="flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-indigo-600 transition">
+                                                        <span>Edit</span>
+                                                    </button>
 
+                                                    <form method="POST" action="{{ route('items.destroy', $item) }}"
+                                                        onsubmit="return confirm('Yakin ingin menghapus barang ini?')"
+                                                        class="block m-0 p-0">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit"
+                                                            class="flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 transition">
+                                                            <span>Hapus</span>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </template>
                                         </div>
                                     </td>
                                 </tr>
@@ -193,9 +201,10 @@
     </div>
 
     {{-- 1. MODAL DETAIL --}}
-    <div id="detailModal" class="fixed inset-0 z-50 hidden p-4 pointer-events-none items-center justify-center">
-        <div
-            class="pointer-events-auto w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl transition-all border border-neutral-200">
+    <div id="detailModal" class="fixed inset-0 z-50 hidden p-4 items-center justify-center bg-black/50"
+        onclick="closeDetailModal()">
+        <div class="pointer-events-auto w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl transition-all border border-neutral-200"
+            onclick="event.stopPropagation()">
             <div class="flex items-center justify-between border-b border-neutral-200 pb-3">
                 <h3 class="text-base font-extrabold text-black">Detail Informasi Barang</h3>
                 <button type="button" onclick="closeDetailModal()"
@@ -234,10 +243,41 @@
         </div>
     </div>
 
+    {{-- MODAL PREVIEW FILE / LAMPIRAN --}}
+    <div id="filePreviewModal" class="fixed inset-0 z-[60] hidden p-4 items-center justify-center bg-black/60"
+        onclick="closeFilePreview()">
+        <div class="relative flex h-full max-h-[90vh] w-full max-w-5xl flex-col rounded-2xl bg-white shadow-2xl"
+            onclick="event.stopPropagation()">
+            <div class="flex shrink-0 items-center justify-between border-b border-neutral-200 px-4 py-3 sm:px-6">
+                <h3 id="filePreviewTitle" class="truncate pr-4 text-sm font-extrabold text-neutral-900">Preview File</h3>
+                <button type="button" onclick="closeFilePreview()" title="Tutup preview"
+                    class="shrink-0 rounded-lg p-1.5 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-900 transition">
+                    <span class="text-xl leading-none">&times;</span>
+                </button>
+            </div>
+            <div class="flex min-h-0 flex-1 items-center justify-center bg-neutral-100 p-3 sm:p-6">
+                <img id="filePreviewImage" src="" alt="Preview lampiran barang"
+                    class="hidden max-h-full max-w-full rounded-lg object-contain shadow-sm">
+                <iframe id="filePreviewDocument" title="Preview dokumen barang"
+                    class="hidden h-full w-full rounded-lg border border-neutral-200 bg-white"></iframe>
+                <p id="filePreviewUnsupported" class="hidden text-center text-sm font-semibold text-neutral-500">
+                    File ini tidak dapat ditampilkan sebagai preview.
+                </p>
+            </div>
+            <div class="flex shrink-0 justify-end border-t border-neutral-200 px-4 py-3 sm:px-6">
+                <a id="filePreviewOpen" href="#" target="_blank" rel="noopener"
+                    class="inline-flex items-center rounded-xl bg-indigo-600 px-4 py-2 text-xs font-bold text-white hover:bg-indigo-700 transition">
+                    Buka / Unduh File
+                </a>
+            </div>
+        </div>
+    </div>
+
     {{-- 2. MODAL TAMBAH --}}
-    <div id="tambahModal" class="fixed inset-0 z-50 hidden p-4 pointer-events-none items-center justify-center">
-        <div
-            class="pointer-events-auto w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl transition-all border border-neutral-200 max-h-[90vh] overflow-y-auto">
+    <div id="tambahModal" class="fixed inset-0 z-50 hidden p-4 items-center justify-center bg-black/50"
+        onclick="closeTambahModal()">
+        <div class="pointer-events-auto w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl transition-all border border-neutral-200 max-h-[90vh] overflow-y-auto"
+            onclick="event.stopPropagation()">
             <div class="flex items-center justify-between border-b border-neutral-200 pb-3">
                 <h3 class="text-base font-extrabold text-black">Tambah Data Barang</h3>
                 <button type="button" onclick="closeTambahModal()"
@@ -287,9 +327,10 @@
     </div>
 
     {{-- 3. MODAL EDIT --}}
-    <div id="editModal" class="fixed inset-0 z-50 hidden p-4 pointer-events-none items-center justify-center">
-        <div
-            class="pointer-events-auto w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl transition-all border border-neutral-200 max-h-[90vh] overflow-y-auto">
+    <div id="editModal" class="fixed inset-0 z-50 hidden p-4 items-center justify-center bg-black/50"
+        onclick="closeEditModal()">
+        <div class="pointer-events-auto w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl transition-all border border-neutral-200 max-h-[90vh] overflow-y-auto"
+            onclick="event.stopPropagation()">
             <div class="flex items-center justify-between border-b border-neutral-200 pb-3">
                 <h3 class="text-base font-extrabold text-black">Edit Data Barang</h3>
                 <button type="button" onclick="closeEditModal()"
@@ -341,7 +382,10 @@
 
 <script>
     // Functions Modal Detail
-    function openDetailModal(kode, nama, stok, keterangan, fileUrl) {
+    function openDetailModal(kode, nama, stok, keterangan, fileUrl, fileName) {
+        closeTambahModal();
+        closeEditModal();
+        closeFilePreview();
         document.getElementById('modalKode').innerText = kode;
         document.getElementById('modalNama').innerText = nama;
         document.getElementById('modalStok').innerText = stok + ' Unit';
@@ -350,12 +394,12 @@
         const fileContainer = document.getElementById('modalFileContainer');
         if (fileUrl) {
             fileContainer.innerHTML = `
-                <a href="${fileUrl}" target="_blank" class="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 hover:underline">
+                <button type="button" onclick="openFilePreview(${JSON.stringify(fileUrl)}, ${JSON.stringify(fileName)})" class="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 hover:underline">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
                     Buka / Unduh Lampiran
-                </a>`;
+                </button>`;
         } else {
             fileContainer.innerHTML = `<span class="font-bold text-neutral-400">- Tidak ada file -</span>`;
         }
@@ -373,6 +417,9 @@
 
     // Functions Modal Tambah
     function openTambahModal() {
+        closeDetailModal();
+        closeEditModal();
+        closeFilePreview();
         const modal = document.getElementById('tambahModal');
         modal.classList.remove('hidden');
         modal.classList.add('flex');
@@ -386,6 +433,9 @@
 
     // Functions Modal Edit
     function openEditModal(actionUrl, kode, nama, stok, keterangan) {
+        closeTambahModal();
+        closeDetailModal();
+        closeFilePreview();
         document.getElementById('editForm').action = actionUrl;
         document.getElementById('editKode').value = kode;
         document.getElementById('editNama').value = nama;
@@ -402,6 +452,63 @@
         modal.classList.add('hidden');
         modal.classList.remove('flex');
     }
+
+    function openFilePreview(fileUrl, fileName) {
+        closeDetailModal();
+        closeTambahModal();
+        closeEditModal();
+
+        const modal = document.getElementById('filePreviewModal');
+        const image = document.getElementById('filePreviewImage');
+        const documentViewer = document.getElementById('filePreviewDocument');
+        const unsupported = document.getElementById('filePreviewUnsupported');
+        const openLink = document.getElementById('filePreviewOpen');
+        const title = document.getElementById('filePreviewTitle');
+        const extension = fileName.split('.').pop().toLowerCase();
+
+        image.classList.add('hidden');
+        documentViewer.classList.add('hidden');
+        unsupported.classList.add('hidden');
+        image.removeAttribute('src');
+        documentViewer.removeAttribute('src');
+        openLink.href = fileUrl;
+        title.textContent = fileName || 'Preview File';
+
+        if (['jpg', 'jpeg', 'png'].includes(extension)) {
+            image.src = fileUrl;
+            image.classList.remove('hidden');
+        } else if (extension === 'pdf') {
+            documentViewer.src = fileUrl;
+            documentViewer.classList.remove('hidden');
+        } else {
+            unsupported.classList.remove('hidden');
+        }
+
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    function closeFilePreview() {
+        const modal = document.getElementById('filePreviewModal');
+        const image = document.getElementById('filePreviewImage');
+        const documentViewer = document.getElementById('filePreviewDocument');
+
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        image.removeAttribute('src');
+        documentViewer.removeAttribute('src');
+    }
+
+    document.addEventListener('keydown', function(event) {
+        if (event.key !== 'Escape') {
+            return;
+        }
+
+        closeFilePreview();
+        closeDetailModal();
+        closeTambahModal();
+        closeEditModal();
+    });
 
     // AJAX Live Search
     document.addEventListener('DOMContentLoaded', function() {

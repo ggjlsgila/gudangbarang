@@ -11,6 +11,7 @@ class Item extends Model
         'nama_barang',
         'stok',
         'keterangan',
+        'file',
     ];
     public function transactions()
 {

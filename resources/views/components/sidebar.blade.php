@@ -5,9 +5,8 @@
     ========================================== --}}
     <div class="flex h-16 shrink-0 items-center justify-between border-b border-slate-100 px-5">
         <div class="flex items-center gap-3 min-w-0">
-            <div
-                class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-indigo-600 text-white font-bold text-base shadow-sm shadow-indigo-200">
-                ⚡
+            <div class="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-xl">
+                <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-full w-full object-cover">
             </div>
             <div class="min-w-0">
                 <h1 class="truncate text-base font-bold text-slate-900 tracking-tight">
@@ -108,20 +107,6 @@
                         d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                 </svg>
                 <span>Transaksi</span>
-            </div>
-        </a>
-
-        {{-- PENGATURAN --}}
-        <a href="{{ route('settings.index') }}"
-            class="flex items-center justify-between rounded-xl px-3 py-2.5 text-sm transition {{ request()->routeIs('settings.*') ? 'bg-indigo-50 text-indigo-700 font-bold' : 'font-semibold text-slate-900 hover:bg-slate-100' }}">
-            <div class="flex items-center gap-3">
-                <svg class="w-5 h-5 {{ request()->routeIs('settings.*') ? 'text-indigo-600' : 'text-slate-600' }}"
-                    fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                <span>Pengaturan</span>
             </div>
         </a>
 

@@ -16,11 +16,21 @@ public function index(Request $request)
     $query = Transaction::query()->with('itemable')->latest();
 
     // Logika pencarian
-    if ($request->has('search') && !empty($request->search)) {
-        $search = $request->search;
-        $query->where(function($q) use ($search) {
-            $q->where('kode_transaksi', 'like', "%{$search}%")
-              ->orWhere('keterangan', 'like', "%{$search}%");
+    if ($request->filled('search')) {
+        $search = $request->input('search');
+
+        $query->where(function ($query) use ($search) {
+            $query->where('kode_transaksi', 'like', "%{$search}%")
+                ->orWhere('keterangan', 'like', "%{$search}%")
+                ->orWhereHasMorph('itemable', [Book::class, Item::class], function ($itemQuery, $type) use ($search) {
+                    if ($type === Book::class) {
+                        $itemQuery->where('kode_buku', 'like', "%{$search}%")
+                            ->orWhere('judul_buku', 'like', "%{$search}%");
+                    } else {
+                        $itemQuery->where('kode_barang', 'like', "%{$search}%")
+                            ->orWhere('nama_barang', 'like', "%{$search}%");
+                    }
+                });
         });
     }
 

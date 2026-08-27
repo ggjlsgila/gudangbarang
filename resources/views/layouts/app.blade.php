@@ -222,9 +222,9 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                 </svg></button>
             <div class="flex items-center gap-2">
-                <div
-                    class="flex h-7 w-7 items-center justify-center rounded-lg bg-indigo-600 text-xs font-bold text-white shadow-sm shadow-indigo-200">
-                    ⚡ </div><span class="text-base font-bold text-slate-800">Gudang Barang</span>
+                <img src="{{ asset('images/logo.png') }}" alt="Logo Manufaktur Indonesia"
+                    class="h-8 w-8 rounded-lg object-contain">
+                <span class="text-base font-bold text-slate-800">Gudang Barang</span>
             </div>{{-- Spacer penyeimbang flex --}} <div class="h-10 w-10"></div>
         </header>{{-- =====================================
              ISI HALAMAN UTAMA

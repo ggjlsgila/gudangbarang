@@ -62,7 +62,7 @@
                         <div
                             class="flex items-center justify-between rounded-md bg-red-50/60 border border-red-100 p-2 text-xs">
                             <span
-                                class="font-medium text-gray-800 line-clamp-1 pr-2">{{ $buku->judul ?? $buku->nama_buku }}</span>
+                                class="font-medium text-gray-800 line-clamp-1 pr-2">{{ $buku->judul_buku ?? ($buku->judul ?? $buku->nama_buku) }}</span>
                             <span
                                 class="shrink-0 font-semibold text-red-600 bg-white px-1.5 py-0.5 rounded border border-red-200 text-[10px]">
                                 Sisa {{ $buku->stok }}
