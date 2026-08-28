@@ -17,21 +17,32 @@
         body {
             font-family: 'Inter', sans-serif;
         }
+
+        .welcome-grid {
+            background-color: #f8fafc;
+            background-image: linear-gradient(#e2e8f0 1px, transparent 1px),
+                linear-gradient(90deg, #e2e8f0 1px, transparent 1px);
+            background-size: 32px 32px;
+            mask-image: linear-gradient(to bottom, black, transparent 72%);
+        }
     </style>
 </head>
 
 <body
-    class="h-full bg-slate-50 text-slate-900 antialiased selection:bg-indigo-600 selection:text-white flex flex-col justify-between">
+    class="h-full bg-slate-50 text-slate-900 antialiased selection:bg-sky-600 selection:text-white flex flex-col justify-between">
 
     {{-- HEADER / NAVBAR --}}
     <header
-        class="w-full bg-white/80 backdrop-blur-md border-b border-indigo-100/60 py-3 px-4 sm:px-10 flex items-center justify-between sticky top-0 z-50">
+        class="w-full bg-white/90 backdrop-blur-md border-b border-slate-200/80 py-3.5 px-4 sm:px-10 flex items-center justify-between sticky top-0 z-50">
         <div class="flex items-center gap-2.5">
             <div
-                class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold text-xs sm:text-sm tracking-wider shadow-md shadow-indigo-200">
-
+                class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white overflow-hidden flex items-center justify-center border border-slate-200 shadow-sm">
+                <img src="{{ asset('images/logo.png') }}" alt="Logo Gudang Barang" class="h-full w-full object-contain">
             </div>
-            <span class="font-bold text-xs sm:text-sm tracking-tight text-slate-800 uppercase"></span>
+            <div>
+                <span class="block font-extrabold text-xs sm:text-sm tracking-tight text-slate-900">Gudang Barang</span>
+                <span class="hidden sm:block text-[10px] font-medium text-slate-500">Sistem Inventaris</span>
+            </div>
         </div>
 
         <div>
@@ -39,18 +50,18 @@
                 <nav class="flex items-center gap-2 sm:gap-3">
                     @auth
                         <a href="{{ url('/dashboard') }}"
-                            class="text-[11px] sm:text-xs font-semibold px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm shadow-indigo-200 transition">
+                            class="text-[11px] sm:text-xs font-semibold px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg bg-slate-900 text-white hover:bg-sky-700 shadow-sm transition">
                             Dashboard →
                         </a>
                     @else
                         <a href="{{ route('login') }}"
-                            class="text-[11px] sm:text-xs font-semibold px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-lg text-slate-700 hover:text-indigo-600 transition">
+                            class="text-[11px] sm:text-xs font-semibold px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-lg text-slate-700 hover:text-sky-700 transition">
                             Masuk
                         </a>
 
                         @if (Route::has('register'))
                             <a href="{{ route('register') }}"
-                                class="text-[11px] sm:text-xs font-semibold px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm shadow-indigo-200 transition">
+                                class="text-[11px] sm:text-xs font-semibold px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg bg-sky-600 text-white hover:bg-sky-700 shadow-sm shadow-sky-200 transition">
                                 Daftar
                             </a>
                         @endif
@@ -62,22 +73,23 @@
 
     {{-- HERO SECTION (Desain responsif: Mobile tetap rapat ke bawah, Desktop rapat & padat ke tengah) --}}
     <main
-        class="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-10 text-center flex-1 flex flex-col justify-center items-center">
+        class="relative isolate max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-14 text-center flex-1 flex flex-col justify-center items-center overflow-hidden">
+        <div class="welcome-grid absolute inset-0 -z-10 opacity-70" aria-hidden="true"></div>
 
         {{-- Badge kecil di atas judul --}}
         <div
-            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 text-[10px] sm:text-[11px] font-bold mb-3 tracking-wide uppercase shadow-sm">
-            <span class="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-pulse"></span>
-            Sistem Inventaris & Logistik Modern
+            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-sky-100 text-sky-700 text-[10px] sm:text-[11px] font-bold mb-4 tracking-wide uppercase shadow-sm">
+            <span class="w-1.5 h-1.5 rounded-full bg-sky-500 animate-pulse"></span>
+            Sistem Inventaris & Logistik
         </div>
 
         {{-- Judul Utama --}}
-        <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-slate-900 leading-tight mb-2.5 max-w-2xl">
-            Kelola Stok Barang & Transaksi <span class="text-indigo-600">Lebih Terstruktur.</span>
+        <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-950 leading-[1.08] mb-3 max-w-3xl">
+            Kelola Stok Barang & Transaksi <span class="text-sky-600">Lebih Terstruktur.</span>
         </h1>
 
         {{-- Deskripsi Singkat --}}
-        <p class="text-xs sm:text-sm text-slate-600 max-w-lg mb-6 leading-relaxed">
+        <p class="text-xs sm:text-sm text-slate-600 max-w-xl mb-7 leading-relaxed">
             Platform manajemen gudang digital yang dirancang untuk memantau inventaris buku, barang masuk, dan barang
             keluar secara real-time.
         </p>
@@ -86,17 +98,17 @@
         <div class="flex flex-col sm:flex-row items-center justify-center gap-2.5 sm:gap-3 w-full sm:w-auto mb-8">
             @auth
                 <a href="{{ url('/dashboard') }}"
-                    class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-bold tracking-wide uppercase hover:bg-indigo-700 transition shadow-md shadow-indigo-200">
+                    class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-slate-900 text-white text-xs font-bold tracking-wide uppercase hover:bg-sky-700 transition shadow-md shadow-slate-300">
                     Buka Dashboard
                 </a>
             @else
                 <a href="{{ route('login') }}"
-                    class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-bold tracking-wide uppercase hover:bg-indigo-700 transition shadow-md shadow-indigo-200">
+                    class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-slate-900 text-white text-xs font-bold tracking-wide uppercase hover:bg-sky-700 transition shadow-md shadow-slate-300">
                     Mulai Masuk Sistem
                 </a>
                 @if (Route::has('register'))
                     <a href="{{ route('register') }}"
-                        class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-white border border-indigo-200 text-indigo-700 text-xs font-bold tracking-wide uppercase hover:bg-indigo-50 transition shadow-sm">
+                        class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-white border border-slate-300 text-slate-700 text-xs font-bold tracking-wide uppercase hover:border-sky-300 hover:text-sky-700 transition shadow-sm">
                         Buat Akun Baru
                     </a>
                 @endif
@@ -106,27 +118,27 @@
         {{-- Fitur Singkat Grid (Otomatis menyesuaikan: 1 kolom di HP, 3 kolom rapat di Desktop) --}}
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-4 w-full text-left">
             <div
-                class="p-3.5 sm:p-4 rounded-xl border border-indigo-100/80 bg-white shadow-sm hover:shadow-md transition">
+                class="p-4 sm:p-5 rounded-2xl border border-slate-200 bg-white/95 shadow-sm hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-200/70 transition duration-300">
                 <div
-                    class="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs mb-2 font-bold">
+                    class="w-8 h-8 rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center text-xs mb-3 font-bold">
                     📊</div>
                 <h3 class="text-xs font-bold uppercase tracking-wider text-slate-900 mb-1">Grafik Real-Time</h3>
                 <p class="text-[11px] text-slate-500 leading-normal">Pantau perbandingan arus barang masuk dan keluar
                     langsung dari satu layar.</p>
             </div>
             <div
-                class="p-3.5 sm:p-4 rounded-xl border border-indigo-100/80 bg-white shadow-sm hover:shadow-md transition">
+                class="p-4 sm:p-5 rounded-2xl border border-slate-200 bg-white/95 shadow-sm hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-200/70 transition duration-300">
                 <div
-                    class="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs mb-2 font-bold">
+                    class="w-8 h-8 rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center text-xs mb-3 font-bold">
                     📚</div>
                 <h3 class="text-xs font-bold uppercase tracking-wider text-slate-900 mb-1">Katalog Terintegrasi</h3>
                 <p class="text-[11px] text-slate-500 leading-normal">Manajemen data buku dan inventaris barang dengan
                     pencarian cepat.</p>
             </div>
             <div
-                class="p-3.5 sm:p-4 rounded-xl border border-indigo-100/80 bg-white shadow-sm hover:shadow-md transition">
+                class="p-4 sm:p-5 rounded-2xl border border-slate-200 bg-white/95 shadow-sm hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-200/70 transition duration-300">
                 <div
-                    class="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs mb-2 font-bold">
+                    class="w-8 h-8 rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center text-xs mb-3 font-bold">
                     ⚡</div>
                 <h3 class="text-xs font-bold uppercase tracking-wider text-slate-900 mb-1">Cepat & Responsif</h3>
                 <p class="text-[11px] text-slate-500 leading-normal">Antarmuka bersih dengan navigasi yang nyaman
