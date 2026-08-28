@@ -76,8 +76,7 @@
                            border border-slate-200
                            shadow-sm">
 
-                    <img src="{{ asset('images/bg-login.png') }}" alt="Logo Perusahaan"
-                        class="w-14 h-14 object-contain">
+                    <img src="{{ asset('images/logo.png') }}" alt="Logo Perusahaan" class="w-14 h-14 object-contain">
 
                 </div>
 

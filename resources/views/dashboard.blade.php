@@ -81,10 +81,29 @@
 
             {{-- 1. GRAFIK PERBANDINGAN TRANSAKSI --}}
             <div class="lg:col-span-4 flex flex-col rounded-lg border border-gray-200 bg-white p-3 shadow-sm">
-                <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center justify-between gap-2 mb-2">
                     <h2 class="text-[11px] font-bold uppercase tracking-wider text-gray-800">
-                        📊 Perbandingan Transaksi
+                        Perkembangan Transaksi
                     </h2>
+                    <form method="GET" action="{{ route('dashboard') }}" class="flex items-center gap-1.5">
+                        <label for="tahunGrafik" class="sr-only">Pilih tahun grafik</label>
+                        <select id="tahunGrafik" name="tahun_grafik" onchange="this.form.submit()"
+                            class="rounded-md border-gray-200 py-1 pl-2 pr-6 text-[10px] font-semibold text-gray-600 focus:border-indigo-500 focus:ring-indigo-500">
+                            @for ($tahun = now()->year + 1; $tahun >= 2020; $tahun--)
+                                <option value="{{ $tahun }}" @selected($tahunGrafik == $tahun)>{{ $tahun }}
+                                </option>
+                            @endfor
+                        </select>
+                        <label for="bulanGrafik" class="sr-only">Pilih bulan grafik</label>
+                        <select id="bulanGrafik" name="bulan_grafik" onchange="this.form.submit()"
+                            class="rounded-md border-gray-200 py-1 pl-2 pr-5 text-[10px] font-semibold text-gray-600 focus:border-indigo-500 focus:ring-indigo-500">
+                            <option value="">Semua Bulan</option>
+                            @foreach (['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'] as $index => $namaBulan)
+                                <option value="{{ $index + 1 }}" @selected($bulanGrafik === $index + 1)>{{ $namaBulan }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </form>
                 </div>
                 {{-- Tinggi grafik diperkecil di mobile (h-[180px]) agar tidak terlalu panjang --}}
                 <div class="relative w-full h-[180px] lg:h-[220px]">
@@ -125,7 +144,7 @@
                                                 class="text-[10px] font-mono text-gray-500 shrink-0">{{ $log->kode_transaksi }}</span>
                                         </div>
                                         <p class="text-xs font-semibold text-gray-800 truncate">
-                                            {{ $log->itemable->judul ?? ($log->itemable->nama_buku ?? ($log->itemable->nama_barang ?? 'Item')) }}
+                                            {{ data_get($log->itemable, 'judul_buku') ?? (data_get($log->itemable, 'nama_barang') ?? (data_get($log->itemable, 'nama_buku') ?? 'Item tidak ditemukan')) }}
                                         </p>
                                         <p class="text-[10px] text-gray-400">
                                             {{ \Carbon\Carbon::parse($log->tanggal_transaksi)->format('d/m/Y') }}
@@ -160,19 +179,35 @@
             new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: ['Buku', 'Barang Lain'],
+                    labels: {!! json_encode($labelGrafik) !!},
                     datasets: [{
-                            label: 'Masuk',
-                            data: [{{ $bukuMasuk ?? 0 }}, {{ $barangMasuk ?? 0 }}],
+                            label: 'Buku Masuk',
+                            data: {!! json_encode($dataGrafik['bukuMasuk']) !!},
                             backgroundColor: 'rgba(21, 128, 61, 0.75)',
                             borderRadius: 4,
                             barPercentage: 0.6,
                             categoryPercentage: 0.7
                         },
                         {
-                            label: 'Keluar',
-                            data: [{{ $bukuKeluar ?? 0 }}, {{ $barangKeluar ?? 0 }}],
+                            label: 'Buku Keluar',
+                            data: {!! json_encode($dataGrafik['bukuKeluar']) !!},
                             backgroundColor: 'rgba(185, 28, 28, 0.75)',
+                            borderRadius: 4,
+                            barPercentage: 0.6,
+                            categoryPercentage: 0.7
+                        },
+                        {
+                            label: 'Barang Masuk',
+                            data: {!! json_encode($dataGrafik['barangMasuk']) !!},
+                            backgroundColor: 'rgba(37, 99, 235, 0.75)',
+                            borderRadius: 4,
+                            barPercentage: 0.6,
+                            categoryPercentage: 0.7
+                        },
+                        {
+                            label: 'Barang Keluar',
+                            data: {!! json_encode($dataGrafik['barangKeluar']) !!},
+                            backgroundColor: 'rgba(217, 119, 6, 0.75)',
                             borderRadius: 4,
                             barPercentage: 0.6,
                             categoryPercentage: 0.7
