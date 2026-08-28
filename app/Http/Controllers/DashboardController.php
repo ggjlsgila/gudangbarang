@@ -26,6 +26,33 @@ class DashboardController extends Controller
         $totalBarang = Item::count();
         $totalStokBuku = Book::sum('stok');
 
+        $totalBukuMasuk = Transaction::where('jenis_transaksi', 'masuk')
+            ->where('itemable_type', Book::class)
+            ->whereYear('tanggal_transaksi', $tahunGrafik)
+            ->when($bulanGrafik, fn ($query) => $query->whereMonth('tanggal_transaksi', $bulanGrafik))
+            ->sum('jumlah');
+
+        $totalBarangMasuk = Transaction::where('jenis_transaksi', 'masuk')
+            ->where('itemable_type', Item::class)
+            ->whereYear('tanggal_transaksi', $tahunGrafik)
+            ->when($bulanGrafik, fn ($query) => $query->whereMonth('tanggal_transaksi', $bulanGrafik))
+            ->sum('jumlah');
+
+        $totalBukuKeluar = Transaction::where('jenis_transaksi', 'keluar')
+            ->where('itemable_type', Book::class)
+            ->whereYear('tanggal_transaksi', $tahunGrafik)
+            ->when($bulanGrafik, fn ($query) => $query->whereMonth('tanggal_transaksi', $bulanGrafik))
+            ->sum('jumlah');
+
+        $totalBarangKeluar = Transaction::where('jenis_transaksi', 'keluar')
+            ->where('itemable_type', Item::class)
+            ->whereYear('tanggal_transaksi', $tahunGrafik)
+            ->when($bulanGrafik, fn ($query) => $query->whereMonth('tanggal_transaksi', $bulanGrafik))
+            ->sum('jumlah');
+
+        $totalMasuk = $totalBukuMasuk + $totalBarangMasuk;
+        $totalKeluar = $totalBukuKeluar + $totalBarangKeluar;
+
         $stokMenipis = Book::where('stok', '<=', 5)->get();
 
         $latestTransactions = Transaction::with('itemable')
@@ -57,21 +84,58 @@ class DashboardController extends Controller
 
         $namaBulan = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
         $labelGrafik = $bulanGrafik ? [$namaBulan[$bulanGrafik - 1]] : $namaBulan;
+        $labelBulanGrafik = $bulanGrafik ? $namaBulan[$bulanGrafik - 1] : 'Semua Bulan';
         $dataGrafik = $bulanGrafik
             ? array_map(fn ($data) => [$data[$bulanGrafik - 1]], $grafik)
             : $grafik;
+
+        $chartValues = [$totalBukuMasuk, $totalBukuKeluar, $totalBarangMasuk, $totalBarangKeluar];
+        $chartHasData = array_sum($chartValues) > 0;
+        $chartData = $chartHasData
+            ? [
+                'labels' => ['Buku Masuk', 'Buku Keluar', 'Barang Lainnya Masuk', 'Barang Lainnya Keluar'],
+                'datasets' => [[
+                    'data' => $chartValues,
+                    'backgroundColor' => [
+                        'rgba(16, 185, 129, 0.85)',
+                        'rgba(239, 68, 68, 0.85)',
+                        'rgba(59, 130, 246, 0.85)',
+                        'rgba(249, 115, 22, 0.85)',
+                    ],
+                    'borderColor' => '#ffffff',
+                    'borderWidth' => 3,
+                ]],
+            ]
+            : [
+                'labels' => ['Belum ada transaksi'],
+                'datasets' => [[
+                    'data' => [1],
+                    'backgroundColor' => ['#ffffff'],
+                    'borderColor' => ['#0f172a'],
+                    'borderWidth' => 2,
+                ]],
+            ];
 
         // Kirim semua variabel ke view
         return view('dashboard', compact(
             'totalBuku',
             'totalBarang',
             'totalStokBuku',
+            'totalBukuMasuk',
+            'totalBarangMasuk',
+            'totalMasuk',
+            'totalBukuKeluar',
+            'totalBarangKeluar',
+            'totalKeluar',
             'stokMenipis',
             'latestTransactions',
             'tahunGrafik',
             'bulanGrafik',
             'labelGrafik',
-            'dataGrafik'
+            'labelBulanGrafik',
+            'dataGrafik',
+            'chartHasData',
+            'chartData'
         ));
     }
 }
