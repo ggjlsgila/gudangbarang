@@ -85,7 +85,7 @@
 
         {{-- Judul Utama --}}
         <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-950 leading-[1.08] mb-3 max-w-3xl">
-            Kelola Stok Barang & Transaksi <span class="text-sky-600">Lebih Terstruktur.</span>
+            Kelola <span class="text-sky-600">Buku</span>, Stok Barang, dan Transaksi Lebih Terstruktur.
         </h1>
 
         {{-- Deskripsi Singkat --}}
