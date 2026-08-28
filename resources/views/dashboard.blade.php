@@ -1,6 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
+    <style>
+        .chart-filter {
+            width: auto !important;
+            max-width: none !important;
+        }
+    </style>
+
     <div class="space-y-3 pb-6">
 
         {{-- Header Ringkas --}}
@@ -81,14 +88,14 @@
 
             {{-- 1. GRAFIK PERBANDINGAN TRANSAKSI --}}
             <div class="lg:col-span-4 flex flex-col rounded-lg border border-gray-200 bg-white p-3 shadow-sm">
-                <div class="flex items-center justify-between gap-2 mb-2">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
                     <h2 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-gray-800">
                         Perkembangan Transaksi
                     </h2>
-                    <form method="GET" action="{{ route('dashboard') }}" class="flex items-center gap-1.5">
+                    <form method="GET" action="{{ route('dashboard') }}" class="flex items-center justify-end gap-1.5">
                         <label for="tahunGrafik" class="sr-only">Pilih tahun grafik</label>
                         <select id="tahunGrafik" name="tahun_grafik" onchange="this.form.submit()"
-                            class="rounded-md border-gray-200 py-1 pl-2 pr-6 text-[11px] sm:text-xs font-semibold text-gray-600 focus:border-indigo-500 focus:ring-indigo-500">
+                            class="chart-filter rounded-md border-gray-200 py-1 pl-2 pr-6 text-[11px] sm:text-xs font-semibold text-gray-600 focus:border-indigo-500 focus:ring-indigo-500">
                             @for ($tahun = now()->year + 1; $tahun >= 2020; $tahun--)
                                 <option value="{{ $tahun }}" @selected($tahunGrafik == $tahun)>{{ $tahun }}
                                 </option>
@@ -96,7 +103,7 @@
                         </select>
                         <label for="bulanGrafik" class="sr-only">Pilih bulan grafik</label>
                         <select id="bulanGrafik" name="bulan_grafik" onchange="this.form.submit()"
-                            class="rounded-md border-gray-200 py-1 pl-2 pr-5 text-[11px] sm:text-xs font-semibold text-gray-600 focus:border-indigo-500 focus:ring-indigo-500">
+                            class="chart-filter rounded-md border-gray-200 py-1 pl-2 pr-5 text-[11px] sm:text-xs font-semibold text-gray-600 focus:border-indigo-500 focus:ring-indigo-500">
                             <option value="">Semua Bulan</option>
                             @foreach (['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'] as $index => $namaBulan)
                                 <option value="{{ $index + 1 }}" @selected($bulanGrafik === $index + 1)>{{ $namaBulan }}
@@ -170,6 +177,7 @@
             </div>
 
         </div>
+
     </div>
 
     {{-- SCRIPT CHART.JS --}}
@@ -186,6 +194,7 @@
                             data: {!! json_encode($dataGrafik['bukuMasuk']) !!},
                             backgroundColor: 'rgba(21, 128, 61, 0.75)',
                             borderRadius: 4,
+                            maxBarThickness: 18,
                             barPercentage: 0.6,
                             categoryPercentage: 0.7
                         },
@@ -194,6 +203,7 @@
                             data: {!! json_encode($dataGrafik['bukuKeluar']) !!},
                             backgroundColor: 'rgba(185, 28, 28, 0.75)',
                             borderRadius: 4,
+                            maxBarThickness: 18,
                             barPercentage: 0.6,
                             categoryPercentage: 0.7
                         },
@@ -202,6 +212,7 @@
                             data: {!! json_encode($dataGrafik['barangMasuk']) !!},
                             backgroundColor: 'rgba(37, 99, 235, 0.75)',
                             borderRadius: 4,
+                            maxBarThickness: 18,
                             barPercentage: 0.6,
                             categoryPercentage: 0.7
                         },
@@ -210,6 +221,7 @@
                             data: {!! json_encode($dataGrafik['barangKeluar']) !!},
                             backgroundColor: 'rgba(217, 119, 6, 0.75)',
                             borderRadius: 4,
+                            maxBarThickness: 18,
                             barPercentage: 0.6,
                             categoryPercentage: 0.7
                         }
