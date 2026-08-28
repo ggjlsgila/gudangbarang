@@ -5,18 +5,18 @@
 
         {{-- Header Ringkas --}}
         <div>
-            <h1 class="text-lg font-bold text-gray-900">Dashboard</h1>
-            <p class="text-[11px] text-gray-500">Ringkasan stok dan aktivitas barang.</p>
+            <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Dashboard</h1>
+            <p class="text-xs sm:text-sm text-gray-500">Ringkasan stok dan aktivitas barang.</p>
         </div>
 
         {{-- Stat Cards: Di Mobile 2 Kolom Sejajar yang Compact, di Desktop 3 Kolom --}}
         <div class="grid grid-cols-2 lg:grid-cols-3 gap-2.5">
 
             {{-- Total Buku --}}
-            <div class="flex items-center justify-between rounded-lg border border-gray-200 bg-white p-3 shadow-sm">
+            <div class="flex items-center justify-between rounded-lg border border-gray-200 bg-white p-3 sm:p-4 shadow-sm">
                 <div>
-                    <p class="text-[10px] font-medium text-gray-500 uppercase tracking-wide">Total Buku</p>
-                    <p class="mt-0.5 text-lg font-bold text-gray-900">{{ $totalBuku }}</p>
+                    <p class="text-[11px] sm:text-xs font-medium text-gray-500 uppercase tracking-wide">Total Buku</p>
+                    <p class="mt-0.5 text-xl sm:text-2xl font-bold text-gray-900">{{ $totalBuku }}</p>
                 </div>
                 <div class="flex h-7 w-7 items-center justify-center rounded-md bg-gray-100 text-sm">
                     📚
@@ -24,10 +24,10 @@
             </div>
 
             {{-- Barang Lainnya --}}
-            <div class="flex items-center justify-between rounded-lg border border-gray-200 bg-white p-3 shadow-sm">
+            <div class="flex items-center justify-between rounded-lg border border-gray-200 bg-white p-3 sm:p-4 shadow-sm">
                 <div>
-                    <p class="text-[10px] font-medium text-gray-500 uppercase tracking-wide">Item Lain</p>
-                    <p class="mt-0.5 text-lg font-bold text-gray-900">{{ $totalBarang }}</p>
+                    <p class="text-[11px] sm:text-xs font-medium text-gray-500 uppercase tracking-wide">Total Barang Lain</p>
+                    <p class="mt-0.5 text-xl sm:text-2xl font-bold text-gray-900">{{ $totalBarang }}</p>
                 </div>
                 <div class="flex h-7 w-7 items-center justify-center rounded-md bg-gray-100 text-sm">
                     📦
@@ -36,11 +36,11 @@
 
             {{-- Total Stok Buku (Di mobile melebar memenuhi 2 kolom bawah) --}}
             <div
-                class="col-span-2 lg:col-span-1 flex items-center justify-between rounded-lg border border-gray-200 bg-white p-3 shadow-sm">
+                class="col-span-2 lg:col-span-1 flex items-center justify-between rounded-lg border border-gray-200 bg-white p-3 sm:p-4 shadow-sm">
                 <div>
-                    <p class="text-[10px] font-medium text-gray-500 uppercase tracking-wide">Total Stok Buku</p>
-                    <p class="mt-0.5 text-lg font-bold text-gray-900">{{ $totalStokBuku }} <span
-                            class="text-[11px] font-normal text-gray-500">pcs</span></p>
+                    <p class="text-[11px] sm:text-xs font-medium text-gray-500 uppercase tracking-wide">Total Stok Buku</p>
+                    <p class="mt-0.5 text-xl sm:text-2xl font-bold text-gray-900">{{ $totalStokBuku }} <span
+                            class="text-xs sm:text-sm font-normal text-gray-500">pcs</span></p>
                 </div>
                 <div class="flex h-7 w-7 items-center justify-center rounded-md bg-gray-100 text-sm">
                     📊
@@ -50,10 +50,10 @@
         </div>
 
         {{-- Peringatan Stok --}}
-        <div class="rounded-lg border border-gray-200 bg-white p-3 shadow-sm">
+        <div class="rounded-lg border border-gray-200 bg-white p-3 sm:p-4 shadow-sm">
             <div class="flex items-center gap-1.5 mb-1.5">
                 <span class="text-sm">⚠️</span>
-                <h2 class="text-[11px] font-bold uppercase tracking-wider text-gray-800">Peringatan Stok Menipis</h2>
+                <h2 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-gray-800">Peringatan Stok Menipis</h2>
             </div>
 
             @if ($stokMenipis->count() > 0)
@@ -82,13 +82,13 @@
             {{-- 1. GRAFIK PERBANDINGAN TRANSAKSI --}}
             <div class="lg:col-span-4 flex flex-col rounded-lg border border-gray-200 bg-white p-3 shadow-sm">
                 <div class="flex items-center justify-between gap-2 mb-2">
-                    <h2 class="text-[11px] font-bold uppercase tracking-wider text-gray-800">
+                    <h2 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-gray-800">
                         Perkembangan Transaksi
                     </h2>
                     <form method="GET" action="{{ route('dashboard') }}" class="flex items-center gap-1.5">
                         <label for="tahunGrafik" class="sr-only">Pilih tahun grafik</label>
                         <select id="tahunGrafik" name="tahun_grafik" onchange="this.form.submit()"
-                            class="rounded-md border-gray-200 py-1 pl-2 pr-6 text-[10px] font-semibold text-gray-600 focus:border-indigo-500 focus:ring-indigo-500">
+                            class="rounded-md border-gray-200 py-1 pl-2 pr-6 text-[11px] sm:text-xs font-semibold text-gray-600 focus:border-indigo-500 focus:ring-indigo-500">
                             @for ($tahun = now()->year + 1; $tahun >= 2020; $tahun--)
                                 <option value="{{ $tahun }}" @selected($tahunGrafik == $tahun)>{{ $tahun }}
                                 </option>
@@ -96,7 +96,7 @@
                         </select>
                         <label for="bulanGrafik" class="sr-only">Pilih bulan grafik</label>
                         <select id="bulanGrafik" name="bulan_grafik" onchange="this.form.submit()"
-                            class="rounded-md border-gray-200 py-1 pl-2 pr-5 text-[10px] font-semibold text-gray-600 focus:border-indigo-500 focus:ring-indigo-500">
+                            class="rounded-md border-gray-200 py-1 pl-2 pr-5 text-[11px] sm:text-xs font-semibold text-gray-600 focus:border-indigo-500 focus:ring-indigo-500">
                             <option value="">Semua Bulan</option>
                             @foreach (['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'] as $index => $namaBulan)
                                 <option value="{{ $index + 1 }}" @selected($bulanGrafik === $index + 1)>{{ $namaBulan }}
@@ -116,9 +116,10 @@
                 class="lg:col-span-8 flex flex-col justify-between rounded-lg border border-gray-200 bg-white p-3 shadow-sm">
                 <div>
                     <div class="flex items-center justify-between mb-2.5">
-                        <h2 class="text-[11px] font-bold uppercase tracking-wider text-gray-800">Transaksi Terbaru</h2>
+                        <h2 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-gray-800">Transaksi Terbaru
+                        </h2>
                         <a href="{{ route('transactions.index') }}"
-                            class="text-[11px] font-semibold text-gray-600 hover:text-black">
+                            class="text-xs sm:text-sm font-semibold text-gray-600 hover:text-black">
                             Lihat Semua →
                         </a>
                     </div>
@@ -141,19 +142,19 @@
                                                 </span>
                                             @endif
                                             <span
-                                                class="text-[10px] font-mono text-gray-500 shrink-0">{{ $log->kode_transaksi }}</span>
+                                                class="text-[10px] sm:text-xs font-mono text-gray-500 shrink-0">{{ $log->kode_transaksi }}</span>
                                         </div>
-                                        <p class="text-xs font-semibold text-gray-800 truncate">
+                                        <p class="text-sm sm:text-base font-semibold text-gray-800 truncate">
                                             {{ data_get($log->itemable, 'judul_buku') ?? (data_get($log->itemable, 'nama_barang') ?? (data_get($log->itemable, 'nama_buku') ?? 'Item tidak ditemukan')) }}
                                         </p>
-                                        <p class="text-[10px] text-gray-400">
+                                        <p class="text-[11px] sm:text-xs text-gray-400">
                                             {{ \Carbon\Carbon::parse($log->tanggal_transaksi)->format('d/m/Y') }}
                                         </p>
                                     </div>
 
                                     <div class="text-right shrink-0 pl-2">
                                         <span
-                                            class="text-xs font-extrabold {{ $log->jenis_transaksi === 'masuk' ? 'text-green-600' : 'text-red-600' }}">
+                                            class="text-sm sm:text-base font-extrabold {{ $log->jenis_transaksi === 'masuk' ? 'text-green-600' : 'text-red-600' }}">
                                             {{ $log->jenis_transaksi === 'masuk' ? '+' : '-' }}{{ $log->jumlah }}
                                         </span>
                                     </div>
