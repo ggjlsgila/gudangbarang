@@ -31,6 +31,8 @@
 <body
     class="h-full bg-slate-50 text-slate-900 antialiased selection:bg-sky-600 selection:text-white flex flex-col justify-between">
 
+    <div class="welcome-grid fixed inset-0 z-0 opacity-70" aria-hidden="true"></div>
+
     {{-- HEADER / NAVBAR --}}
     <header
         class="w-full bg-white/90 backdrop-blur-md border-b border-slate-200/80 py-3.5 px-4 sm:px-10 flex items-center justify-between sticky top-0 z-50">
@@ -74,8 +76,6 @@
     {{-- HERO SECTION (Desain responsif: Mobile tetap rapat ke bawah, Desktop rapat & padat ke tengah) --}}
     <main
         class="relative isolate max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-14 text-center flex-1 flex flex-col justify-center items-center overflow-hidden">
-        <div class="welcome-grid absolute inset-0 -z-10 opacity-70" aria-hidden="true"></div>
-
         {{-- Badge kecil di atas judul --}}
         <div
             class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-sky-100 text-sky-700 text-[10px] sm:text-[11px] font-bold mb-4 tracking-wide uppercase shadow-sm">
