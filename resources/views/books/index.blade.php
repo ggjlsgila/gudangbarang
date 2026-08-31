@@ -576,6 +576,8 @@
             }
 
             e.preventDefault();
+            console.log("URL yang dipanggil:", url.href); // <-- Cek ini di Console browser
+
             fetchBooks(url.href);
             window.history.pushState(null, '', url.href);
 
