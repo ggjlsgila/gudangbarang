@@ -100,7 +100,6 @@
                                 </th>
 
                                 <th class="hidden sm:table-cell px-3 py-3 sm:px-4 w-[14%]">KETERANGAN</th>
-                                <th class="hidden sm:table-cell px-2 py-3 sm:px-4 w-[10%] text-center">FILE / COVER</th>
                                 <th class="px-1 py-3 sm:px-4 text-center w-[18%] sm:w-[14%]">AKSI</th>
                             </tr>
                         </thead>
@@ -135,9 +134,6 @@
                                         {{ $book->keterangan ?? '-' }}
                                     </td>
 
-                                    <td class="hidden sm:table-cell px-2 py-3.5 sm:px-4 text-center whitespace-nowrap">
-                                        <span class="text-xs text-slate-400 font-medium">-</span>
-                                    </td>
                                     {{-- KOLOM AKSI DENGAN DROPDOWN PINTAR OTOMATIS --}}
                                     <td class="whitespace-nowrap px-1 py-3.5 sm:px-4 text-center">
                                         <div class="relative inline-block text-left" x-data="{ open: false, dropUp: false, menuTop: 0, menuLeft: 0 }">
@@ -172,7 +168,7 @@
                                                         data-kode="{{ $book->kode_buku }}"
                                                         data-judul="{{ $book->judul_buku }}"
                                                         data-stok="{{ $book->stok }}"
-                                                        data-keterangan="{{ $book->keterangan ?? '-' }}" data-file=""
+                                                        data-keterangan="{{ $book->keterangan ?? '-' }}"
                                                         @click="open = false"
                                                         class="flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-indigo-600 transition">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -390,7 +386,6 @@
     function openTambahModal() {
         closeDetailModal();
         closeEditModal();
-        closeFilePreview();
         const modal = document.getElementById('tambahModal');
         if (modal) {
             modal.classList.remove('hidden');
@@ -414,29 +409,13 @@
         const judul = button.dataset.judul;
         const stok = button.dataset.stok;
         const keterangan = button.dataset.keterangan;
-        const fileUrl = button.dataset.file;
 
         closeTambahModal();
         closeEditModal();
-        closeFilePreview();
         document.getElementById('modalKode').innerText = kode;
         document.getElementById('modalJudul').innerText = judul;
         document.getElementById('modalStok').innerText = stok + ' Unit';
         document.getElementById('modalKeterangan').innerText = keterangan;
-
-        const fileLink = document.getElementById('modalFileLink');
-        const fileEmpty = document.getElementById('modalFileEmpty');
-
-        if (fileUrl && fileUrl.trim() !== '') {
-            fileLink.href = fileUrl;
-            fileLink.classList.remove('hidden');
-            fileLink.classList.add('inline-flex');
-            fileEmpty.classList.add('hidden');
-        } else {
-            fileLink.classList.add('hidden');
-            fileLink.classList.remove('inline-flex');
-            fileEmpty.classList.remove('hidden');
-        }
 
         const modal = document.getElementById('detailModal');
         if (modal) {
@@ -453,78 +432,10 @@
         }
     }
 
-    function openFilePreview(fileUrl, fileName) {
-        closeDetailModal();
-        closeTambahModal();
-        closeEditModal();
-        const modal = document.getElementById('filePreviewModal');
-        const image = document.getElementById('filePreviewImage');
-        const documentViewer = document.getElementById('filePreviewDocument');
-        const unsupported = document.getElementById('filePreviewUnsupported');
-        const openLink = document.getElementById('filePreviewOpen');
-        const title = document.getElementById('filePreviewTitle');
-        const extension = (fileName || '').split('.').pop().toLowerCase();
-
-        image.classList.add('hidden');
-        documentViewer.classList.add('hidden');
-        unsupported.classList.add('hidden');
-        image.removeAttribute('src');
-        documentViewer.removeAttribute('src');
-
-        if (!fileUrl || fileUrl.trim() === '') {
-            unsupported.textContent = 'File tidak tersedia atau belum diunggah.';
-            unsupported.classList.remove('hidden');
-            openLink.href = '#';
-            title.textContent = fileName || 'Preview File';
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            return;
-        }
-
-        openLink.href = fileUrl;
-        title.textContent = fileName || 'Preview File';
-
-        if (['jpg', 'jpeg', 'png'].includes(extension)) {
-            image.onerror = function() {
-                image.classList.add('hidden');
-                unsupported.textContent = 'Gambar tidak dapat dimuat atau file sudah tidak tersedia.';
-                unsupported.classList.remove('hidden');
-            };
-            image.src = fileUrl;
-            image.classList.remove('hidden');
-        } else if (extension === 'pdf') {
-            documentViewer.onerror = function() {
-                documentViewer.classList.add('hidden');
-                unsupported.textContent = 'File PDF tidak dapat dimuat atau file sudah tidak tersedia.';
-                unsupported.classList.remove('hidden');
-            };
-            documentViewer.src = fileUrl;
-            documentViewer.classList.remove('hidden');
-        } else {
-            unsupported.textContent = 'File ini tidak dapat ditampilkan sebagai preview.';
-            unsupported.classList.remove('hidden');
-        }
-
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-    }
-
-    function closeFilePreview() {
-        const modal = document.getElementById('filePreviewModal');
-        const image = document.getElementById('filePreviewImage');
-        const documentViewer = document.getElementById('filePreviewDocument');
-
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-        image.removeAttribute('src');
-        documentViewer.removeAttribute('src');
-    }
-
     // --- MODAL EDIT ---
     function openEditModal(actionUrl, kode, judul, stok, keterangan) {
         closeTambahModal();
         closeDetailModal();
-        closeFilePreview();
         document.getElementById('editForm').action = actionUrl;
         document.getElementById('editKode').value = kode;
         document.getElementById('editJudul').value = judul;
@@ -551,7 +462,6 @@
             return;
         }
 
-        closeFilePreview();
         closeDetailModal();
         closeTambahModal();
         closeEditModal();

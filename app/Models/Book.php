@@ -14,7 +14,6 @@ class Book extends Model
         'judul_buku',
         'stok',
         'keterangan',
-        'file',
     ];
 
     public function transactions()
