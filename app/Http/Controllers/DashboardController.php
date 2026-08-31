@@ -82,7 +82,7 @@ class DashboardController extends Controller
             $grafik[$prefix . $jenis][$indexBulan] = (int) $baris->total;
         }
 
-        $namaBulan = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+        $namaBulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
         $labelGrafik = $bulanGrafik ? [$namaBulan[$bulanGrafik - 1]] : $namaBulan;
         $labelBulanGrafik = $bulanGrafik ? $namaBulan[$bulanGrafik - 1] : 'Semua Bulan';
         $dataGrafik = $bulanGrafik

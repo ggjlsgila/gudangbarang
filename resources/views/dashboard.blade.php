@@ -153,7 +153,7 @@
                             <button type="button" id="bulanGrafikButton" onclick="toggleBulanGrafik()"
                                 class="chart-filter flex items-center justify-between gap-2 rounded-md border border-gray-200 bg-white py-1 pl-2 pr-2 text-[11px] sm:text-xs font-semibold text-gray-600 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
                                 <span
-                                    id="bulanGrafikLabel">{{ $bulanGrafik ? ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'][$bulanGrafik - 1] : 'Semua Bulan' }}</span>
+                                    id="bulanGrafikLabel">{{ $bulanGrafik ? ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'][$bulanGrafik - 1] : 'Semua Bulan' }}</span>
                                 <span class="text-[10px]">⌄</span>
                             </button>
                             <div id="bulanGrafikMenu"
@@ -161,7 +161,7 @@
                                 <button type="button" onclick="pilihBulanGrafik('', 'Semua Bulan')"
                                     class="block w-full px-2 py-1.5 text-left text-[11px] text-gray-700 hover:bg-slate-100">Semua
                                     Bulan</button>
-                                @foreach (['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'] as $index => $namaBulan)
+                                @foreach (['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'] as $index => $namaBulan)
                                     <button type="button"
                                         onclick="pilihBulanGrafik('{{ $index + 1 }}', '{{ $namaBulan }}')"
                                         class="block w-full px-2 py-1.5 text-left text-[11px] text-gray-700 hover:bg-slate-100">{{ $namaBulan }}</button>
