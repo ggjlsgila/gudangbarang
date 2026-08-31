@@ -192,7 +192,8 @@
                     @if ($latestTransactions->count() > 0)
                         <div class="divide-y divide-gray-100">
                             @foreach ($latestTransactions as $log)
-                                <div class="py-2 first:pt-0 last:pb-0 flex items-center justify-between gap-2">
+                                <div
+                                    class="py-2 first:pt-0 last:pb-0 flex items-center justify-between gap-2 {{ $loop->index > 0 ? 'hidden md:flex' : '' }}">
                                     <div class="space-y-0.5 min-w-0">
                                         <div class="flex items-center gap-1.5 flex-wrap">
                                             @if ($log->jenis_transaksi === 'masuk')
