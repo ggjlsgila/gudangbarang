@@ -135,29 +135,8 @@
                                         {{ $book->keterangan ?? '-' }}
                                     </td>
 
-                                    {{-- KOLOM FILE / COVER (Hidden di Mobile) --}}
                                     <td class="hidden sm:table-cell px-2 py-3.5 sm:px-4 text-center whitespace-nowrap">
-                                        @php
-                                            $bookPreviewUrl =
-                                                $book->file && Storage::disk('public')->exists($book->file)
-                                                    ? Storage::url($book->file)
-                                                    : null;
-                                        @endphp
-
-                                        @if ($bookPreviewUrl)
-                                            <button type="button"
-                                                onclick="openFilePreview(@js($bookPreviewUrl), @js(basename($book->file)))"
-                                                class="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] font-bold text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-200 transition">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                    stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-                                                </svg>
-                                                <span>Lihat</span>
-                                            </button>
-                                        @else
-                                            <span class="text-xs text-slate-400 font-medium">-</span>
-                                        @endif
+                                        <span class="text-xs text-slate-400 font-medium">-</span>
                                     </td>
                                     {{-- KOLOM AKSI DENGAN DROPDOWN PINTAR OTOMATIS --}}
                                     <td class="whitespace-nowrap px-1 py-3.5 sm:px-4 text-center">
@@ -189,19 +168,12 @@
                                                     style="display: none;">
 
                                                     {{-- Tombol Detail --}}
-                                                    @php
-                                                        $detailFileUrl =
-                                                            $book->file && Storage::disk('public')->exists($book->file)
-                                                                ? Storage::url($book->file)
-                                                                : null;
-                                                    @endphp
-
                                                     <button type="button" onclick="openDetailModal(this)"
                                                         data-kode="{{ $book->kode_buku }}"
                                                         data-judul="{{ $book->judul_buku }}"
                                                         data-stok="{{ $book->stok }}"
-                                                        data-keterangan="{{ $book->keterangan ?? '-' }}"
-                                                        data-file="{{ $detailFileUrl ?? '' }}" @click="open = false"
+                                                        data-keterangan="{{ $book->keterangan ?? '-' }}" data-file=""
+                                                        @click="open = false"
                                                         class="flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-indigo-600 transition">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
@@ -305,60 +277,12 @@
                     <span class="text-[11px] font-bold text-neutral-500 uppercase tracking-wider block">Keterangan</span>
                     <p id="modalKeterangan" class="font-bold text-black leading-relaxed"></p>
                 </div>
-                {{-- DOKUMEN / FILE ATTACHMENT --}}
-                <div>
-                    <span class="text-[11px] font-bold text-neutral-500 uppercase tracking-wider block mb-1">File / Cover
-                        Buku</span>
-                    <div id="modalFileContainer">
-                        <span id="modalFileEmpty" class="text-xs text-neutral-400 font-medium hidden">- Tidak Ada File
-                            -</span>
-                        <a id="modalFileLink" href="#" target="_blank"
-                            class="inline-flex items-center gap-2 rounded-xl border border-indigo-200 bg-indigo-50/50 px-3 py-2 text-xs font-bold text-indigo-600 hover:bg-indigo-100 transition">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                                stroke="currentColor" class="w-4 h-4">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-                            </svg>
-                            <span>Buka / Unduh File</span>
-                        </a>
-                    </div>
-                </div>
             </div>
             <div class="mt-6 flex justify-end border-t border-neutral-200 pt-3">
                 <button type="button" onclick="closeDetailModal()"
                     class="rounded-xl border border-neutral-300 bg-white px-4 py-2 text-xs font-bold text-neutral-700 hover:bg-neutral-100 transition cursor-pointer">
                     Tutup
                 </button>
-            </div>
-        </div>
-    </div>
-
-    {{-- MODAL PREVIEW FILE / COVER --}}
-    <div id="filePreviewModal" class="fixed inset-0 z-[60] hidden p-4 items-center justify-center bg-black/60"
-        onclick="closeFilePreview()">
-        <div class="relative flex h-full max-h-[90vh] w-full max-w-5xl flex-col rounded-2xl bg-white shadow-2xl"
-            onclick="event.stopPropagation()">
-            <div class="flex shrink-0 items-center justify-between border-b border-neutral-200 px-4 py-3 sm:px-6">
-                <h3 id="filePreviewTitle" class="truncate pr-4 text-sm font-extrabold text-neutral-900">Preview File</h3>
-                <button type="button" onclick="closeFilePreview()" title="Tutup preview"
-                    class="shrink-0 rounded-lg p-1.5 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-900 transition">
-                    <span class="text-xl leading-none">&times;</span>
-                </button>
-            </div>
-            <div class="flex min-h-0 flex-1 items-center justify-center bg-neutral-100 p-3 sm:p-6">
-                <img id="filePreviewImage" src="" alt="Preview cover buku"
-                    class="hidden max-h-full max-w-full rounded-lg object-contain shadow-sm">
-                <iframe id="filePreviewDocument" title="Preview dokumen buku"
-                    class="hidden h-full w-full rounded-lg border border-neutral-200 bg-white"></iframe>
-                <p id="filePreviewUnsupported" class="hidden text-center text-sm font-semibold text-neutral-500">
-                    File ini tidak dapat ditampilkan sebagai preview.
-                </p>
-            </div>
-            <div class="flex shrink-0 justify-end border-t border-neutral-200 px-4 py-3 sm:px-6">
-                <a id="filePreviewOpen" href="#" target="_blank" rel="noopener"
-                    class="inline-flex items-center rounded-xl bg-indigo-600 px-4 py-2 text-xs font-bold text-white hover:bg-indigo-700 transition">
-                    Buka / Unduh File
-                </a>
             </div>
         </div>
     </div>
@@ -398,12 +322,6 @@
                         class="text-[11px] font-bold text-neutral-500 uppercase tracking-wider block mb-1">Keterangan</label>
                     <textarea name="keterangan" rows="3"
                         class="w-full rounded-xl border border-neutral-300 px-3.5 py-2 text-xs sm:text-sm text-black focus:border-indigo-600 focus:outline-none"></textarea>
-                </div>
-                <div>
-                    <label class="text-[11px] font-bold text-neutral-500 uppercase tracking-wider block mb-1">Upload File
-                        Cover / Dokumen</label>
-                    <input type="file" name="file"
-                        class="w-full text-xs text-neutral-600 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-neutral-100 file:text-neutral-700 hover:file:bg-neutral-200 cursor-pointer">
                 </div>
                 <div class="mt-6 flex justify-end gap-2 border-t border-neutral-200 pt-4">
                     <button type="button" onclick="closeTambahModal()"
@@ -453,13 +371,6 @@
                     <textarea name="keterangan" id="editKeterangan" rows="3"
                         class="w-full rounded-xl border border-neutral-300 px-3.5 py-2 text-xs sm:text-sm text-black focus:border-indigo-600 focus:outline-none"></textarea>
                 </div>
-                <div>
-                    <label class="text-[11px] font-bold text-neutral-500 uppercase tracking-wider block mb-1">Ganti File
-                        Cover (Opsional)</label>
-                    <input type="file" name="file"
-                        class="w-full text-xs text-neutral-600 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-neutral-100 file:text-neutral-700 hover:file:bg-neutral-200 cursor-pointer">
-                </div>
-
                 <div class="mt-6 flex justify-end gap-2 border-t border-neutral-200 pt-4">
                     <button type="button" onclick="closeEditModal()"
                         class="rounded-xl border border-neutral-300 bg-white px-4 py-2 text-xs font-bold text-neutral-700 hover:bg-neutral-100 transition cursor-pointer">
@@ -552,23 +463,45 @@
         const unsupported = document.getElementById('filePreviewUnsupported');
         const openLink = document.getElementById('filePreviewOpen');
         const title = document.getElementById('filePreviewTitle');
-        const extension = fileName.split('.').pop().toLowerCase();
+        const extension = (fileName || '').split('.').pop().toLowerCase();
 
         image.classList.add('hidden');
         documentViewer.classList.add('hidden');
         unsupported.classList.add('hidden');
         image.removeAttribute('src');
         documentViewer.removeAttribute('src');
+
+        if (!fileUrl || fileUrl.trim() === '') {
+            unsupported.textContent = 'File tidak tersedia atau belum diunggah.';
+            unsupported.classList.remove('hidden');
+            openLink.href = '#';
+            title.textContent = fileName || 'Preview File';
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            return;
+        }
+
         openLink.href = fileUrl;
         title.textContent = fileName || 'Preview File';
 
         if (['jpg', 'jpeg', 'png'].includes(extension)) {
+            image.onerror = function() {
+                image.classList.add('hidden');
+                unsupported.textContent = 'Gambar tidak dapat dimuat atau file sudah tidak tersedia.';
+                unsupported.classList.remove('hidden');
+            };
             image.src = fileUrl;
             image.classList.remove('hidden');
         } else if (extension === 'pdf') {
+            documentViewer.onerror = function() {
+                documentViewer.classList.add('hidden');
+                unsupported.textContent = 'File PDF tidak dapat dimuat atau file sudah tidak tersedia.';
+                unsupported.classList.remove('hidden');
+            };
             documentViewer.src = fileUrl;
             documentViewer.classList.remove('hidden');
         } else {
+            unsupported.textContent = 'File ini tidak dapat ditampilkan sebagai preview.';
             unsupported.classList.remove('hidden');
         }
 
