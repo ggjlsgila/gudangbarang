@@ -635,10 +635,7 @@
         toggleResetButton();
 
         function fetchBooks(url) {
-            // Paksa URL menggunakan https agar tidak terkena Mixed Content di production
-            let secureUrl = url.replace('http://', 'https://');
-
-            fetch(secureUrl, {
+            fetch(url, {
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest'
                     }
@@ -671,7 +668,7 @@
                         `{{ route('books.index') }}?search=${encodeURIComponent(query)}`;
 
                     fetchBooks(url);
-                    window.history.pushState(null, '', url.replace('http://', 'https://'));
+                    window.history.pushState(null, '', url);
                 }, 300);
             });
         }
@@ -686,7 +683,7 @@
                 const url = `{{ route('books.index') }}?search=${encodeURIComponent(query)}`;
 
                 fetchBooks(url);
-                window.history.pushState(null, '', url.replace('http://', 'https://'));
+                window.history.pushState(null, '', url);
             });
         }
 
@@ -700,7 +697,7 @@
 
                 const url = `{{ route('books.index') }}`;
                 fetchBooks(url);
-                window.history.pushState(null, '', url.replace('http://', 'https://'));
+                window.history.pushState(null, '', url);
             });
         }
 
@@ -710,8 +707,7 @@
 
             if (targetLink && targetLink.href) {
                 e.preventDefault();
-                // Paksa ubah ke https agar aman dari blokir browser
-                const url = targetLink.href.replace('http://', 'https://');
+                const url = targetLink.href;
 
                 fetchBooks(url);
                 window.history.pushState(null, '', url);
