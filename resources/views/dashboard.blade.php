@@ -294,7 +294,10 @@
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
                     ctx.fillStyle = '#0F172A';
-                    ctx.font = '700 12px Inter, sans-serif';
+                    ctx.font = 'bold 16px Inter, sans-serif';
+                    ctx.strokeStyle = '#FFFFFF';
+                    ctx.lineWidth = 3;
+                    ctx.strokeText(@json($labelBulanGrafik), firstArc.x, firstArc.y);
                     ctx.fillText(@json($labelBulanGrafik), firstArc.x, firstArc.y);
                     ctx.restore();
                 }
