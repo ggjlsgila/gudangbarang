@@ -38,7 +38,6 @@ class ItemController extends Controller
             'nama_barang' => 'required|string|max:255',
             'stok' => 'required|integer|min:0',
             'keterangan' => 'nullable|string',
-            'file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         ], [
             'kode_barang.required' => 'Kode barang wajib diisi.',
             'kode_barang.unique' => 'Kode barang sudah digunakan.',
@@ -46,13 +45,7 @@ class ItemController extends Controller
             'stok.required' => 'Stok wajib diisi.',
             'stok.integer' => 'Stok harus berupa angka.',
             'stok.min' => 'Stok tidak boleh kurang dari 0.',
-            'file.mimes' => 'Format file harus berupa PDF, JPG, JPEG, atau PNG.',
-            'file.max' => 'Ukuran file maksimal 2 MB.',
         ]);
-
-        if ($request->hasFile('file')) {
-            $validated['file'] = $request->file('file')->store('items', 'public');
-        }
 
         Item::create($validated);
 
@@ -71,7 +64,6 @@ class ItemController extends Controller
             'nama_barang' => 'required|string|max:255',
             'stok' => 'required|integer|min:0',
             'keterangan' => 'nullable|string',
-            'file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         ], [
             'kode_barang.required' => 'Kode barang wajib diisi.',
             'kode_barang.unique' => 'Kode barang sudah digunakan.',
@@ -79,18 +71,7 @@ class ItemController extends Controller
             'stok.required' => 'Stok wajib diisi.',
             'stok.integer' => 'Stok harus berupa angka.',
             'stok.min' => 'Stok tidak boleh kurang dari 0.',
-            'file.mimes' => 'Format file harus berupa PDF, JPG, JPEG, atau PNG.',
-            'file.max' => 'Ukuran file maksimal 2 MB.',
         ]);
-
-        if ($request->hasFile('file')) {
-            // Hapus file lama jika ada file baru yang diunggah
-            if ($item->file && Storage::disk('public')->exists($item->file)) {
-                Storage::disk('public')->delete($item->file);
-            }
-
-            $validated['file'] = $request->file('file')->store('items', 'public');
-        }
 
         $item->update($validated);
 
@@ -104,11 +85,6 @@ class ItemController extends Controller
      */
     public function destroy(Item $item)
     {
-        // Hapus file dari direktori storage jika ada
-        if ($item->file && Storage::disk('public')->exists($item->file)) {
-            Storage::disk('public')->delete($item->file);
-        }
-
         $item->delete();
 
         return redirect()

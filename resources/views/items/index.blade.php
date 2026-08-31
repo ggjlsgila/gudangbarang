@@ -67,7 +67,6 @@
                                 <th class="px-2 py-3 sm:px-4 w-[40%] sm:w-[32%]">Nama Barang</th>
                                 <th class="px-1.5 py-3 sm:px-4 w-[10%] text-center">Stok</th>
                                 <th class="hidden sm:table-cell px-3 py-3 sm:px-4 w-[12%]">Keterangan</th>
-                                <th class="hidden sm:table-cell px-3 py-3 sm:px-4 w-[10%] text-center">File</th>
                                 <th class="px-1 py-3 sm:px-4 text-center w-[24%] sm:w-[14%]">Aksi</th>
                             </tr>
                         </thead>
@@ -102,24 +101,6 @@
                                         {{ $item->keterangan ?? '-' }}
                                     </td>
 
-                                    {{-- Kolom File/Lampiran --}}
-                                    <td class="hidden sm:table-cell px-3 py-3.5 sm:px-4 text-center whitespace-nowrap">
-                                        @if ($item->file)
-                                            <button type="button"
-                                                onclick="openFilePreview(@js(asset('storage/' . $item->file)), @js(basename($item->file)))"
-                                                class="inline-flex items-center gap-1 rounded-lg bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-700 transition hover:bg-slate-200">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none"
-                                                    viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
-                                                </svg>
-                                                <span>Lihat</span>
-                                            </button>
-                                        @else
-                                            <span class="text-slate-400 font-medium">-</span>
-                                        @endif
-                                    </td>
-
                                     <td class="whitespace-nowrap px-1 py-3.5 sm:px-4 text-center">
                                         <div class="relative inline-block text-left" x-data="{ open: false, dropUp: false, menuTop: 0, menuLeft: 0 }">
                                             <button type="button" title="Menu Aksi"
@@ -146,7 +127,7 @@
                                                     class="fixed z-[9999] w-32 rounded-xl border border-slate-200 bg-white py-1 text-left shadow-lg focus:outline-none"
                                                     style="display: none;">
                                                     <button type="button"
-                                                        onclick="openDetailModal(@js($item->kode_barang), @js($item->nama_barang), @js($item->stok), @js($item->keterangan ?? '-'), @js($item->file ? asset('storage/' . $item->file) : ''), @js($item->file ? basename($item->file) : ''))"
+                                                        onclick="openDetailModal(@js($item->kode_barang), @js($item->nama_barang), @js($item->stok), @js($item->keterangan ?? '-'))"
                                                         @click="open = false"
                                                         class="flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-indigo-600 transition">
                                                         <span>Detail</span>
@@ -227,48 +208,12 @@
                     <span class="text-[11px] font-bold text-neutral-500 uppercase tracking-wider block">Keterangan</span>
                     <p id="modalKeterangan" class="font-bold text-black leading-relaxed"></p>
                 </div>
-                {{-- Field File di Modal --}}
-                <div>
-                    <span class="text-[11px] font-bold text-neutral-500 uppercase tracking-wider block mb-1">File /
-                        Lampiran</span>
-                    <div id="modalFileContainer"></div>
-                </div>
             </div>
             <div class="mt-6 flex justify-end border-t border-neutral-200 pt-3">
                 <button type="button" onclick="closeDetailModal()"
                     class="rounded-xl bg-indigo-600 px-4 py-2 text-xs font-bold text-white transition hover:bg-indigo-700 shadow-sm shadow-indigo-200">
                     Tutup
                 </button>
-            </div>
-        </div>
-    </div>
-
-    {{-- MODAL PREVIEW FILE / LAMPIRAN --}}
-    <div id="filePreviewModal" class="fixed inset-0 z-[60] hidden p-4 items-center justify-center bg-black/60"
-        onclick="closeFilePreview()">
-        <div class="relative flex h-full max-h-[90vh] w-full max-w-5xl flex-col rounded-2xl bg-white shadow-2xl"
-            onclick="event.stopPropagation()">
-            <div class="flex shrink-0 items-center justify-between border-b border-neutral-200 px-4 py-3 sm:px-6">
-                <h3 id="filePreviewTitle" class="truncate pr-4 text-sm font-extrabold text-neutral-900">Preview File</h3>
-                <button type="button" onclick="closeFilePreview()" title="Tutup preview"
-                    class="shrink-0 rounded-lg p-1.5 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-900 transition">
-                    <span class="text-xl leading-none">&times;</span>
-                </button>
-            </div>
-            <div class="flex min-h-0 flex-1 items-center justify-center bg-neutral-100 p-3 sm:p-6">
-                <img id="filePreviewImage" src="" alt="Preview lampiran barang"
-                    class="hidden max-h-full max-w-full rounded-lg object-contain shadow-sm">
-                <iframe id="filePreviewDocument" title="Preview dokumen barang"
-                    class="hidden h-full w-full rounded-lg border border-neutral-200 bg-white"></iframe>
-                <p id="filePreviewUnsupported" class="hidden text-center text-sm font-semibold text-neutral-500">
-                    File ini tidak dapat ditampilkan sebagai preview.
-                </p>
-            </div>
-            <div class="flex shrink-0 justify-end border-t border-neutral-200 px-4 py-3 sm:px-6">
-                <a id="filePreviewOpen" href="#" target="_blank" rel="noopener"
-                    class="inline-flex items-center rounded-xl bg-indigo-600 px-4 py-2 text-xs font-bold text-white hover:bg-indigo-700 transition">
-                    Buka / Unduh File
-                </a>
             </div>
         </div>
     </div>
@@ -283,8 +228,7 @@
                 <button type="button" onclick="closeTambahModal()"
                     class="rounded-lg p-1 text-neutral-400 hover:bg-neutral-100 hover:text-black transition">✕</button>
             </div>
-            <form action="{{ route('items.store') }}" method="POST" enctype="multipart/form-data"
-                class="mt-4 space-y-4">
+            <form action="{{ route('items.store') }}" method="POST" class="mt-4 space-y-4">
                 @csrf
                 <div>
                     <label class="text-[11px] font-bold text-neutral-500 uppercase tracking-wider block mb-1">Kode
@@ -308,12 +252,6 @@
                         class="text-[11px] font-bold text-neutral-500 uppercase tracking-wider block mb-1">Keterangan</label>
                     <textarea name="keterangan" rows="3"
                         class="w-full rounded-xl border border-neutral-300 px-3.5 py-2 text-xs sm:text-sm text-black focus:border-indigo-600 focus:outline-none"></textarea>
-                </div>
-                <div>
-                    <label class="text-[11px] font-bold text-neutral-500 uppercase tracking-wider block mb-1">Upload File /
-                        Lampiran</label>
-                    <input type="file" name="file"
-                        class="w-full text-xs text-neutral-600 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-neutral-100 file:text-neutral-700 hover:file:bg-neutral-200 cursor-pointer">
                 </div>
                 <div class="mt-6 flex justify-end gap-2 border-t border-neutral-200 pt-4">
                     <button type="button" onclick="closeTambahModal()"
@@ -362,12 +300,6 @@
                     <textarea name="keterangan" id="editKeterangan" rows="3"
                         class="w-full rounded-xl border border-neutral-300 px-3.5 py-2 text-xs sm:text-sm text-black focus:border-indigo-600 focus:outline-none"></textarea>
                 </div>
-                <div>
-                    <label class="text-[11px] font-bold text-neutral-500 uppercase tracking-wider block mb-1">Ganti File /
-                        Lampiran (Opsional)</label>
-                    <input type="file" name="file"
-                        class="w-full text-xs text-neutral-600 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-neutral-100 file:text-neutral-700 hover:file:bg-neutral-200 cursor-pointer">
-                </div>
                 <div class="mt-6 flex justify-end gap-2 border-t border-neutral-200 pt-4">
                     <button type="button" onclick="closeEditModal()"
                         class="rounded-xl border border-neutral-300 bg-white px-4 py-2 text-xs font-bold text-neutral-700 hover:bg-neutral-100">Batal</button>
@@ -382,27 +314,13 @@
 
 <script>
     // Functions Modal Detail
-    function openDetailModal(kode, nama, stok, keterangan, fileUrl, fileName) {
+    function openDetailModal(kode, nama, stok, keterangan) {
         closeTambahModal();
         closeEditModal();
-        closeFilePreview();
         document.getElementById('modalKode').innerText = kode;
         document.getElementById('modalNama').innerText = nama;
         document.getElementById('modalStok').innerText = stok + ' Unit';
         document.getElementById('modalKeterangan').innerText = keterangan;
-
-        const fileContainer = document.getElementById('modalFileContainer');
-        if (fileUrl) {
-            fileContainer.innerHTML = `
-                <button type="button" onclick="openFilePreview(${JSON.stringify(fileUrl)}, ${JSON.stringify(fileName)})" class="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 hover:underline">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                    Buka / Unduh Lampiran
-                </button>`;
-        } else {
-            fileContainer.innerHTML = `<span class="font-bold text-neutral-400">- Tidak ada file -</span>`;
-        }
 
         const modal = document.getElementById('detailModal');
         modal.classList.remove('hidden');
@@ -419,7 +337,6 @@
     function openTambahModal() {
         closeDetailModal();
         closeEditModal();
-        closeFilePreview();
         const modal = document.getElementById('tambahModal');
         modal.classList.remove('hidden');
         modal.classList.add('flex');
@@ -435,7 +352,6 @@
     function openEditModal(actionUrl, kode, nama, stok, keterangan) {
         closeTambahModal();
         closeDetailModal();
-        closeFilePreview();
         document.getElementById('editForm').action = actionUrl;
         document.getElementById('editKode').value = kode;
         document.getElementById('editNama').value = nama;
@@ -453,58 +369,11 @@
         modal.classList.remove('flex');
     }
 
-    function openFilePreview(fileUrl, fileName) {
-        closeDetailModal();
-        closeTambahModal();
-        closeEditModal();
-
-        const modal = document.getElementById('filePreviewModal');
-        const image = document.getElementById('filePreviewImage');
-        const documentViewer = document.getElementById('filePreviewDocument');
-        const unsupported = document.getElementById('filePreviewUnsupported');
-        const openLink = document.getElementById('filePreviewOpen');
-        const title = document.getElementById('filePreviewTitle');
-        const extension = fileName.split('.').pop().toLowerCase();
-
-        image.classList.add('hidden');
-        documentViewer.classList.add('hidden');
-        unsupported.classList.add('hidden');
-        image.removeAttribute('src');
-        documentViewer.removeAttribute('src');
-        openLink.href = fileUrl;
-        title.textContent = fileName || 'Preview File';
-
-        if (['jpg', 'jpeg', 'png'].includes(extension)) {
-            image.src = fileUrl;
-            image.classList.remove('hidden');
-        } else if (extension === 'pdf') {
-            documentViewer.src = fileUrl;
-            documentViewer.classList.remove('hidden');
-        } else {
-            unsupported.classList.remove('hidden');
-        }
-
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-    }
-
-    function closeFilePreview() {
-        const modal = document.getElementById('filePreviewModal');
-        const image = document.getElementById('filePreviewImage');
-        const documentViewer = document.getElementById('filePreviewDocument');
-
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-        image.removeAttribute('src');
-        documentViewer.removeAttribute('src');
-    }
-
     document.addEventListener('keydown', function(event) {
         if (event.key !== 'Escape') {
             return;
         }
 
-        closeFilePreview();
         closeDetailModal();
         closeTambahModal();
         closeEditModal();
