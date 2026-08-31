@@ -336,8 +336,11 @@
                             bodyFont: {
                                 size: 9
                             },
-                            padding: 6,
-                            cornerRadius: 4
+                            padding: 8,
+                            cornerRadius: 4,
+                            position: 'nearest',
+                            yAlign: 'top',
+                            xAlign: 'center'
                         }
                     },
                     cutout: '66%',
