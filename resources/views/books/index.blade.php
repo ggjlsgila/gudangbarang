@@ -566,9 +566,9 @@
             }
 
             const url = new URL(targetLink.href, window.location.href);
-            const isPaginationLink = targetLink.closest('.pagination a') ||
-                targetLink.getAttribute('rel') === 'next' ||
-                targetLink.getAttribute('rel') === 'prev';
+            const isPaginationLink = targetLink.closest('.pagination') ||
+                targetLink.matches('a[rel="next"], a[rel="prev"], a[rel="first"], a[rel="last"]') ||
+                targetLink.matches('[data-page]');
             const isSortLink = url.searchParams.has('sort');
 
             if (isPaginationLink || isSortLink) {
