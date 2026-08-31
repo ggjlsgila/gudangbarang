@@ -137,9 +137,16 @@
 
                                     {{-- KOLOM FILE / COVER (Hidden di Mobile) --}}
                                     <td class="hidden sm:table-cell px-2 py-3.5 sm:px-4 text-center whitespace-nowrap">
-                                        @if (!empty($book->file))
+                                        @php
+                                            $bookPreviewUrl =
+                                                $book->file && Storage::disk('public')->exists($book->file)
+                                                    ? Storage::url($book->file)
+                                                    : null;
+                                        @endphp
+
+                                        @if ($bookPreviewUrl)
                                             <button type="button"
-                                                onclick="openFilePreview(@js($book->file ? Storage::url($book->file) : ''), @js(basename($book->file)))"
+                                                onclick="openFilePreview(@js($bookPreviewUrl), @js(basename($book->file)))"
                                                 class="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] font-bold text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-200 transition">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                     stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
@@ -182,13 +189,19 @@
                                                     style="display: none;">
 
                                                     {{-- Tombol Detail --}}
+                                                    @php
+                                                        $detailFileUrl =
+                                                            $book->file && Storage::disk('public')->exists($book->file)
+                                                                ? Storage::url($book->file)
+                                                                : null;
+                                                    @endphp
+
                                                     <button type="button" onclick="openDetailModal(this)"
                                                         data-kode="{{ $book->kode_buku }}"
                                                         data-judul="{{ $book->judul_buku }}"
                                                         data-stok="{{ $book->stok }}"
                                                         data-keterangan="{{ $book->keterangan ?? '-' }}"
-                                                        data-file="{{ $book->file ? Storage::url($book->file) : '' }}"
-                                                        @click="open = false"
+                                                        data-file="{{ $detailFileUrl ?? '' }}" @click="open = false"
                                                         class="flex w-full items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-indigo-600 transition">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
