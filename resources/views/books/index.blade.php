@@ -701,26 +701,36 @@
             });
         }
 
-        // Penanganan AJAX untuk Pagination / Link di dalam Tabel
+        // Hanya AJAX untuk search/reset. Pagination dan sort dibiarkan normal agar URL Laravel bawaan tetap aman.
         document.addEventListener('click', function(e) {
             const targetLink = e.target.closest('#tableContainer a');
 
-            if (targetLink && targetLink.href) {
-                e.preventDefault();
-                const url = targetLink.href;
+            if (!targetLink || !targetLink.href) {
+                return;
+            }
 
-                fetchBooks(url);
-                window.history.pushState(null, '', url);
+            const url = new URL(targetLink.href, window.location.href);
+            const isPaginationLink = targetLink.closest('.pagination a') ||
+                targetLink.getAttribute('rel') === 'next' ||
+                targetLink.getAttribute('rel') === 'prev';
+            const isSortLink = url.searchParams.has('sort');
 
-                try {
-                    const urlParams = new URLSearchParams(new URL(url).search);
-                    if (urlParams.has('search') && searchInput) {
-                        searchInput.value = urlParams.get('search');
-                        toggleResetButton();
-                    }
-                } catch (err) {
-                    console.error('Error parsing pagination URL:', err);
+            if (isPaginationLink || isSortLink) {
+                return;
+            }
+
+            e.preventDefault();
+            fetchBooks(url.href);
+            window.history.pushState(null, '', url.href);
+
+            try {
+                const urlParams = new URLSearchParams(url.search);
+                if (urlParams.has('search') && searchInput) {
+                    searchInput.value = urlParams.get('search');
+                    toggleResetButton();
                 }
+            } catch (err) {
+                console.error('Error parsing AJAX URL:', err);
             }
         });
     });
