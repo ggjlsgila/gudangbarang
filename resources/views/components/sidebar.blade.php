@@ -110,6 +110,20 @@
             </div>
         </a>
 
+        @if (auth()->user()->role === 'admin')
+            <a href="{{ route('users.index') }}"
+                class="flex items-center justify-between rounded-xl px-3 py-2.5 text-sm transition {{ request()->routeIs('users.*') ? 'bg-indigo-50 text-indigo-700 font-bold' : 'font-semibold text-slate-900 hover:bg-slate-100' }}">
+                <div class="flex items-center gap-3">
+                    <svg class="h-5 w-5 {{ request()->routeIs('users.*') ? 'text-indigo-600' : 'text-slate-600' }}"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15 19a3 3 0 10-6 0m9-8a3 3 0 11-6 0 3 3 0 016 0zm-9 0a3 3 0 11-6 0 3 3 0 016 0zm-6 8a3 3 0 015.65-1.35M18 18a3 3 0 015.65 1.35" />
+                    </svg>
+                    <span>User</span>
+                </div>
+            </a>
+        @endif
+
     </nav>
 
 
