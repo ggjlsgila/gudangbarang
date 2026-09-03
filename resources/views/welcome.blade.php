@@ -48,47 +48,29 @@
         </div>
 
         <div>
-            @if (Route::has('login'))
-                <nav class="flex items-center gap-2 sm:gap-3">
-                    @auth
-                        <a href="{{ url('/dashboard') }}"
-                            class="text-[11px] sm:text-xs font-semibold px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg bg-slate-900 text-white hover:bg-sky-700 shadow-sm transition">
-                            Dashboard →
-                        </a>
-                    @else
-                        <a href="{{ route('login') }}"
-                            class="text-[11px] sm:text-xs font-semibold px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-lg text-slate-700 hover:text-sky-700 transition">
-                            Masuk
-                        </a>
-
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}"
-                                class="text-[11px] sm:text-xs font-semibold px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg bg-sky-600 text-white hover:bg-sky-700 shadow-sm shadow-sky-200 transition">
-                                Daftar
-                            </a>
-                        @endif
-                    @endauth
-                </nav>
-            @endif
+            <nav class="flex items-center gap-2 sm:gap-3">
+                <a href="{{ url('/dashboard') }}"
+                    class="text-[11px] sm:text-xs font-semibold px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg bg-slate-900 text-white hover:bg-sky-700 shadow-sm transition">
+                    Dashboard →
+                </a>
+            </nav>
         </div>
     </header>
 
-    {{-- HERO SECTION (Desain responsif: Mobile tetap rapat ke bawah, Desktop rapat & padat ke tengah) --}}
+    {{-- HERO SECTION --}}
     <main
         class="relative isolate max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-14 text-center flex-1 flex flex-col justify-center items-center overflow-hidden">
-        {{-- Badge kecil di atas judul --}}
+
         <div
             class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-sky-100 text-sky-700 text-[10px] sm:text-[11px] font-bold mb-4 tracking-wide uppercase shadow-sm">
             <span class="w-1.5 h-1.5 rounded-full bg-sky-500 animate-pulse"></span>
             Sistem Inventaris & Logistik
         </div>
 
-        {{-- Judul Utama --}}
         <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-950 leading-[1.08] mb-3 max-w-3xl">
             Kelola <span class="text-sky-600">Buku</span>, Stok Barang, dan Transaksi Lebih Terstruktur.
         </h1>
 
-        {{-- Deskripsi Singkat --}}
         <p class="text-xs sm:text-sm text-slate-600 max-w-xl mb-7 leading-relaxed">
             Platform manajemen gudang digital yang dirancang untuk memantau inventaris buku, barang masuk, dan barang
             keluar secara real-time.
@@ -96,26 +78,13 @@
 
         {{-- Tombol Aksi Utama --}}
         <div class="flex flex-col sm:flex-row items-center justify-center gap-2.5 sm:gap-3 w-full sm:w-auto mb-8">
-            @auth
-                <a href="{{ url('/dashboard') }}"
-                    class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-slate-900 text-white text-xs font-bold tracking-wide uppercase hover:bg-sky-700 transition shadow-md shadow-slate-300">
-                    Buka Dashboard
-                </a>
-            @else
-                <a href="{{ route('login') }}"
-                    class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-slate-900 text-white text-xs font-bold tracking-wide uppercase hover:bg-sky-700 transition shadow-md shadow-slate-300">
-                    Mulai Masuk Sistem
-                </a>
-                @if (Route::has('register'))
-                    <a href="{{ route('register') }}"
-                        class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-white border border-slate-300 text-slate-700 text-xs font-bold tracking-wide uppercase hover:border-sky-300 hover:text-sky-700 transition shadow-sm">
-                        Buat Akun Baru
-                    </a>
-                @endif
-            @endauth
+            <a href="{{ url('/dashboard') }}"
+                class="w-full sm:w-auto px-6 py-3 rounded-xl bg-slate-900 text-white text-xs font-bold tracking-wide uppercase hover:bg-sky-700 transition shadow-md shadow-slate-300">
+                Buka Dashboard Sistem
+            </a>
         </div>
 
-        {{-- Fitur Singkat Grid (Otomatis menyesuaikan: 1 kolom di HP, 3 kolom rapat di Desktop) --}}
+        {{-- Fitur Singkat Grid --}}
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-4 w-full text-left">
             <div
                 class="p-4 sm:p-5 rounded-2xl border border-slate-200 bg-white/95 shadow-sm hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-200/70 transition duration-300">

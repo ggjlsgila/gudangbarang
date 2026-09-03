@@ -7,39 +7,34 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 
+// Halaman utama (Landing Page)
 Route::get('/', function () {
     return view('welcome');
 });
 
+// Dashboard langsung bisa diakses tanpa middleware auth & verified
 Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+// Semua fitur Master Data & Transaksi dibebaskan dari middleware auth
+// =========================
+// MASTER DATA
+// =========================
 
-    // =========================
-    // MASTER DATA
-    // =========================
+// Buku
+Route::resource('books', BookController::class);
 
-    // Buku
-    Route::resource('books', BookController::class);
+// Barang Lainnya
+Route::resource('items', ItemController::class);
 
-    // Barang Lainnya
-    Route::resource('items', ItemController::class);
+// =========================
+// TRANSAKSI
+// =========================
+Route::resource('transactions', TransactionController::class);
 
-    // =========================
-    // TRANSAKSI
-    // =========================
-
-    // Opsi 1: Menggunakan Route Resource (Rekomendasi)
-    Route::resource('transactions', TransactionController::class);
-
-    // =========================
-    // PROFILE
-    // =========================
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
-
-require __DIR__.'/auth.php';
+// =========================
+// PROFILE (Opsional, kalau masih mau dipakai)
+// =========================
+Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
