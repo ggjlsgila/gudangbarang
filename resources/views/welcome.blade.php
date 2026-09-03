@@ -49,10 +49,17 @@
 
         <div>
             <nav class="flex items-center gap-2 sm:gap-3">
-                <a href="{{ url('/dashboard') }}"
-                    class="text-[11px] sm:text-xs font-semibold px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg bg-slate-900 text-white hover:bg-sky-700 shadow-sm transition">
-                    Dashboard →
-                </a>
+                @auth
+                    <a href="{{ route('dashboard') }}"
+                        class="text-[11px] sm:text-xs font-semibold px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg bg-slate-900 text-white hover:bg-sky-700 shadow-sm transition">
+                        Dashboard →
+                    </a>
+                @else
+                    <a href="{{ route('login') }}"
+                        class="text-[11px] sm:text-xs font-semibold px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg bg-slate-900 text-white hover:bg-sky-700 shadow-sm transition">
+                        Login
+                    </a>
+                @endauth
             </nav>
         </div>
     </header>
@@ -78,11 +85,13 @@
 
         {{-- Tombol Aksi Utama --}}
         <div class="flex flex-col sm:flex-row items-center justify-center gap-2.5 sm:gap-3 w-full sm:w-auto mb-8">
-            <a href="{{ url('/dashboard') }}"
+            <a href="{{ route('login') }}"
                 class="w-full sm:w-auto px-6 py-3 rounded-xl bg-slate-900 text-white text-xs font-bold tracking-wide uppercase hover:bg-sky-700 transition shadow-md shadow-slate-300">
-                Buka Dashboard Sistem
+                Login ke Sistem
             </a>
         </div>
+
+        <p class="mb-8 text-[11px] text-slate-500">Akun pengguna dibuat oleh admin sistem.</p>
 
         {{-- Fitur Singkat Grid --}}
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-4 w-full text-left">
