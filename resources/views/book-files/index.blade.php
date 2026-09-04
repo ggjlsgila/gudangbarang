@@ -66,10 +66,8 @@
                                 <td class="truncate px-3 py-3.5 font-medium text-slate-700 sm:px-4"
                                     title="{{ $bookFile->original_name }}">{{ $bookFile->original_name }}</td>
                                 <td class="whitespace-nowrap px-1 py-3.5 text-center sm:px-4">
-                                    <div class="relative inline-block text-left" x-data="{ open: false, dropUp: false, menuTop: 0, menuLeft: 0 }">
-                                        <button type="button" title="Menu Aksi"
-                                            @click="let rect = $el.getBoundingClientRect(); dropUp = window.innerHeight - rect.bottom < 220; menuTop = dropUp ? rect.top - 180 : rect.bottom + 8; menuLeft = Math.max(8, Math.min(rect.right - 128, window.innerWidth - 136)); open = !open"
-                                            @click.away="open = false"
+                                    <div class="relative inline-block text-left">
+                                        <button type="button" title="Menu Aksi" onclick="toggleBookFileMenu(event, this)"
                                             class="inline-flex cursor-pointer items-center justify-center rounded-lg border border-slate-200 p-1.5 text-slate-600 transition hover:border-slate-300 hover:bg-slate-100 hover:text-indigo-600">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                 stroke-width="2" stroke="currentColor" class="h-4 w-4">
@@ -77,30 +75,25 @@
                                                     d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
                                             </svg>
                                         </button>
-                                        <template x-teleport="body">
-                                            <div x-show="open" x-transition
-                                                :style="`top: ${menuTop}px; left: ${menuLeft}px;`"
-                                                class="fixed z-[9999] w-32 rounded-xl border border-slate-200 bg-white py-1 text-left shadow-lg"
-                                                style="display: none;">
-                                                <a href="{{ Storage::url($bookFile->file_path) }}" target="_blank"
-                                                    @click="open = false"
-                                                    class="block px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 hover:text-indigo-600">Lihat</a>
-                                                <a href="{{ Storage::url($bookFile->file_path) }}"
-                                                    download="{{ $bookFile->original_name }}" @click="open = false"
-                                                    class="block px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 hover:text-indigo-600">Download</a>
-                                                <button type="button"
-                                                    onclick="openEditBookFileModal('{{ route('book-files.update', $bookFile) }}', '{{ $bookFile->book_id }}')"
-                                                    @click="open = false"
-                                                    class="block w-full px-3 py-2 text-left text-xs font-semibold text-slate-700 transition hover:bg-slate-50 hover:text-indigo-600">Edit</button>
-                                                <form method="POST" action="{{ route('book-files.destroy', $bookFile) }}"
-                                                    onsubmit="return confirm('Hapus file ini?')" class="m-0 block p-0">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit"
-                                                        class="block w-full px-3 py-2 text-left text-xs font-semibold text-rose-600 transition hover:bg-rose-50">Hapus</button>
-                                                </form>
-                                            </div>
-                                        </template>
+                                        <div
+                                            class="book-file-menu fixed z-[9999] hidden w-32 rounded-xl border border-slate-200 bg-white py-1 text-left shadow-lg">
+                                            <a href="{{ Storage::url($bookFile->file_path) }}" target="_blank"
+                                                onclick="closeBookFileMenus()"
+                                                class="block px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 hover:text-indigo-600">Lihat</a>
+                                            <a href="{{ Storage::url($bookFile->file_path) }}"
+                                                download="{{ $bookFile->original_name }}" onclick="closeBookFileMenus()"
+                                                class="block px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 hover:text-indigo-600">Download</a>
+                                            <button type="button"
+                                                onclick="closeBookFileMenus(); openEditBookFileModal('{{ route('book-files.update', $bookFile) }}', '{{ $bookFile->book_id }}')"
+                                                class="block w-full px-3 py-2 text-left text-xs font-semibold text-slate-700 transition hover:bg-slate-50 hover:text-indigo-600">Edit</button>
+                                            <form method="POST" action="{{ route('book-files.destroy', $bookFile) }}"
+                                                onsubmit="return confirm('Hapus file ini?')" class="m-0 block p-0">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                    class="block w-full px-3 py-2 text-left text-xs font-semibold text-rose-600 transition hover:bg-rose-50">Hapus</button>
+                                            </form>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
@@ -173,6 +166,37 @@
     </div>
 
     <script>
+        function closeBookFileMenus() {
+            document.querySelectorAll('.book-file-menu').forEach(function(menu) {
+                menu.classList.add('hidden');
+            });
+        }
+
+        function toggleBookFileMenu(event, button) {
+            event.stopPropagation();
+
+            const menu = button.nextElementSibling;
+            const isOpen = !menu.classList.contains('hidden');
+            closeBookFileMenus();
+
+            if (isOpen) {
+                return;
+            }
+
+            const rect = button.getBoundingClientRect();
+            const menuHeight = 180;
+            const top = window.innerHeight - rect.bottom < menuHeight ?
+                rect.top - menuHeight :
+                rect.bottom + 8;
+            const left = Math.max(8, Math.min(rect.right - 128, window.innerWidth - 136));
+
+            menu.style.top = `${top}px`;
+            menu.style.left = `${left}px`;
+            menu.classList.remove('hidden');
+        }
+
+        document.addEventListener('click', closeBookFileMenus);
+
         let bookFileSelect = null;
 
         document.addEventListener('DOMContentLoaded', function() {

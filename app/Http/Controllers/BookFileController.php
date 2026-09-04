@@ -54,7 +54,7 @@ class BookFileController extends Controller
         return redirect()->route('book-files.index')->with('success', 'File buku berhasil ditambahkan.');
     }
 
-    public function update(Request $request, BookFile $bookFile)
+    public function update(Request $request, BookFile $book_file)
     {
         $validated = $request->validate([
             'book_id' => ['required', 'exists:books,id'],
@@ -66,25 +66,25 @@ class BookFileController extends Controller
             'file.max' => 'Ukuran file maksimal 20 MB.',
         ]);
 
-        $bookFile->book_id = $validated['book_id'];
+        $book_file->book_id = $validated['book_id'];
 
         if ($request->hasFile('file')) {
-            Storage::disk('public')->delete($bookFile->file_path);
+            Storage::disk('public')->delete($book_file->file_path);
             $file = $request->file('file');
-            $bookFile->original_name = $file->getClientOriginalName();
-            $bookFile->file_path = $file->store('book-files', 'public');
-            $bookFile->file_size = $file->getSize();
+            $book_file->original_name = $file->getClientOriginalName();
+            $book_file->file_path = $file->store('book-files', 'public');
+            $book_file->file_size = $file->getSize();
         }
 
-        $bookFile->save();
+        $book_file->save();
 
         return redirect()->route('book-files.index')->with('success', 'File buku berhasil diperbarui.');
     }
 
-    public function destroy(BookFile $bookFile)
+    public function destroy(BookFile $book_file)
     {
-        Storage::disk('public')->delete($bookFile->file_path);
-        $bookFile->delete();
+        Storage::disk('public')->delete($book_file->file_path);
+        $book_file->delete();
 
         return redirect()->route('book-files.index')->with('success', 'File buku berhasil dihapus.');
     }
