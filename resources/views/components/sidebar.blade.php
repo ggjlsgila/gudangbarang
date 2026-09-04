@@ -110,6 +110,20 @@
             </div>
         </a>
 
+        {{-- FILE BUKU --}}
+        <a href="{{ route('book-files.index') }}"
+            class="flex items-center justify-between rounded-xl px-3 py-2.5 text-sm transition {{ request()->routeIs('book-files.*') ? 'bg-indigo-50 text-indigo-700 font-bold' : 'font-semibold text-slate-900 hover:bg-slate-100' }}">
+            <div class="flex items-center gap-3">
+                <svg class="w-5 h-5 {{ request()->routeIs('book-files.*') ? 'text-indigo-600' : 'text-slate-600' }}"
+                    fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 13h6m-6 4h6m2 4H7a2 2 0 01-2-2V5a2 2 0 012-2h6l4 4v12a2 2 0 01-2 2z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 3v4h4" />
+                </svg>
+                <span>File Buku</span>
+            </div>
+        </a>
+
         @if (auth()->user()->role === 'admin')
             <a href="{{ route('users.index') }}"
                 class="flex items-center justify-between rounded-xl px-3 py-2.5 text-sm transition {{ request()->routeIs('users.*') ? 'bg-indigo-50 text-indigo-700 font-bold' : 'font-semibold text-slate-900 hover:bg-slate-100' }}">

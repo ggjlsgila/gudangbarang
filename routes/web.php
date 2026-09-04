@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\BookFileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ProfileController;
@@ -23,6 +24,7 @@ Route::middleware('auth')->group(function () {
 
 // Buku
 Route::resource('books', BookController::class);
+Route::resource('book-files', BookFileController::class)->only(['index', 'store', 'update', 'destroy']);
 
 // Barang Lainnya
 Route::resource('items', ItemController::class);

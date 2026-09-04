@@ -20,4 +20,9 @@ class Book extends Model
     {
         return $this->morphMany(Transaction::class, 'itemable');
     }
+
+    public function files()
+    {
+        return $this->hasMany(BookFile::class);
+    }
 }
