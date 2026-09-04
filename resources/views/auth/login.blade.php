@@ -34,13 +34,6 @@
             </label>
 
             <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
-                @if (Route::has('password.request'))
-                    <a class="text-sm font-medium text-slate-600 transition hover:text-slate-900"
-                        href="{{ route('password.request') }}">
-                        Forgot your password?
-                    </a>
-                @endif
-
                 <button type="submit"
                     class="inline-flex w-full items-center justify-center rounded-xl bg-[#1d4ed8] px-5 py-3 text-sm font-bold uppercase tracking-wide text-white shadow-md transition hover:bg-[#1e40af] focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-2 sm:w-auto">
                     LOG IN
