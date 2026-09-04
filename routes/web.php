@@ -25,6 +25,8 @@ Route::middleware('auth')->group(function () {
 // Buku
 Route::resource('books', BookController::class);
 Route::resource('book-files', BookFileController::class)->only(['index', 'store', 'update', 'destroy']);
+Route::get('book-files/{book_file}/view', [BookFileController::class, 'view'])->name('book-files.view');
+Route::get('book-files/{book_file}/download', [BookFileController::class, 'download'])->name('book-files.download');
 
 // Barang Lainnya
 Route::resource('items', ItemController::class);

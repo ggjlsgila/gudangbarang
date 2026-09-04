@@ -77,10 +77,10 @@
                                         </button>
                                         <div
                                             class="book-file-menu fixed z-[9999] hidden w-32 rounded-xl border border-slate-200 bg-white py-1 text-left shadow-lg">
-                                            <a href="{{ Storage::url($bookFile->file_path) }}" target="_blank"
+                                            <a href="{{ route('book-files.view', $bookFile) }}" target="_blank"
                                                 onclick="closeBookFileMenus()"
                                                 class="block px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 hover:text-indigo-600">Lihat</a>
-                                            <a href="{{ Storage::url($bookFile->file_path) }}"
+                                            <a href="{{ route('book-files.download', $bookFile) }}"
                                                 download="{{ $bookFile->original_name }}" onclick="closeBookFileMenus()"
                                                 class="block px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 hover:text-indigo-600">Download</a>
                                             <button type="button"

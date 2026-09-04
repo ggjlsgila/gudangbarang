@@ -81,6 +81,23 @@ class BookFileController extends Controller
         return redirect()->route('book-files.index')->with('success', 'File buku berhasil diperbarui.');
     }
 
+    public function view(BookFile $book_file)
+    {
+        abort_unless(Storage::disk('public')->exists($book_file->file_path), 404);
+
+        return response()->file(Storage::disk('public')->path($book_file->file_path));
+    }
+
+    public function download(BookFile $book_file)
+    {
+        abort_unless(Storage::disk('public')->exists($book_file->file_path), 404);
+
+        return response()->download(
+            Storage::disk('public')->path($book_file->file_path),
+            $book_file->original_name
+        );
+    }
+
     public function destroy(BookFile $book_file)
     {
         Storage::disk('public')->delete($book_file->file_path);
