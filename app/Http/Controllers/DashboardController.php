@@ -53,7 +53,9 @@ class DashboardController extends Controller
         $totalMasuk = $totalBukuMasuk + $totalBarangMasuk;
         $totalKeluar = $totalBukuKeluar + $totalBarangKeluar;
 
-        $stokMenipis = Book::where('stok', '<=', 5)->get();
+        $stokMenipis = Book::where('stok', '<', 12)
+            ->orderBy('stok')
+            ->get();
 
         $latestTransactions = Transaction::with('itemable')
             ->latest()
