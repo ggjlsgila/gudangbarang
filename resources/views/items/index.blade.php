@@ -141,7 +141,8 @@
                                                     </button>
 
                                                     <form method="POST" action="{{ route('items.destroy', $item) }}"
-                                                        onsubmit="return confirm('Yakin ingin menghapus barang ini?')"
+                                                        data-confirm-message="Yakin ingin menghapus barang ini?"
+                                                        onsubmit="return openDeleteModal(this)"
                                                         class="block m-0 p-0">
                                                         @csrf
                                                         @method('DELETE')

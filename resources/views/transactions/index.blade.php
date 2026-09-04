@@ -191,8 +191,8 @@
                                                     </button>
 
                                                     <form method="POST" action="{{ route('transactions.destroy', $trx) }}"
-                                                        onsubmit="return confirm('Hapus transaksi ini? Stok item akan disesuaikan kembali.')"
-                                                        class="block m-0 p-0">
+                                                        data-confirm-message="Hapus transaksi ini? Stok item akan disesuaikan kembali."
+                                                        onsubmit="return openDeleteModal(this)" class="block m-0 p-0">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit"

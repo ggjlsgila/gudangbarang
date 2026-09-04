@@ -198,8 +198,8 @@
 
                                                     {{-- Tombol Hapus --}}
                                                     <form method="POST" action="{{ route('books.destroy', $book) }}"
-                                                        onsubmit="return confirm('Yakin ingin menghapus buku ini?')"
-                                                        class="block m-0 p-0">
+                                                        data-confirm-message="Yakin ingin menghapus buku ini?"
+                                                        onsubmit="return openDeleteModal(this)" class="block m-0 p-0">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit"

@@ -87,7 +87,8 @@
                                                 onclick="closeBookFileMenus(); openEditBookFileModal('{{ route('book-files.update', $bookFile) }}', '{{ $bookFile->book_id }}')"
                                                 class="block w-full px-3 py-2 text-left text-xs font-semibold text-slate-700 transition hover:bg-slate-50 hover:text-indigo-600">Edit</button>
                                             <form method="POST" action="{{ route('book-files.destroy', $bookFile) }}"
-                                                onsubmit="return confirm('Hapus file ini?')" class="m-0 block p-0">
+                                                data-confirm-message="Hapus file ini?"
+                                                onsubmit="return openDeleteModal(this)" class="m-0 block p-0">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit"

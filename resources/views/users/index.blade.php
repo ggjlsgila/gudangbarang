@@ -39,7 +39,8 @@
                                         class="font-semibold text-indigo-600 hover:text-indigo-800">Edit</a>
                                     @if (!$user->is(auth()->user()))
                                         <form method="POST" action="{{ route('users.destroy', $user) }}"
-                                            class="ml-3 inline" onsubmit="return confirm('Hapus user ini?')">@csrf
+                                            class="ml-3 inline" data-confirm-message="Hapus user ini?"
+                                            onsubmit="return openDeleteModal(this)">@csrf
                                             @method('DELETE')<button
                                                 class="font-semibold text-rose-600 hover:text-rose-800">Hapus</button>
                                         </form>

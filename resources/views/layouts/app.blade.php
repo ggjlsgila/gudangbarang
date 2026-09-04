@@ -236,7 +236,75 @@
         onclick="closeSidebar()"></div>{{-- =========================================
          JAVASCRIPT SIDEBAR (100% LOGIKA UTUH)
     ========================================== --}}
+    <div id="deleteConfirmModal"
+        class="fixed inset-0 z-[10000] hidden items-center justify-center bg-slate-900/40 px-4 backdrop-blur-sm"
+        role="dialog" aria-modal="true" aria-labelledby="deleteConfirmTitle">
+        <div class="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl"
+            onclick="event.stopPropagation()">
+            <div class="flex items-start gap-3">
+                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-rose-50 text-rose-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 9v3.75m0 3.75h.008v.008H12V16.5zM10.29 3.86l-7.4 12.82A1.5 1.5 0 004.19 18.9h15.62a1.5 1.5 0 001.3-2.22l-7.4-12.82a1.98 1.98 0 00-3.42 0z" />
+                    </svg>
+                </div>
+                <div>
+                    <h2 id="deleteConfirmTitle" class="text-base font-bold text-slate-900">Konfirmasi Penghapusan</h2>
+                    <p id="deleteConfirmMessage" class="mt-1 text-sm font-medium text-slate-500"></p>
+                </div>
+            </div>
+            <div class="mt-6 flex justify-end gap-2 border-t border-slate-100 pt-4">
+                <button type="button" onclick="closeDeleteModal()"
+                    class="rounded-xl bg-slate-100 px-4 py-2 text-xs font-bold text-slate-700 transition hover:bg-slate-200">Batal</button>
+                <button type="button" onclick="submitDeleteForm()"
+                    class="rounded-xl bg-rose-600 px-4 py-2 text-xs font-bold text-white shadow-sm transition hover:bg-rose-700">Hapus</button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        let deleteForm = null;
+
+        function openDeleteModal(form) {
+            deleteForm = form;
+            document.getElementById('deleteConfirmMessage').textContent =
+                form.dataset.confirmMessage || 'Yakin ingin menghapus data ini?';
+            const modal = document.getElementById('deleteConfirmModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            return false;
+        }
+
+        function closeDeleteModal() {
+            const modal = document.getElementById('deleteConfirmModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            deleteForm = null;
+        }
+
+        function submitDeleteForm() {
+            if (!deleteForm) {
+                return;
+            }
+
+            const form = deleteForm;
+            deleteForm = null;
+            form.submit();
+        }
+
+        document.getElementById('deleteConfirmModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeDeleteModal();
+            }
+        });
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeDeleteModal();
+            }
+        });
+
         function openSidebar() {
 
             const sidebar = document.getElementById('sidebar');
