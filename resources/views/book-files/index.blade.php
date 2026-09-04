@@ -51,9 +51,9 @@
                         class="border-b border-indigo-100/60 bg-indigo-50/50 text-[10px] font-bold uppercase tracking-wider text-slate-900 sm:text-xs">
                         <tr>
                             <th class="w-[12%] px-3 py-3.5 text-center sm:w-[8%] sm:px-4">No</th>
-                            <th class="w-[38%] px-3 py-3.5 sm:w-[40%] sm:px-4">Judul Buku</th>
-                            <th class="w-[35%] px-3 py-3.5 sm:w-[40%] sm:px-4">File</th>
-                            <th class="w-[15%] px-2 py-3.5 text-center sm:w-[12%] sm:px-4">Aksi</th>
+                            <th class="w-[52%] px-3 py-3.5 sm:w-[55%] sm:px-4">Judul Buku</th>
+                            <th class="w-[26%] px-3 py-3.5 sm:w-[27%] sm:px-4">File</th>
+                            <th class="w-[10%] px-2 py-3.5 text-center sm:w-[10%] sm:px-4">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 bg-white">
@@ -141,7 +141,7 @@
                             <label for="book_id"
                                 class="mb-1 block text-xs font-bold uppercase tracking-wider text-slate-700">Pilih
                                 Buku</label>
-                            <select id="book_id" name="book_id" required
+                            <select id="book_id" name="book_id" required placeholder="Cari atau pilih buku..."
                                 class="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs font-medium focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
                                 <option value="">-- Cari / Pilih Buku --</option>
                                 @foreach ($books as $book)
@@ -173,11 +173,28 @@
     </div>
 
     <script>
+        let bookFileSelect = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            bookFileSelect = new TomSelect('#book_id', {
+                create: false,
+                allowEmptyOption: true,
+                searchField: ['text'],
+                maxOptions: 50,
+                closeAfterSelect: true,
+                onInitialize: function() {
+                    this.clear(true);
+                }
+            });
+        });
+
         function openBookFileModal() {
             document.getElementById('bookFileModalTitle').textContent = 'Tambah File Buku';
             document.getElementById('bookFileForm').action = @js(route('book-files.store'));
             document.getElementById('bookFileMethod').value = 'POST';
-            document.getElementById('book_id').value = '';
+            if (bookFileSelect) {
+                bookFileSelect.clear(true);
+            }
             document.getElementById('file').required = true;
             document.getElementById('bookFileModal').classList.remove('hidden');
         }
@@ -186,7 +203,11 @@
             document.getElementById('bookFileModalTitle').textContent = 'Edit File Buku';
             document.getElementById('bookFileForm').action = action;
             document.getElementById('bookFileMethod').value = 'PUT';
-            document.getElementById('book_id').value = bookId;
+            if (bookFileSelect) {
+                bookFileSelect.setValue(bookId, true);
+            } else {
+                document.getElementById('book_id').value = bookId;
+            }
             document.getElementById('file').required = false;
             document.getElementById('bookFileModal').classList.remove('hidden');
         }
