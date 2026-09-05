@@ -9,14 +9,12 @@
 
         @media (max-width: 639px) {
             .chart-filter-form {
-                display: grid;
-                grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-                width: 100%;
+                width: auto;
             }
 
             .chart-filter {
                 min-width: 0;
-                width: 100% !important;
+                width: auto !important;
             }
         }
     </style>
@@ -101,7 +99,7 @@
             </div>
 
             @if ($stokMenipis->count() > 0)
-                <div class="max-h-[108px] space-y-1 overflow-y-auto pr-1 sm:max-h-56">
+                <div class="max-h-[132px] space-y-1 overflow-y-auto pr-1 sm:max-h-56">
                     @foreach ($stokMenipis as $buku)
                         <div
                             class="flex items-center justify-between rounded-md bg-red-50/60 border border-red-100 p-2 text-xs">
