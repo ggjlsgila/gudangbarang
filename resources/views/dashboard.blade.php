@@ -125,12 +125,12 @@
 
             {{-- 1. GRAFIK PERBANDINGAN TRANSAKSI --}}
             <div class="lg:col-span-5 flex flex-col rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
-                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
-                    <h2 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-gray-800">
+                <div class="flex items-center justify-between gap-2 mb-2">
+                    <h2 class="min-w-0 text-xs sm:text-sm font-bold uppercase tracking-wider text-gray-800">
                         Komposisi Transaksi
                     </h2>
                     <form method="GET" action="{{ route('dashboard') }}"
-                        class="chart-filter-form flex items-center justify-end gap-1.5">
+                        class="chart-filter-form flex shrink-0 items-center justify-end gap-1.5">
                         <label for="tahunGrafik" class="sr-only">Pilih tahun grafik</label>
                         <div class="relative" id="tahunGrafikWrapper">
                             <input type="hidden" id="tahunGrafik" name="tahun_grafik" value="{{ $tahunGrafik }}">
