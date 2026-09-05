@@ -101,7 +101,7 @@
             </div>
 
             @if ($stokMenipis->count() > 0)
-                <div class="max-h-56 space-y-1 overflow-y-auto pr-1">
+                <div class="max-h-[108px] space-y-1 overflow-y-auto pr-1 sm:max-h-56">
                     @foreach ($stokMenipis as $buku)
                         <div
                             class="flex items-center justify-between rounded-md bg-red-50/60 border border-red-100 p-2 text-xs">
