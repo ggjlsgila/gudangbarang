@@ -49,7 +49,8 @@
 
                     {{-- Filter jenis transaksi --}}
                     <select name="jenis_transaksi" id="transactionTypeFilter"
-                        class="w-[140px] shrink-0 rounded-xl border-slate-300 bg-white px-3 py-2 text-xs sm:w-[160px] sm:text-sm font-semibold text-slate-700 focus:border-indigo-500 focus:ring-indigo-500">
+                        style="width: 130px !important; max-width: 130px !important; flex: 0 0 130px !important;"
+                        class="shrink-0 rounded-xl border-slate-300 bg-white px-2 py-2 text-xs font-semibold text-slate-700 focus:border-indigo-500 focus:ring-indigo-500">
                         <option value="">Semua Transaksi</option>
                         <option value="masuk" @selected(request('jenis_transaksi') === 'masuk')>Masuk</option>
                         <option value="keluar" @selected(request('jenis_transaksi') === 'keluar')>Keluar</option>
@@ -58,7 +59,8 @@
                     {{-- Input Pencarian --}}
                     <input type="text" name="search" id="transactionSearch" value="{{ request('search') }}"
                         placeholder="Cari kode TRX, item, atau keterangan..." autocomplete="off"
-                        class="min-w-0 flex-1 rounded-xl border-slate-300 text-xs sm:text-sm font-medium text-slate-900 placeholder-slate-400 focus:border-indigo-500 focus:ring-indigo-500">
+                        style="width: auto !important; max-width: none !important; flex: 1 1 auto !important;"
+                        class="min-w-0 rounded-xl border-slate-300 text-xs sm:text-sm font-medium text-slate-900 placeholder-slate-400 focus:border-indigo-500 focus:ring-indigo-500">
 
                     {{-- Tombol Cari --}}
                     <button type="submit"
