@@ -49,7 +49,7 @@
 
                     {{-- Filter jenis transaksi --}}
                     <select name="jenis_transaksi" id="transactionTypeFilter"
-                        class="rounded-xl border-slate-300 bg-white px-3 py-2 text-xs sm:text-sm font-semibold text-slate-700 focus:border-indigo-500 focus:ring-indigo-500">
+                        class="w-auto shrink-0 rounded-xl border-slate-300 bg-white px-3 py-2 text-xs sm:text-sm font-semibold text-slate-700 focus:border-indigo-500 focus:ring-indigo-500">
                         <option value="">Semua Transaksi</option>
                         <option value="masuk" @selected(request('jenis_transaksi') === 'masuk')>Masuk</option>
                         <option value="keluar" @selected(request('jenis_transaksi') === 'keluar')>Keluar</option>
