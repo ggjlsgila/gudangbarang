@@ -47,10 +47,13 @@
                 <form method="GET" action="{{ route('transactions.index') }}" class="flex gap-2"
                     id="transactionSearchForm">
 
-                    {{-- Pertahankan filter jenis_transaksi jika sedang aktif --}}
-                    @if (request('jenis_transaksi'))
-                        <input type="hidden" name="jenis_transaksi" value="{{ request('jenis_transaksi') }}">
-                    @endif
+                    {{-- Filter jenis transaksi --}}
+                    <select name="jenis_transaksi" id="transactionTypeFilter"
+                        class="rounded-xl border-slate-300 bg-white px-3 py-2 text-xs sm:text-sm font-semibold text-slate-700 focus:border-indigo-500 focus:ring-indigo-500">
+                        <option value="">Semua Transaksi</option>
+                        <option value="masuk" @selected(request('jenis_transaksi') === 'masuk')>Masuk</option>
+                        <option value="keluar" @selected(request('jenis_transaksi') === 'keluar')>Keluar</option>
+                    </select>
 
                     {{-- Input Pencarian --}}
                     <input type="text" name="search" id="transactionSearch" value="{{ request('search') }}"
@@ -642,6 +645,7 @@
                                 const searchForm = document.getElementById('transactionSearchForm');
                                 const tableContainer = document.getElementById('tableContainer');
                                 const btnReset = document.getElementById('btnReset');
+                                const typeFilter = document.getElementById('transactionTypeFilter');
                                 let timer;
 
                                 function fetchTransactions(url) {
@@ -660,7 +664,7 @@
                                             }
 
                                             // Tampilkan atau sembunyikan tombol Reset
-                                            const jenisFilter = document.querySelector('input[name="jenis_transaksi"]');
+                                            const jenisFilter = document.getElementById('transactionTypeFilter');
                                             const hasJenis = jenisFilter && jenisFilter.value;
 
                                             if ((searchInput && searchInput.value.trim() !== '') || hasJenis) {
@@ -691,7 +695,7 @@
                                                 urlObj.searchParams.set('search', query);
                                             }
 
-                                            const jenisFilter = document.querySelector('input[name="jenis_transaksi"]');
+                                            const jenisFilter = document.getElementById('transactionTypeFilter');
                                             if (jenisFilter && jenisFilter.value) {
                                                 urlObj.searchParams.set('jenis_transaksi', jenisFilter.value);
                                             }
@@ -712,9 +716,26 @@
                                             urlObj.searchParams.set('search', query);
                                         }
 
-                                        const jenisFilter = document.querySelector('input[name="jenis_transaksi"]');
+                                        const jenisFilter = document.getElementById('transactionTypeFilter');
                                         if (jenisFilter && jenisFilter.value) {
                                             urlObj.searchParams.set('jenis_transaksi', jenisFilter.value);
+                                        }
+
+                                        fetchTransactions(urlObj.toString());
+                                        window.history.pushState(null, '', urlObj.toString());
+                                    });
+                                }
+
+                                if (typeFilter) {
+                                    typeFilter.addEventListener('change', function() {
+                                        const urlObj = new URL("{{ route('transactions.index') }}", window.location.origin);
+
+                                        if (searchInput && searchInput.value.trim() !== '') {
+                                            urlObj.searchParams.set('search', searchInput.value.trim());
+                                        }
+
+                                        if (typeFilter.value) {
+                                            urlObj.searchParams.set('jenis_transaksi', typeFilter.value);
                                         }
 
                                         fetchTransactions(urlObj.toString());

@@ -25,7 +25,12 @@ public function index(Request $request)
         $direction = 'desc';
     }
 
+    $jenisTransaksi = $request->input('jenis_transaksi');
     $query = Transaction::query()->with('itemable')->orderBy($sort, $direction);
+
+    if (in_array($jenisTransaksi, ['masuk', 'keluar'])) {
+        $query->where('jenis_transaksi', $jenisTransaksi);
+    }
 
     // Logika pencarian
     if ($request->filled('search')) {
