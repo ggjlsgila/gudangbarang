@@ -18,7 +18,7 @@ class BookController extends Controller
     $sort = $request->input('sort', 'id');
     $direction = strtolower($request->input('direction', 'desc'));
 
-    $allowedSorts = ['judul_buku', 'stok'];
+    $allowedSorts = ['kode_buku', 'judul_buku', 'stok'];
 
     if (!in_array($sort, $allowedSorts)) {
         $sort = 'id';

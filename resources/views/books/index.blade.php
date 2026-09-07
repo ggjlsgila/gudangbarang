@@ -67,7 +67,20 @@
                             class="bg-indigo-50/50 border-b border-indigo-100/60 text-slate-900 font-bold uppercase tracking-wider text-[10px] sm:text-xs">
                             <tr>
                                 <th class="px-2 py-3 sm:px-4 w-[8%] text-center">NO</th>
-                                <th class="hidden sm:table-cell px-3 py-3 sm:px-4 w-[15%]">KODE / ISBN</th>
+                                {{-- Kolom Kode / ISBN dengan Sortir URL --}}
+                                <th class="hidden sm:table-cell px-3 py-3 sm:px-4 w-[15%]">
+                                    <a href="{{ route('books.index', array_merge(request()->all(), ['sort' => 'kode_buku', 'direction' => request('direction') == 'asc' && request('sort') == 'kode_buku' ? 'desc' : 'asc'])) }}"
+                                        class="group inline-flex items-center gap-1.5 hover:text-indigo-600 transition cursor-pointer">
+                                        <span>KODE / ISBN</span>
+                                        <span class="text-slate-400 group-hover:text-indigo-600">
+                                            @if (request('sort') == 'kode_buku')
+                                                {{ request('direction') == 'asc' ? '▲' : '▼' }}
+                                            @else
+                                                ⇅
+                                            @endif
+                                        </span>
+                                    </a>
+                                </th>
 
                                 {{-- Kolom Nama Buku dengan Sortir URL --}}
                                 <th class="px-2 py-3 sm:px-4 w-[48%] sm:w-[33%]">
