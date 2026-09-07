@@ -93,8 +93,20 @@
                                 {{-- Jumlah --}}
                                 <th class="px-2 py-3.5 sm:px-4 w-[14%] sm:w-[10%] text-center">JUMLAH</th>
 
-                                {{-- Tanggal (Desktop only) --}}
-                                <th class="hidden sm:table-cell px-3 py-3.5 sm:px-4 sm:w-[16%] text-center">TANGGAL</th>
+                                {{-- Tanggal (Desktop only) dengan Sortir URL --}}
+                                <th class="hidden sm:table-cell px-3 py-3.5 sm:px-4 sm:w-[16%] text-center">
+                                    <a href="{{ route('transactions.index', array_merge(request()->all(), ['sort' => 'tanggal_transaksi', 'direction' => request('direction') == 'asc' && request('sort') == 'tanggal_transaksi' ? 'desc' : 'asc'])) }}"
+                                        class="group inline-flex items-center justify-center gap-1 hover:text-indigo-600 transition cursor-pointer w-full">
+                                        <span>TANGGAL</span>
+                                        <span class="text-slate-400 group-hover:text-indigo-600">
+                                            @if (request('sort') == 'tanggal_transaksi')
+                                                {{ request('direction') == 'asc' ? '▲' : '▼' }}
+                                            @else
+                                                ⇅
+                                            @endif
+                                        </span>
+                                    </a>
+                                </th>
 
                                 {{-- Aksi: Diberikan ruang lebih longgar di mobile (w-[26%]) agar tombol icon tidak saling dempet --}}
                                 <th class="px-2 py-3.5 sm:px-4 text-center w-[26%] sm:w-[12%]">AKSI</th>

@@ -13,7 +13,19 @@ class TransactionController extends Controller
 public function index(Request $request)
 {
     // Query dasar transaksi
-    $query = Transaction::query()->with('itemable')->latest();
+    $sort = $request->input('sort', 'created_at');
+    $direction = strtolower($request->input('direction', 'desc'));
+    $allowedSorts = ['tanggal_transaksi'];
+
+    if (!in_array($sort, $allowedSorts)) {
+        $sort = 'created_at';
+    }
+
+    if (!in_array($direction, ['asc', 'desc'])) {
+        $direction = 'desc';
+    }
+
+    $query = Transaction::query()->with('itemable')->orderBy($sort, $direction);
 
     // Logika pencarian
     if ($request->filled('search')) {
