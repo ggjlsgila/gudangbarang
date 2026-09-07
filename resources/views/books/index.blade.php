@@ -271,16 +271,18 @@
                 <div>
                     <span class="text-[11px] font-bold text-neutral-500 uppercase tracking-wider block">Kode Buku /
                         ISBN</span>
-                    <span id="modalKode" class="font-mono font-bold text-black text-sm"></span>
+                    <span id="modalKode"
+                        class="mt-1 inline-block rounded-md bg-slate-100 px-2 py-1 font-mono text-base font-bold text-slate-900"></span>
                 </div>
                 <div>
                     <span class="text-[11px] font-bold text-neutral-500 uppercase tracking-wider block">Judul / Nama
                         Buku</span>
-                    <p id="modalJudul" class="font-bold text-black leading-relaxed"></p>
+                    <p id="modalJudul" class="mt-1 text-base font-extrabold leading-relaxed text-slate-900"></p>
                 </div>
                 <div>
                     <span class="text-[11px] font-bold text-neutral-500 uppercase tracking-wider block">Stok Gudang</span>
-                    <span id="modalStok" class="font-extrabold text-indigo-600 text-sm"></span>
+                    <span id="modalStok"
+                        class="mt-1 inline-block rounded-md border border-indigo-200 bg-indigo-50 px-2 py-1 text-base font-extrabold leading-none text-indigo-700"></span>
                 </div>
                 <div>
                     <span class="text-[11px] font-bold text-neutral-500 uppercase tracking-wider block">Keterangan</span>
