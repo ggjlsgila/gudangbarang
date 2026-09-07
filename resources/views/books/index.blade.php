@@ -83,7 +83,7 @@
                                 </th>
 
                                 {{-- Kolom Nama Buku dengan Sortir URL --}}
-                                <th class="px-2 py-3 sm:px-4 w-[48%] sm:w-[33%]">
+                                <th class="px-2 py-3 sm:px-4 w-[48%] sm:w-[40%]">
                                     <a href="{{ route('books.index', array_merge(request()->all(), ['sort' => 'judul_buku', 'direction' => request('direction') == 'asc' && request('sort') == 'judul_buku' ? 'desc' : 'asc'])) }}"
                                         class="group inline-flex items-center gap-1.5 hover:text-indigo-600 transition cursor-pointer">
                                         <span>judul BUKU</span>
@@ -98,7 +98,7 @@
                                 </th>
 
                                 {{-- Kolom Stok dengan Sortir URL --}}
-                                <th class="px-1.5 py-3 sm:px-4 w-[14%] sm:w-[8%] text-center">
+                                <th class="px-1.5 py-3 sm:px-4 w-[14%] sm:w-[10%] text-center">
                                     <a href="{{ route('books.index', array_merge(request()->all(), ['sort' => 'stok', 'direction' => request('direction') == 'asc' && request('sort') == 'stok' ? 'desc' : 'asc'])) }}"
                                         class="group inline-flex items-center justify-center gap-1 hover:text-indigo-600 transition cursor-pointer w-full">
                                         <span>STOK</span>
@@ -112,7 +112,7 @@
                                     </a>
                                 </th>
 
-                                <th class="hidden sm:table-cell px-3 py-3 sm:px-4 w-[14%]">KETERANGAN</th>
+                                <th class="hidden sm:table-cell px-3 py-3 sm:px-4 w-[8%]">KETERANGAN</th>
                                 <th class="px-1 py-3 sm:px-4 text-center w-[18%] sm:w-[14%]">AKSI</th>
                             </tr>
                         </thead>
@@ -137,7 +137,7 @@
                                     <td
                                         class="whitespace-nowrap px-1.5 py-3.5 sm:px-4 text-center font-extrabold text-slate-900">
                                         <span
-                                            class="inline-block rounded-lg bg-slate-100 px-2 py-0.5 text-xs text-slate-800">
+                                            class="inline-block rounded-lg bg-slate-100 px-2 py-0.5 text-sm leading-none font-bold text-slate-800">
                                             {{ $book->stok }}
                                         </span>
                                     </td>
