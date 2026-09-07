@@ -142,8 +142,7 @@
 
                                                     <form method="POST" action="{{ route('items.destroy', $item) }}"
                                                         data-confirm-message="Yakin ingin menghapus barang ini?"
-                                                        onsubmit="return openDeleteModal(this)"
-                                                        class="block m-0 p-0">
+                                                        onsubmit="return openDeleteModal(this)" class="block m-0 p-0">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit"
@@ -431,5 +430,22 @@
             fetchItems(url);
             window.history.pushState(null, '', url);
         });
+
+        // Event delegation untuk semua link pagination, termasuk angka halaman.
+        if (tableContainer) {
+            tableContainer.addEventListener('click', function(e) {
+                const link = e.target.closest('a');
+
+                if (!link || !link.getAttribute('href') ||
+                    (!link.closest('nav') && !link.closest('.border-t'))) {
+                    return;
+                }
+
+                e.preventDefault();
+                const targetUrl = link.getAttribute('href');
+                fetchItems(targetUrl);
+                window.history.pushState(null, '', targetUrl);
+            });
+        }
     });
 </script>

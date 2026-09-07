@@ -715,7 +715,7 @@
                                     tableContainer.addEventListener('click', function(e) {
                                         const link = e.target.closest('a');
                                         if (link && link.getAttribute('href') && link.getAttribute('href') !== '#') {
-                                            if (link.closest('.border-t') || link.closest('nav')) {
+                                            if (link.closest('nav') || link.closest('.border-t')) {
                                                 e.preventDefault();
                                                 const targetUrl = link.getAttribute('href');
                                                 fetchTransactions(targetUrl);
