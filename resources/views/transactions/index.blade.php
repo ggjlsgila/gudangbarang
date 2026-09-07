@@ -58,7 +58,7 @@
 
                     {{-- Input Pencarian --}}
                     <input type="text" name="search" id="transactionSearch" value="{{ request('search') }}"
-                        placeholder="Cari kode TRX, item, atau keterangan..." autocomplete="off"
+                        placeholder="Cari kode, item, keterangan, atau bulan..." autocomplete="off"
                         style="width: auto !important; max-width: none !important; flex: 1 1 auto !important;"
                         class="min-w-0 rounded-xl border-slate-300 text-xs sm:text-sm font-medium text-slate-900 placeholder-slate-400 focus:border-indigo-500 focus:ring-indigo-500">
 

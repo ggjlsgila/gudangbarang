@@ -35,8 +35,42 @@ public function index(Request $request)
     // Logika pencarian
     if ($request->filled('search')) {
         $search = $request->input('search');
+        $monthNames = [
+            'januari' => 1, 'january' => 1,
+            'februari' => 2, 'february' => 2,
+            'maret' => 3, 'march' => 3,
+            'april' => 4,
+            'mei' => 5, 'may' => 5,
+            'juni' => 6, 'june' => 6,
+            'juli' => 7, 'july' => 7,
+            'agustus' => 8, 'augustus' => 8, 'august' => 8,
+            'september' => 9,
+            'oktober' => 10, 'october' => 10,
+            'november' => 11,
+            'desember' => 12, 'december' => 12,
+        ];
+        $month = null;
+        $year = null;
+        $normalizedSearch = strtolower(trim($search));
 
-        $query->where(function ($query) use ($search) {
+        if (preg_match('/^(\d{4})-(\d{1,2})$/', $normalizedSearch, $matches)) {
+            $year = (int) $matches[1];
+            $month = (int) $matches[2];
+        } elseif (preg_match('/^(\d{1,2})[\/-](\d{4})$/', $normalizedSearch, $matches)) {
+            $month = (int) $matches[1];
+            $year = (int) $matches[2];
+        } elseif (preg_match('/^([a-z]+)(?:\s+(\d{4}))?$/', $normalizedSearch, $matches)
+            && isset($monthNames[$matches[1]])) {
+            $month = $monthNames[$matches[1]];
+            $year = isset($matches[2]) ? (int) $matches[2] : null;
+        } elseif (preg_match('/^(\d{4})$/', $normalizedSearch, $matches)) {
+            $year = (int) $matches[1];
+        }
+
+        $validDateSearch = ($month === null || $month >= 1 && $month <= 12)
+            && ($year === null || $year >= 1000 && $year <= 9999);
+
+        $query->where(function ($query) use ($search, $month, $year, $validDateSearch) {
             $query->where('kode_transaksi', 'like', "%{$search}%")
                 ->orWhere('keterangan', 'like', "%{$search}%")
                 ->orWhereHasMorph('itemable', [Book::class, Item::class], function ($itemQuery, $type) use ($search) {
@@ -48,6 +82,18 @@ public function index(Request $request)
                             ->orWhere('nama_barang', 'like', "%{$search}%");
                     }
                 });
+
+            if ($validDateSearch && ($month !== null || $year !== null)) {
+                $query->orWhere(function ($dateQuery) use ($month, $year) {
+                    if ($month !== null) {
+                        $dateQuery->whereMonth('tanggal_transaksi', $month);
+                    }
+
+                    if ($year !== null) {
+                        $dateQuery->whereYear('tanggal_transaksi', $year);
+                    }
+                });
+            }
         });
     }
 
