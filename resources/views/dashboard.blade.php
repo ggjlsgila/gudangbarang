@@ -328,18 +328,32 @@
                             }
                         },
                         tooltip: {
-                            backgroundColor: '#000',
+                            backgroundColor: '#FFFFFF',
+                            borderColor: '#E2E8F0',
+                            borderWidth: 1,
+                            titleColor: '#0F172A',
+                            bodyColor: '#475569',
                             titleFont: {
-                                size: 10
+                                size: 11,
+                                weight: '700'
                             },
                             bodyFont: {
-                                size: 9
+                                size: 11,
+                                weight: '600'
                             },
-                            padding: 8,
-                            cornerRadius: 4,
+                            padding: 10,
+                            cornerRadius: 6,
                             position: 'nearest',
                             yAlign: 'top',
-                            xAlign: 'center'
+                            xAlign: 'center',
+                            callbacks: {
+                                title: function(items) {
+                                    return items[0].label;
+                                },
+                                label: function(context) {
+                                    return 'Jumlah: ' + context.formattedValue;
+                                }
+                            }
                         }
                     },
                     cutout: '66%',
