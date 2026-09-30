@@ -31,30 +31,35 @@
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
 
             {{-- Total Buku --}}
-            <div class="flex items-center justify-between rounded-lg border border-gray-200 bg-white p-3 sm:p-4 shadow-sm">
+            <div
+                class="flex items-center justify-between rounded-lg border border-gray-200 border-l-4 border-l-blue-500 bg-blue-50/40 p-3 sm:p-4 shadow-sm">
                 <div>
-                    <p class="text-[11px] sm:text-xs font-medium text-gray-500 uppercase tracking-wide">Total Buku</p>
-                    <p class="mt-0.5 text-xl sm:text-2xl font-bold text-gray-900">{{ $totalBuku }}</p>
+                    <p class="text-[11px] sm:text-xs font-medium text-gray-700 uppercase tracking-wide">Total Buku</p>
+                    <p class="mt-0.5 text-xl sm:text-2xl font-bold text-gray-950">{{ $totalBuku }}</p>
                 </div>
-                <div class="flex h-7 w-7 items-center justify-center rounded-md bg-gray-100 text-sm">
+                {{-- Total Buku --}}
+                <div class="flex h-9 w-9 items-center justify-center rounded-md bg-gray-100 text-sm">
                     📚
                 </div>
             </div>
 
-            {{-- Total Stok Buku --}}
-            <div class="flex items-center justify-between rounded-lg border border-gray-200 bg-white p-3 sm:p-4 shadow-sm">
+
+            <div
+                class="flex items-center justify-between rounded-lg border border-gray-200 border-l-4 border-l-blue-500 bg-blue-50/40 p-3 sm:p-4 shadow-sm">
                 <div>
-                    <p class="text-[11px] sm:text-xs font-medium text-gray-500 uppercase tracking-wide">Total Stok Buku</p>
-                    <p class="mt-0.5 text-xl sm:text-2xl font-bold text-gray-900">{{ $totalStokBuku }} <span
-                            class="text-xs sm:text-sm font-normal text-gray-500">pcs</span></p>
+                    <p class="text-[11px] sm:text-xs font-medium text-gray-700 uppercase tracking-wide">Total Stok Buku</p>
+                    <p class="mt-0.5 text-xl sm:text-2xl font-bold text-gray-950">{{ $totalStokBuku }} <span
+                            class="text-xs sm:text-sm font-normal text-gray-700">pcs</span></p>
                 </div>
-                <div class="flex h-7 w-7 items-center justify-center rounded-md bg-sky-50 text-sm">
+
+                <div class="flex h-9 w-9 items-center justify-center rounded-md bg-gray-100 text-sm">
                     📊
                 </div>
             </div>
 
             {{-- Barang Masuk --}}
-            <div class="rounded-lg border border-emerald-100 bg-emerald-50/40 p-3 sm:p-4 shadow-sm">
+            <div
+                class="rounded-lg border border-emerald-100 border-l-4 border-l-emerald-500 bg-emerald-50/40 p-3 sm:p-4 shadow-sm">
                 <div>
                     <p class="text-[11px] sm:text-xs font-medium text-emerald-700 uppercase tracking-wide">Barang Masuk</p>
                 </div>
@@ -72,7 +77,8 @@
             </div>
 
             {{-- Barang Keluar --}}
-            <div class="rounded-lg border border-orange-100 bg-orange-50/40 p-3 sm:p-4 shadow-sm">
+            <div
+                class="rounded-lg border border-orange-100 border-l-4 border-l-orange-500 bg-orange-50/40 p-3 sm:p-4 shadow-sm">
                 <div>
                     <p class="text-[11px] sm:text-xs font-medium text-orange-700 uppercase tracking-wide">Barang Keluar</p>
                 </div>
@@ -176,7 +182,7 @@
 
             {{-- 2. TRANSAKSI TERBARU --}}
             <div
-                class="lg:col-span-7 flex flex-col justify-between rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+                class="lg:col-span-7 flex flex-col justify-between rounded-xl border border-gray-200 bg-blue-50 p-4 shadow-sm">
                 <div>
                     <div class="flex items-center justify-between mb-2.5">
                         <h2 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-gray-800">Transaksi Terbaru

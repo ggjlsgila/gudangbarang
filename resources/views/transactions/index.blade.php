@@ -270,7 +270,7 @@
                             <div>
                                 <label class="block text-[11px] font-bold tracking-wider text-slate-400 uppercase">NAMA
                                     ITEM /
-                                    BUKU</label>
+                                    BUKU </label>
                                 <p id="detailItem" class="text-sm font-bold text-slate-900 mt-0.5"></p>
                             </div>
 
