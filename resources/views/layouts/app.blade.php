@@ -7,8 +7,8 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
-    <title>{{ config('app.name', 'Gudang Barang') }}</title>
-
+    <title>{{ config('app.name', 'Inventaris Barang') }}</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
@@ -224,7 +224,7 @@
             <div class="flex items-center gap-2">
                 <img src="{{ asset('images/logo.png') }}" alt="Logo Manufaktur Indonesia"
                     class="h-8 w-8 rounded-lg object-contain">
-                <span class="text-base font-bold text-slate-800">Gudang Barang</span>
+                <span class="text-base font-bold text-slate-800">Inventaris Barang</span>
             </div>{{-- Spacer penyeimbang flex --}} <div class="h-10 w-10"></div>
         </header>{{-- =====================================
              ISI HALAMAN UTAMA

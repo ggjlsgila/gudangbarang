@@ -31,212 +31,319 @@
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
 
             {{-- Total Buku --}}
-            <div
-                class="flex items-center justify-between rounded-lg border border-gray-200 border-l-4 border-l-blue-500 bg-blue-50/40 p-3 sm:p-4 shadow-sm">
-                <div>
-                    <p class="text-[11px] sm:text-xs font-medium text-gray-700 uppercase tracking-wide">Total Buku</p>
-                    <p class="mt-0.5 text-xl sm:text-2xl font-bold text-gray-950">{{ $totalBuku }}</p>
+            <div class="rounded-lg border border-blue-100 border-l-4 border-l-blue-500 bg-blue-50/40 p-3 sm:p-4 shadow-sm">
+
+                <!-- Header & Ikon -->
+                <div class="flex items-center justify-between">
+                    <p class="text-[11px] sm:text-xs font-medium text-blue-700 uppercase tracking-wide">Total Buku</p>
+                    <div class="flex h-7 w-7 items-center justify-center rounded bg-blue-100/80 text-sm">
+                        📚
+                    </div>
                 </div>
-                {{-- Total Buku --}}
-                <div class="flex h-9 w-9 items-center justify-center rounded-md bg-gray-100 text-sm">
-                    📚
+
+                <!-- Total Angka Utama -->
+                <div class="mt-2">
+                    <h3 class="text-2xl sm:text-3xl font-bold text-gray-950">
+                        {{ $totalBuku }} <span class="text-xs font-normal text-blue-700">judul</span>
+                    </h3>
                 </div>
+
+                <!-- Keterangan Bawah (Penyeimbang Tinggi Card) -->
+                <div
+                    class="mt-3 flex items-center gap-2 border-t border-blue-200/60 pt-2 text-[11px] sm:text-xs text-blue-800">
+                    <span class="inline-block h-1.5 w-1.5 rounded-full bg-blue-500"></span>
+                    <span>Master Data Aktif</span>
+                </div>
+
             </div>
 
+            {{-- Total Stok Buku --}}
+            <div class="rounded-lg border border-blue-100 border-l-4 border-l-blue-500 bg-blue-50/40 p-3 sm:p-4 shadow-sm">
 
-            <div
-                class="flex items-center justify-between rounded-lg border border-gray-200 border-l-4 border-l-blue-500 bg-blue-50/40 p-3 sm:p-4 shadow-sm">
-                <div>
-                    <p class="text-[11px] sm:text-xs font-medium text-gray-700 uppercase tracking-wide">Total Stok Buku</p>
-                    <p class="mt-0.5 text-xl sm:text-2xl font-bold text-gray-950">{{ $totalStokBuku }} <span
-                            class="text-xs sm:text-sm font-normal text-gray-700">pcs</span></p>
+                <!-- Header & Ikon -->
+                <div class="flex items-center justify-between">
+                    <p class="text-[11px] sm:text-xs font-medium text-blue-700 uppercase tracking-wide">Total Stok Buku</p>
+                    <div class="flex h-7 w-7 items-center justify-center rounded bg-blue-100/80 text-sm">
+                        📊
+                    </div>
                 </div>
 
-                <div class="flex h-9 w-9 items-center justify-center rounded-md bg-gray-100 text-sm">
-                    📊
+                <!-- Total Angka Utama -->
+                <div class="mt-2">
+                    <h3 class="text-2xl sm:text-3xl font-bold text-gray-950">
+                        {{ $totalStokBuku }} <span class="text-xs font-normal text-blue-700">pcs</span>
+                    </h3>
                 </div>
+
+                <!-- Keterangan Bawah (Penyeimbang Tinggi Card) -->
+                <div
+                    class="mt-3 flex items-center gap-2 border-t border-blue-200/60 pt-2 text-[11px] sm:text-xs text-blue-800">
+                    <span class="inline-block h-1.5 w-1.5 rounded-full bg-blue-500"></span>
+                    <span>Akumulasi Stok Fisik</span>
+                </div>
+
             </div>
 
             {{-- Barang Masuk --}}
             <div
                 class="rounded-lg border border-emerald-100 border-l-4 border-l-emerald-500 bg-emerald-50/40 p-3 sm:p-4 shadow-sm">
-                <div>
+
+                <!-- Header & Ikon -->
+                <div class="flex items-center justify-between">
                     <p class="text-[11px] sm:text-xs font-medium text-emerald-700 uppercase tracking-wide">Barang Masuk</p>
-                </div>
-                <div class="mt-2 w-full space-y-1 text-[11px] sm:text-xs">
-                    <div class="flex items-center justify-between text-emerald-800">
-                        <span>Buku</span><strong>{{ $totalBukuMasuk }}</strong>
-                    </div>
-                    <div class="flex items-center justify-between text-emerald-800"><span>Barang
-                            Lainnya</span><strong>{{ $totalBarangMasuk }}</strong></div>
-                    <div
-                        class="flex items-center justify-between border-t border-emerald-200 pt-1 font-bold text-emerald-950">
-                        <span>Semua</span><strong>{{ $totalMasuk }} unit</strong>
+                    <div class="flex h-7 w-7 items-center justify-center rounded bg-emerald-100 text-emerald-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                        </svg>
                     </div>
                 </div>
+
+                <!-- Total Angka Utama -->
+                <div class="mt-2">
+                    <h3 class="text-2xl sm:text-3xl font-bold text-emerald-950">
+                        {{ $totalMasuk }} <span class="text-xs font-normal text-emerald-700">unit</span>
+                    </h3>
+                </div>
+
+                <!-- Rincian di Bawah -->
+                <div
+                    class="mt-3 flex items-center gap-3 border-t border-emerald-200/60 pt-2 text-[11px] sm:text-xs text-emerald-800">
+                    <div>Buku: <strong class="text-emerald-950">{{ $totalBukuMasuk }}</strong></div>
+                    <span>•</span>
+                    <div>Lainnya: <strong class="text-emerald-950">{{ $totalBarangMasuk }}</strong></div>
+                </div>
+
             </div>
 
             {{-- Barang Keluar --}}
             <div
-                class="rounded-lg border border-orange-100 border-l-4 border-l-orange-500 bg-orange-50/40 p-3 sm:p-4 shadow-sm">
-                <div>
+                class="rounded-lg border border-orange-100 border-l-4 border-l-orange-400 bg-orange-50/40 p-3 sm:p-4 shadow-sm">
+
+                <!-- Header & Ikon -->
+                <div class="flex items-center justify-between">
                     <p class="text-[11px] sm:text-xs font-medium text-orange-700 uppercase tracking-wide">Barang Keluar</p>
-                </div>
-                <div class="mt-2 w-full space-y-1 text-[11px] sm:text-xs">
-                    <div class="flex items-center justify-between text-orange-800">
-                        <span>Buku</span><strong>{{ $totalBukuKeluar }}</strong>
-                    </div>
-                    <div class="flex items-center justify-between text-orange-800"><span>Barang
-                            Lainnya</span><strong>{{ $totalBarangKeluar }}</strong></div>
-                    <div
-                        class="flex items-center justify-between border-t border-orange-200 pt-1 font-bold text-orange-950">
-                        <span>Semua</span><strong>{{ $totalKeluar }} unit</strong>
+                    <div class="flex h-7 w-7 items-center justify-center rounded bg-orange-100 text-orange-700">
+                        <!-- Ikon Panah ke Atas (Keluar) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                        </svg>
                     </div>
                 </div>
+
+                <!-- Total Angka Utama -->
+                <div class="mt-2">
+                    <h3 class="text-2xl sm:text-3xl font-bold text-orange-950">
+                        {{ $totalKeluar }} <span class="text-xs font-normal text-orange-700">unit</span>
+                    </h3>
+                </div>
+
+                <!-- Rincian di Bawah -->
+                <div
+                    class="mt-3 flex items-center gap-3 border-t border-orange-200/60 pt-2 text-[11px] sm:text-xs text-orange-800">
+                    <div>Buku: <strong class="text-orange-950">{{ $totalBukuKeluar }}</strong></div>
+                    <span>•</span>
+                    <div>Lainnya: <strong class="text-orange-950">{{ $totalBarangKeluar }}</strong></div>
+                </div>
+
             </div>
 
         </div>
 
         {{-- Peringatan Stok --}}
-        <div class="rounded-lg border border-gray-200 bg-white p-3 sm:p-4 shadow-sm">
-            <div class="flex items-center gap-1.5 mb-1.5">
-                <span class="text-sm">⚠️</span>
-                <h2 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-gray-800">Peringatan Stok Menipis</h2>
+        <div
+            class="w-full min-w-0 rounded-xl border border-red-500/60 bg-amber-50/20 p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200">
+
+            <!-- Header Title & Jumlah Badge -->
+            <div class="flex items-center justify-between mb-3">
+                <h2 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-gray-800 flex items-center gap-2">
+                    <span class="flex h-2 w-2 rounded-full bg-amber-500 animate-pulse"></span>
+                    ⚠️ Peringatan Stok Menipis
+                </h2>
+
+                @if ($stokMenipis->count() > 0)
+                    <span
+                        class="text-[10px] sm:text-xs font-bold text-amber-800 bg-amber-100/80 px-2.5 py-0.5 rounded-full border border-amber-200 shrink-0">
+                        {{ $stokMenipis->count() }} Buku
+                    </span>
+                @endif
             </div>
 
             @if ($stokMenipis->count() > 0)
-                <div class="max-h-[132px] space-y-1 overflow-y-auto pr-1 sm:max-h-56">
+                <!-- Tinggi dikunci di max-h-52 (pas untuk 4 baris item) -->
+                <div
+                    class="space-y-1.5 max-h-52 overflow-y-auto pr-1.5 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-200 [&::-webkit-scrollbar-track]:bg-transparent">
                     @foreach ($stokMenipis as $buku)
                         <div
-                            class="flex items-center justify-between rounded-md bg-red-50/60 border border-red-100 p-2 text-xs">
+                            class="flex items-center justify-between gap-3 rounded-lg border border-gray-100 bg-white p-2.5 hover:border-amber-200 hover:shadow-xs transition-all">
+
+                            <!-- Judul Buku -->
+                            <span class="text-xs sm:text-sm font-medium text-gray-700 truncate min-w-0 flex-1"
+                                title="{{ $buku->judul_buku ?? ($buku->judul ?? $buku->nama_buku) }}">
+                                {{ $buku->judul_buku ?? ($buku->judul ?? $buku->nama_buku) }}
+                            </span>
+
+                            <!-- Badge Sisa Stok -->
                             <span
-                                class="font-medium text-gray-800 line-clamp-1 pr-2">{{ $buku->judul_buku ?? ($buku->judul ?? $buku->nama_buku) }}</span>
-                            <span
-                                class="shrink-0 font-semibold text-red-600 bg-white px-1.5 py-0.5 rounded border border-red-200 text-[10px]">
+                                class="shrink-0 font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-md border border-rose-100 text-[10px] sm:text-xs">
                                 Sisa {{ $buku->stok }}
                             </span>
+
                         </div>
                     @endforeach
                 </div>
             @else
-                <p class="text-xs text-gray-500 italic">Semua stok buku dalam kondisi aman.</p>
+                <p class="py-3 text-center text-xs text-gray-400 italic">Semua stok buku dalam kondisi aman.</p>
             @endif
+
         </div>
-
-
+        {{-- =========================================
+            BAGIAN BAWAH: GRAFIK & TRANSAKSI TERBARU
         {{-- BAGIAN BAWAH: Grafik & Transaksi Terbaru --}}
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-3">
 
             {{-- 1. GRAFIK PERBANDINGAN TRANSAKSI --}}
-            <div class="lg:col-span-5 flex flex-col rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
-                <div class="flex items-center justify-between gap-2 mb-2">
-                    <h2 class="min-w-0 text-xs sm:text-sm font-bold uppercase tracking-wider text-gray-800">
+            <div
+                class="lg:col-span-5 flex flex-col justify-between rounded-xl border border-gray-100 bg-white p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200">
+
+                <!-- Header Title & Filters -->
+                <div class="flex items-center justify-between gap-2 mb-3">
+                    <h2
+                        class="min-w-0 text-xs sm:text-sm font-bold uppercase tracking-wider text-gray-800 flex items-center gap-2">
+                        <span class="h-2 w-2 rounded-full bg-indigo-500"></span>
                         Komposisi Transaksi
                     </h2>
+
                     <form method="GET" action="{{ route('dashboard') }}"
                         class="chart-filter-form flex shrink-0 items-center justify-end gap-1.5">
                         <label for="tahunGrafik" class="sr-only">Pilih tahun grafik</label>
+
+                        <!-- Filter Tahun -->
                         <div class="relative" id="tahunGrafikWrapper">
                             <input type="hidden" id="tahunGrafik" name="tahun_grafik" value="{{ $tahunGrafik }}">
                             <button type="button" id="tahunGrafikButton" onclick="toggleTahunGrafik()"
-                                class="chart-filter flex items-center justify-between gap-2 rounded-md border border-gray-200 bg-white py-1 pl-2 pr-2 text-[11px] sm:text-xs font-semibold text-gray-600 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                class="chart-filter flex items-center justify-between gap-1.5 rounded-lg border border-gray-200 bg-gray-50/80 px-2.5 py-1 text-[11px] sm:text-xs font-semibold text-gray-700 hover:bg-gray-100 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-colors">
                                 <span id="tahunGrafikLabel">{{ $tahunGrafik }}</span>
-                                <span class="text-[10px]">⌄</span>
+                                <svg class="h-3 w-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7" />
+                                </svg>
                             </button>
                             <div id="tahunGrafikMenu"
-                                class="absolute left-0 top-full z-20 mt-1 hidden max-h-32 w-full min-w-[60px] overflow-y-auto rounded-md border border-gray-200 bg-white py-1 shadow-lg">
+                                class="absolute left-0 top-full z-20 mt-1 hidden max-h-36 w-full min-w-[70px] overflow-y-auto rounded-lg border border-gray-100 bg-white py-1 shadow-lg ring-1 ring-black/5">
                                 @for ($tahun = now()->year + 1; $tahun >= 2020; $tahun--)
                                     <button type="button" onclick="pilihTahunGrafik('{{ $tahun }}')"
-                                        class="block w-full px-2 py-1.5 text-left text-[11px] text-gray-700 hover:bg-slate-100">{{ $tahun }}</button>
+                                        class="block w-full px-3 py-1.5 text-left text-[11px] text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">{{ $tahun }}</button>
                                 @endfor
                             </div>
                         </div>
+
+                        <!-- Filter Bulan -->
                         <label for="bulanGrafik" class="sr-only">Pilih bulan grafik</label>
                         <div class="relative" id="bulanGrafikWrapper">
                             <input type="hidden" id="bulanGrafik" name="bulan_grafik" value="{{ $bulanGrafik }}">
                             <button type="button" id="bulanGrafikButton" onclick="toggleBulanGrafik()"
-                                class="chart-filter flex items-center justify-between gap-2 rounded-md border border-gray-200 bg-white py-1 pl-2 pr-2 text-[11px] sm:text-xs font-semibold text-gray-600 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
-                                <span
-                                    id="bulanGrafikLabel">{{ $bulanGrafik ? ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'][$bulanGrafik - 1] : 'Semua Bulan' }}</span>
-                                <span class="text-[10px]">⌄</span>
+                                class="chart-filter flex items-center justify-between gap-1.5 rounded-lg border border-gray-200 bg-gray-50/80 px-2.5 py-1 text-[11px] sm:text-xs font-semibold text-gray-700 hover:bg-gray-100 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-colors">
+                                <span id="bulanGrafikLabel">
+                                    {{ $bulanGrafik ? ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'][$bulanGrafik - 1] : 'Semua Bulan' }}
+                                </span>
+                                <svg class="h-3 w-3 text-gray-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7" />
+                                </svg>
                             </button>
                             <div id="bulanGrafikMenu"
-                                class="absolute right-0 top-full z-20 mt-1 hidden max-h-32 w-full min-w-[112px] overflow-y-auto rounded-md border border-gray-200 bg-white py-1 shadow-lg">
+                                class="absolute right-0 top-full z-20 mt-1 hidden max-h-36 w-full min-w-[120px] overflow-y-auto rounded-lg border border-gray-100 bg-white py-1 shadow-lg ring-1 ring-black/5">
                                 <button type="button" onclick="pilihBulanGrafik('', 'Semua Bulan')"
-                                    class="block w-full px-2 py-1.5 text-left text-[11px] text-gray-700 hover:bg-slate-100">Semua
+                                    class="block w-full px-3 py-1.5 text-left text-[11px] text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">Semua
                                     Bulan</button>
                                 @foreach (['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'] as $index => $namaBulan)
                                     <button type="button"
                                         onclick="pilihBulanGrafik('{{ $index + 1 }}', '{{ $namaBulan }}')"
-                                        class="block w-full px-2 py-1.5 text-left text-[11px] text-gray-700 hover:bg-slate-100">{{ $namaBulan }}</button>
+                                        class="block w-full px-3 py-1.5 text-left text-[11px] text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">{{ $namaBulan }}</button>
                                 @endforeach
                             </div>
                         </div>
                     </form>
                 </div>
-                {{-- Tinggi grafik diperkecil di mobile (h-[180px]) agar tidak terlalu panjang --}}
-                <div class="relative w-full h-[220px] lg:h-[250px]">
+
+                <!-- Area Chart Canvas -->
+                <div class="relative my-auto w-full h-[220px] lg:h-[250px] flex items-center justify-center">
                     <canvas id="transactionChart"></canvas>
                 </div>
+
             </div>
 
             {{-- 2. TRANSAKSI TERBARU --}}
             <div
-                class="lg:col-span-7 flex flex-col justify-between rounded-xl border border-gray-200 bg-blue-50 p-4 shadow-sm">
-                <div>
-                    <div class="flex items-center justify-between mb-2.5">
-                        <h2 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-gray-800">Transaksi Terbaru
-                        </h2>
-                        <a href="{{ route('transactions.index') }}"
-                            class="text-xs sm:text-sm font-semibold text-gray-600 hover:text-black">
-                            Lihat Semua →
-                        </a>
-                    </div>
+                class="lg:col-span-7 flex flex-col justify-between rounded-xl border border-blue-100 border-l-4 border-l-blue-500 bg-blue-50/40 p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-200">
 
-                    @if ($latestTransactions->count() > 0)
-                        <div class="divide-y divide-gray-100">
-                            @foreach ($latestTransactions as $log)
-                                <div
-                                    class="py-2 first:pt-0 last:pb-0 flex items-center justify-between gap-2 {{ $loop->index > 0 ? 'hidden md:flex' : '' }}">
-                                    <div class="space-y-0.5 min-w-0">
-                                        <div class="flex items-center gap-1.5 flex-wrap">
-                                            @if ($log->jenis_transaksi === 'masuk')
-                                                <span
-                                                    class="inline-flex items-center text-[9px] font-bold text-green-700 bg-green-50 px-1 py-0.5 rounded border border-green-200 shrink-0">
-                                                    📥 Masuk
-                                                </span>
-                                            @else
-                                                <span
-                                                    class="inline-flex items-center text-[9px] font-bold text-red-700 bg-red-50 px-1 py-0.5 rounded border border-red-200 shrink-0">
-                                                    📤 Keluar
-                                                </span>
-                                            @endif
+                <!-- Header Title & Link -->
+                <div class="flex items-center justify-between mb-3">
+                    <h2
+                        class="text-xs sm:text-sm font-bold uppercase tracking-wider text-gray-800 flex items-center gap-2">
+                        <span class="h-2 w-2 rounded-full bg-blue-500"></span>
+                        Transaksi Terbaru
+                    </h2>
+                    <a href="{{ route('transactions.index') }}"
+                        class="text-xs font-semibold text-blue-600 hover:text-blue-800 transition-colors flex items-center gap-1">
+                        Lihat Semua <span>→</span>
+                    </a>
+                </div>
+
+                @if ($latestTransactions->count() > 0)
+                    <div class="divide-y divide-blue-100/60">
+                        @foreach ($latestTransactions as $log)
+                            <div
+                                class="py-2.5 first:pt-0 last:pb-0 flex items-center justify-between gap-3 {{ $loop->index > 0 ? 'hidden md:flex' : '' }}">
+
+                                <!-- Info Transaksi & Nama Item -->
+                                <div class="space-y-0.5 min-w-0">
+                                    <div class="flex items-center gap-2 flex-wrap">
+                                        @if ($log->jenis_transaksi === 'masuk')
                                             <span
-                                                class="text-[10px] sm:text-xs font-mono text-gray-500 shrink-0">{{ $log->kode_transaksi }}</span>
-                                        </div>
-                                        <p class="text-sm sm:text-base font-semibold text-gray-800 truncate">
-                                            {{ data_get($log->itemable, 'judul_buku') ?? (data_get($log->itemable, 'nama_barang') ?? (data_get($log->itemable, 'nama_buku') ?? 'Item tidak ditemukan')) }}
-                                        </p>
-                                        <p class="text-[11px] sm:text-xs text-gray-400">
-                                            {{ \Carbon\Carbon::parse($log->tanggal_transaksi)->format('d/m/Y') }}
-                                        </p>
-                                    </div>
-
-                                    <div class="text-right shrink-0 pl-2">
-                                        <span
-                                            class="text-sm sm:text-base font-extrabold {{ $log->jenis_transaksi === 'masuk' ? 'text-green-600' : 'text-red-600' }}">
-                                            {{ $log->jenis_transaksi === 'masuk' ? '+' : '-' }}{{ $log->jumlah }}
+                                                class="inline-flex items-center text-[10px] font-bold text-emerald-700 bg-emerald-100/80 px-2 py-0.5 rounded-md shrink-0">
+                                                📥 Masuk
+                                            </span>
+                                        @else
+                                            <span
+                                                class="inline-flex items-center text-[10px] font-bold text-rose-700 bg-rose-100/80 px-2 py-0.5 rounded-md shrink-0">
+                                                📤 Keluar
+                                            </span>
+                                        @endif
+                                        <span class="text-[10px] sm:text-xs font-mono text-gray-400 shrink-0">
+                                            {{ $log->kode_transaksi }}
                                         </span>
                                     </div>
+
+                                    <p class="text-xs sm:text-sm font-semibold text-gray-800 truncate">
+                                        {{ data_get($log->itemable, 'judul_buku') ?? (data_get($log->itemable, 'nama_barang') ?? (data_get($log->itemable, 'nama_buku') ?? 'Item tidak ditemukan')) }}
+                                    </p>
+
+                                    <p class="text-[11px] text-gray-400">
+                                        {{ \Carbon\Carbon::parse($log->tanggal_transaksi)->format('d/m/Y') }}
+                                    </p>
                                 </div>
-                            @endforeach
-                        </div>
-                    @else
-                        <div class="py-4 text-center text-xs text-gray-400">
-                            Belum ada aktivitas transaksi.
-                        </div>
-                    @endif
-                </div>
+
+                                <!-- Badge Jumlah Angka Kanan -->
+                                <div class="text-right shrink-0">
+                                    <span
+                                        class="inline-block px-2.5 py-1 rounded-lg text-xs sm:text-sm font-bold {{ $log->jenis_transaksi === 'masuk' ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700' }}">
+                                        {{ $log->jenis_transaksi === 'masuk' ? '+' : '-' }}{{ $log->jumlah }}
+                                    </span>
+                                </div>
+
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="py-6 text-center text-xs text-gray-400">
+                        Belum ada aktivitas transaksi.
+                    </div>
+                @endif
+
             </div>
 
         </div>
@@ -244,6 +351,7 @@
     </div>
 
     {{-- SCRIPT CHART.JS --}}
+
     <script>
         function toggleBulanGrafik() {
             document.getElementById('bulanGrafikMenu').classList.toggle('hidden');
